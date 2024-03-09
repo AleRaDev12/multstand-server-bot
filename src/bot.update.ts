@@ -1,12 +1,11 @@
 import { Ctx, Hears, On, Start, Update } from 'nestjs-telegraf';
-import { Markup } from 'telegraf';
+import { Markup, Scenes } from 'telegraf';
 import { ADD_ORDER_WIZARD_ID, ADD_USER_WIZARD_ID } from './shared/constants';
-import { Context } from './shared/interfaces';
 
 @Update()
 export class BotUpdate {
   @Start()
-  async onStart(@Ctx() ctx: Context): Promise<void> {
+  async onStart(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.replyWithHTML(
       'Выберите действие:',
       Markup.inlineKeyboard([
@@ -18,13 +17,17 @@ export class BotUpdate {
 
   @On('callback_query')
   @Hears('add_user')
-  async onAddUser(@Ctx() ctx: Context): Promise<void> {
-    await ctx.scene.enter(ADD_USER_WIZARD_ID);
+  async onAddUser(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await ctx.scene.enter(ADD_USER_WIZARD_ID);
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
   }
 
   @On('callback_query')
   @Hears('add_order')
-  async onAddOrder(@Ctx() ctx: Context): Promise<void> {
+  async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.scene.enter(ADD_ORDER_WIZARD_ID);
   }
 }
