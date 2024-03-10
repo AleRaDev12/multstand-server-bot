@@ -3,7 +3,7 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { sessionMiddleware } from './middleware/session.middleware';
-import { UsersModule } from './users/users.module';
+import { BotModule } from './bot.module';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { UsersModule } from './users/users.module';
     TelegrafModule.forRoot({
       token: process.env.BOT_TOKEN,
       middlewares: [sessionMiddleware],
-      include: [UsersModule],
+      include: [BotModule],
     }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
@@ -22,8 +22,8 @@ import { UsersModule } from './users/users.module';
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    UsersModule,
+    BotModule,
   ],
-  providers: [UsersModule],
+  providers: [BotModule],
 })
 export class AppModule {}
