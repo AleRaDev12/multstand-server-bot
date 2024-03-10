@@ -1,10 +1,10 @@
 import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { ADD_ORDER_WIZARD_ID } from '../constants';
-import { Order } from '../../orders/order.entity';
-import { OrdersService } from '../../orders/orders.service';
-import { UsersService } from '../../users/users.service';
+import { ADD_ORDER_WIZARD_ID } from '../shared/constants';
+import { Order } from './order.entity';
+import { OrdersService } from './orders.service';
+import { UsersService } from '../users/users.service';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../interfaces';
+import { CustomWizardContext } from '../shared/interfaces';
 
 @Wizard(ADD_ORDER_WIZARD_ID)
 export class AddOrderWizard {

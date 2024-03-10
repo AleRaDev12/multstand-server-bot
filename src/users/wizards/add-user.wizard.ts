@@ -1,9 +1,9 @@
 import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { ADD_USER_WIZARD_ID } from '../constants';
-import { User } from '../../users/user.entity';
-import { UsersService } from '../../users/users.service';
+import { ADD_USER_WIZARD_ID } from '../../shared/constants';
+import { User } from '../user.entity';
+import { UsersService } from '../users.service';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../interfaces'; // Новый импорт
+import { CustomWizardContext } from '../../shared/interfaces'; // Новый импорт
 
 @Wizard(ADD_USER_WIZARD_ID)
 export class AddUserWizard {

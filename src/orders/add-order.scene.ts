@@ -1,5 +1,5 @@
 import { Scene, SceneEnter, SceneLeave } from 'nestjs-telegraf';
-import { ADD_ORDER_SCENE_ID } from '../constants';
+import { ADD_ORDER_SCENE_ID } from '../shared/constants';
 
 @Scene(ADD_ORDER_SCENE_ID)
 export class AddOrderScene {

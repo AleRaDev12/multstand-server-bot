@@ -1,5 +1,5 @@
 import { Scene, SceneEnter, SceneLeave } from 'nestjs-telegraf';
-import { ADD_USER_SCENE_ID } from '../constants';
+import { ADD_USER_SCENE_ID } from '../shared/constants';
 
 @Scene(ADD_USER_SCENE_ID)
 export class AddUserScene {

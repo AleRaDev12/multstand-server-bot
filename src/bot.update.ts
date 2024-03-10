@@ -1,4 +1,4 @@
-import { Ctx, Hears, On, Start, Update } from 'nestjs-telegraf';
+import { Action, Ctx, Start, Update } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
 import { ADD_ORDER_WIZARD_ID, ADD_USER_WIZARD_ID } from './shared/constants';
 
@@ -15,8 +15,7 @@ export class BotUpdate {
     );
   }
 
-  @On('callback_query')
-  @Hears('add_user')
+  @Action('add_user')
   async onAddUser(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await ctx.scene.enter(ADD_USER_WIZARD_ID);
@@ -25,8 +24,7 @@ export class BotUpdate {
     }
   }
 
-  @On('callback_query')
-  @Hears('add_order')
+  @Action('add_order')
   async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.scene.enter(ADD_ORDER_WIZARD_ID);
   }
