@@ -3,13 +3,12 @@ import {
   WizardContextWizard,
   WizardSessionData,
 } from 'telegraf/typings/scenes';
-import { Order } from '../orders/order.entity';
-import { User } from '../users/user.entity';
-import { Scenes } from 'telegraf';
+import { Order } from '../entities/orders/order.entity';
+import { Client } from '../entities/clients/client.entity';
 
 interface CustomWizardSessionData extends WizardSessionData {
   order?: Order;
-  user?: User;
+  user?: Client;
 }
 
 interface CustomWizardContextWizard<

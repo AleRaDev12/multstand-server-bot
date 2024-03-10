@@ -1,25 +1,27 @@
 import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { ADD_ORDER_WIZARD_ID } from '../shared/constants';
 import { Order } from './order.entity';
 import { OrdersService } from './orders.service';
-import { UsersService } from '../users/users.service';
+import { ClientsService } from '../clients/clients.service';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../shared/interfaces';
+import { CustomWizardContext } from '../../shared/interfaces';
+import { WIZARDS } from '../../shared/wizards';
 
-@Wizard(ADD_ORDER_WIZARD_ID)
-export class AddOrderWizard {
+@Wizard(WIZARDS.ADD_ORDER_WIZARD_ID)
+export class OrderAddWizard {
   constructor(
     @Inject(OrdersService)
     private readonly ordersService: OrdersService,
-    @Inject(UsersService)
-    private readonly usersService: UsersService,
+    @Inject(ClientsService)
+    private readonly usersService: ClientsService,
   ) {}
 
   @WizardStep(1)
-  async onAmount(@Ctx() ctx: CustomWizardContext): Promise<string> {
+  async onStart(@Ctx() ctx: CustomWizardContext): Promise<string> {
     ctx.wizard.state.order = new Order();
     await ctx.wizard.next();
-    return 'Выберите клиента из списка:';
+    const clients = await this.usersService.findAll();
+
+    return `Выберите клиента из списка: ${clients.map((client, i) => `\n${i + 1}. ${client.firstName} ${client.lastName} ${client.city}`)}`;
   }
 
   @On('text')
@@ -28,12 +30,13 @@ export class AddOrderWizard {
     @Ctx() ctx: CustomWizardContext,
     @Message() msg: { text: string },
   ): Promise<string> {
-    const users = await this.usersService.findAll();
-    const user = users.find((u) => `${u.firstName} ${u.lastName}` === msg.text);
-    if (!user) {
+    const selectedNumber = parseInt(msg.text);
+    const clients = await this.usersService.findAll();
+    const client = clients[selectedNumber - 1];
+    if (!client) {
       return 'Клиент не найден. Выберите из списка:';
     }
-    ctx.wizard.state.order.user = user;
+    ctx.wizard.state.order.client = client;
     await ctx.wizard.next();
     return 'Введите дату договора (ГГГГ-ММ-ДД):';
   }
@@ -55,9 +58,20 @@ export class AddOrderWizard {
     @Ctx() ctx: CustomWizardContext,
     @Message() msg: { text: string },
   ): Promise<string> {
-    ctx.wizard.state.order.daysToComplete = parseInt(msg.text, 10);
+    ctx.wizard.state.order.daysToComplete = parseInt(msg.text);
+    await ctx.wizard.next();
+    return 'Введите стоимость заказа:';
+  }
+
+  @On('text')
+  @WizardStep(5)
+  async onAmount(
+    @Ctx() ctx: CustomWizardContext,
+    @Message() msg: { text: string },
+  ): Promise<string> {
+    ctx.wizard.state.order.amount = parseInt(msg.text);
     const order = await this.ordersService.create(ctx.wizard.state.order);
     await ctx.scene.leave();
-    return `Заказ №${order.id} для клиента ${order.user.firstName} ${order.user.lastName} добавлен.`;
+    return `Заказ №${order.id} для клиента ${order.client.firstName} ${order.client.lastName} добавлен.`;
   }
 }

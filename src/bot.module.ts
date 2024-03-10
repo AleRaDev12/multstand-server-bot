@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { BotUpdate } from './bot.update';
-import { UsersModule } from './users/users.module';
-import { OrdersModule } from './orders/orders.module';
+import { ClientsModule } from './entities/clients/clients.module';
+import { OrdersModule } from './entities/orders/orders.module';
 
 @Module({
-  imports: [UsersModule, OrdersModule],
+  imports: [ClientsModule, OrdersModule],
   providers: [BotUpdate],
 })
 export class BotModule {}
