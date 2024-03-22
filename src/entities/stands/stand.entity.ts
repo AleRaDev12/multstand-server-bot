@@ -80,18 +80,18 @@ export class Stand {
   })
   model: StandModel;
 
-  // @Column({
-  //   type: 'text',
-  //   transformer: {
-  //     to: toEnumKey(PaintingType),
-  //     from: fromEnumValue(PaintingType),
-  //   },
-  // })
-  // painting: PaintingType; // Обработка, покраска
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: toEnumKey(PaintingType),
+      from: fromEnumValue(PaintingType),
+    },
+  })
+  painting: PaintingType; // Обработка, покраска
 
-  //
-  // @Column('int')
-  // glassesRegular: number; // Стёкла обычные
+  @Column({ type: 'int', nullable: true })
+  glassesRegular: number; // Стёкла обычные
   //
   // @Column('int')
   // glassesHighTransparency: number; // Стёкла повышенной прозрачности
