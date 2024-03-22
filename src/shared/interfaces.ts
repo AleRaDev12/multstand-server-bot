@@ -5,10 +5,12 @@ import {
 } from 'telegraf/typings/scenes';
 import { Order } from '../entities/orders/order.entity';
 import { Client } from '../entities/clients/client.entity';
+import { Stand } from '../entities/stands/stand.entity';
 
 interface CustomWizardSessionData extends WizardSessionData {
   order?: Order;
   user?: Client;
+  stand?: Stand;
 }
 
 interface CustomWizardContextWizard<
