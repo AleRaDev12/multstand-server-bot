@@ -1,15 +1,10 @@
-import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import {
-  getValueByIndex,
-  PaintingType,
-  printEnum,
-  Stand,
-  StandModel,
-} from './stand.entity';
+import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
+import { LedStripType, PaintingType, Stand, StandModel } from './stand.entity';
 import { StandsService } from './stands.service';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
-import { WIZARDS } from '../../shared/wizards'; // Новый импорт
+import { WIZARDS } from '../../shared/wizards';
+import { getValueByIndex, printEnum } from '../../helpers'; // Новый импорт
 
 interface WizardStep {
   message: string;
@@ -21,6 +16,14 @@ const steps: WizardStep[] = [
   { message: 'Модель:', field: 'model', enum: StandModel },
   { message: 'Покраска:', field: 'painting', enum: PaintingType },
   { message: 'Количество обычных стёкол:', field: 'glassesRegular' },
+  { message: 'Количество стёкол пп:', field: 'glassesHighTransparency' },
+  {
+    message: 'Светодиодная лента:',
+    field: 'ledStripModel',
+    enum: LedStripType,
+  },
+  { message: 'Ткань для затенения:', field: 'shadingFabric' },
+  { message: 'Штатив для объёмной анимации:', field: 'tripod' },
 ];
 
 function generateMessage(step: WizardStep): string {
@@ -29,23 +32,19 @@ function generateMessage(step: WizardStep): string {
 
 function WizardStepHandler(stepIndex: number) {
   return function (
-    target: any,
-    propertyKey: string,
+    _target: any,
+    _propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
     // const originalMethod = descriptor.value;
 
-    descriptor.value = async function (
-      ctx: CustomWizardContext,
-      ...args
-      // msg: { text: string },
-    ) {
-      const { message: msg } = ctx;
+    const stepIndexCorrected = stepIndex - 2;
 
-      const step = steps[stepIndex];
-      console.log('*-* step', step);
-      console.log('*-* msg', msg);
-      console.log('*-* msg json', JSON.stringify(msg, null, 2));
+    descriptor.value = async function (ctx: CustomWizardContext) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const msg = ctx.update?.message;
+      const step = steps[stepIndexCorrected];
 
       if (step.enum) {
         if (msg.text !== undefined) {
@@ -69,13 +68,13 @@ function WizardStepHandler(stepIndex: number) {
         }
       }
 
-      if (stepIndex === steps.length - 1) {
+      if (stepIndexCorrected === steps.length - 1) {
         const stand = await this.usersService.create(ctx.wizard.state.stand);
         await ctx.scene.leave();
         return `Станок ${JSON.stringify(stand, null, 2)} добавлен`;
       } else {
         ctx.wizard.next();
-        return generateMessage(steps[stepIndex + 1]);
+        return generateMessage(steps[stepIndexCorrected + 1]);
       }
     };
 
@@ -99,16 +98,41 @@ export class StandAddWizard {
 
   @On('text')
   @WizardStep(2)
-  @WizardStepHandler(0)
-  async step1() {}
-
-  @On('text')
-  @WizardStep(3)
-  @WizardStepHandler(1)
+  @WizardStepHandler(2)
   async step2() {}
 
   @On('text')
+  @WizardStep(3)
+  @WizardStepHandler(3)
+  async step3() {}
+
+  @On('text')
   @WizardStep(4)
-  @WizardStepHandler(2)
-  async last() {}
+  @WizardStepHandler(4)
+  async step4() {}
+
+  @On('text')
+  @WizardStep(5)
+  @WizardStepHandler(5)
+  async step5() {}
+
+  @On('text')
+  @WizardStep(6)
+  @WizardStepHandler(6)
+  async step6() {}
+
+  @On('text')
+  @WizardStep(7)
+  @WizardStepHandler(7)
+  async step7() {}
+
+  @On('text')
+  @WizardStep(8)
+  @WizardStepHandler(8)
+  async step8() {}
+
+  @On('text')
+  @WizardStep(9)
+  @WizardStepHandler(9)
+  async step9() {}
 }

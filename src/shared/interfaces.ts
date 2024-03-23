@@ -6,6 +6,7 @@ import {
 import { Order } from '../entities/orders/order.entity';
 import { Client } from '../entities/clients/client.entity';
 import { Stand } from '../entities/stands/stand.entity';
+import { Context, Update } from 'nestjs-telegraf';
 
 interface CustomWizardSessionData extends WizardSessionData {
   order?: Order;
@@ -24,3 +25,7 @@ export interface CustomWizardContext<
 > extends WizardContext<D> {
   wizard: CustomWizardContextWizard<D>;
 }
+
+export type MessageType = {
+  text: string;
+};

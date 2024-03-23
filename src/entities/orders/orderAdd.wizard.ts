@@ -3,7 +3,7 @@ import { Order } from './order.entity';
 import { OrdersService } from './orders.service';
 import { ClientsService } from '../clients/clients.service';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext, MessageType } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
 
 @Wizard(WIZARDS.ADD_ORDER_WIZARD_ID)
@@ -18,7 +18,7 @@ export class OrderAddWizard {
   @WizardStep(1)
   async onStart(@Ctx() ctx: CustomWizardContext): Promise<string> {
     ctx.wizard.state.order = new Order();
-    await ctx.wizard.next();
+    ctx.wizard.next();
     const clients = await this.usersService.findAll();
 
     return `Выберите клиента из списка: ${clients.map((client, i) => `\n${i + 1}. ${client.firstName} ${client.lastName} ${client.city}`)}`;
@@ -28,16 +28,16 @@ export class OrderAddWizard {
   @WizardStep(2)
   async onClient(
     @Ctx() ctx: CustomWizardContext,
-    @Message() msg: { text: string },
+    @Message() message: MessageType,
   ): Promise<string> {
-    const selectedNumber = parseInt(msg.text);
+    const selectedNumber = parseInt(message.text);
     const clients = await this.usersService.findAll();
     const client = clients[selectedNumber - 1];
     if (!client) {
       return 'Клиент не найден. Выберите из списка:';
     }
     ctx.wizard.state.order.client = client;
-    await ctx.wizard.next();
+    ctx.wizard.next();
     return 'Введите дату договора (ГГГГ-ММ-ДД):';
   }
 
@@ -48,7 +48,10 @@ export class OrderAddWizard {
     @Message() msg: { text: string },
   ): Promise<string> {
     ctx.wizard.state.order.contractDate = new Date(msg.text);
-    await ctx.wizard.next();
+    ctx.wizard.next();
+
+    ctx.update.update_id;
+
     return 'Введите количество дней на выполнение заказа:';
   }
 
@@ -59,7 +62,7 @@ export class OrderAddWizard {
     @Message() msg: { text: string },
   ): Promise<string> {
     ctx.wizard.state.order.daysToComplete = parseInt(msg.text);
-    await ctx.wizard.next();
+    ctx.wizard.next();
     return 'Введите стоимость заказа:';
   }
 
