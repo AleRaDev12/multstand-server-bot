@@ -3,9 +3,10 @@ import { BotUpdate } from './bot.update';
 import { ClientsModule } from './entities/clients/clients.module';
 import { OrdersModule } from './entities/orders/orders.module';
 import { StandsModule } from './entities/stands/stands.module';
+import { PartsInModule } from './entities/partsIn/partsIn.module';
 
 @Module({
-  imports: [ClientsModule, OrdersModule, StandsModule],
+  imports: [ClientsModule, OrdersModule, StandsModule, PartsInModule],
   providers: [BotUpdate],
 })
 export class BotModule {}

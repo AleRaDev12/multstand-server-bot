@@ -1,27 +1,21 @@
 import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { LedStripType, PaintingType, Stand, StandModel } from './stand.entity';
-import { StandsService } from './stands.service';
+import { PartIn, Parts } from './partsIn.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
 import {
   generateMessage,
-  getValueByIndex,
+  getValueUnionByIndex,
   WizardStepType,
-} from '../../helpers'; // Новый импорт
+} from '../../helpers';
+import { PartsInService } from './partsIn.service'; // Новый импорт
 
 const steps: WizardStepType[] = [
-  { message: 'Модель:', field: 'model', enum: StandModel },
-  { message: 'Покраска:', field: 'painting', enum: PaintingType },
-  { message: 'Количество обычных стёкол:', field: 'glassesRegular' },
-  { message: 'Количество стёкол пп:', field: 'glassesHighTransparency' },
-  {
-    message: 'Светодиодная лента:',
-    field: 'ledStripModel',
-    enum: LedStripType,
-  },
-  { message: 'Ткань для затенения:', field: 'shadingFabric' },
-  { message: 'Штатив для объёмной анимации:', field: 'tripod' },
+  { message: 'Комплектующее:', field: 'part', union: Parts },
+  { message: 'Дата заказа:', field: 'dateOrder' },
+  { message: 'Дата получения:', field: 'dateArrival' },
+  { message: 'Стоимость партии:', field: 'amount' },
+  { message: 'Количество шт:', field: 'count' },
 ];
 
 function WizardStepHandler(stepIndex: number) {
@@ -42,8 +36,19 @@ function WizardStepHandler(stepIndex: number) {
 
       if (step.enum) {
         if (msg.text !== undefined) {
-          ctx.wizard.state.stand[step.field] = getValueByIndex(
+          ctx.wizard.state.partsIn[step.field] = getValueUnionByIndex(
             step.enum,
+            +msg.text - 1,
+          );
+        } else {
+          // Обработка случая, когда msg.text равно undefined
+          // Например, отправка сообщения об ошибке и повторный запрос значения
+          return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
+        }
+      } else if (step.union) {
+        if (msg.text !== undefined) {
+          ctx.wizard.state.partsIn[step.field] = getValueUnionByIndex(
+            step.union,
             +msg.text - 1,
           );
         } else {
@@ -54,7 +59,7 @@ function WizardStepHandler(stepIndex: number) {
       } else {
         if (msg.text !== undefined) {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          ctx.wizard.state.stand[step.field] = +msg.text;
+          ctx.wizard.state.partsIn[step.field] = +msg.text;
         } else {
           // Обработка случая, когда msg.text равно undefined
           return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
@@ -62,7 +67,10 @@ function WizardStepHandler(stepIndex: number) {
       }
 
       if (stepIndexCorrected === steps.length - 1) {
-        const stand = await this.usersService.create(ctx.wizard.state.stand);
+        console.log('*-* ctx', ctx.wizard.state.partsIn);
+        const stand = await this.partsInService.create(
+          ctx.wizard.state.partsIn,
+        );
         await ctx.scene.leave();
         return `Станок ${JSON.stringify(stand, null, 2)} добавлен`;
       } else {
@@ -75,16 +83,16 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_STAND_WIZARD_ID)
-export class StandAddWizard {
+@Wizard(WIZARDS.ADD_PARTS_IN_WIZARD_ID)
+export class PartsInAddWizard {
   constructor(
-    @Inject(StandsService)
-    private readonly usersService: StandsService,
+    @Inject(PartsInService)
+    private readonly partsInService: PartsInService,
   ) {}
 
   @WizardStep(1)
   async start(@Ctx() ctx: CustomWizardContext): Promise<string> {
-    ctx.wizard.state.stand = new Stand();
+    ctx.wizard.state.partsIn = new PartIn();
     ctx.wizard.next();
     return generateMessage(steps[0]);
   }

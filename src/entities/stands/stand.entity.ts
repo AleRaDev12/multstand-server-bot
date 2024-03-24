@@ -1,7 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { fromEnumValue, toEnumKey } from '../../helpers';
-
-type StandModelType = (typeof StandModel)[keyof typeof StandModel];
+import { fromEnumValue, fromValue, toEnumKey, toKey } from '../../helpers';
 
 enum Stand2D {
   mTM15 = 'T-M-15',
@@ -19,6 +17,7 @@ export const StandModel = {
   ...Stand2D,
   ...Stand3D,
 };
+type StandModelType = (typeof StandModel)[keyof typeof StandModel];
 
 export enum PaintingType {
   without = 'Без обработки',
@@ -44,9 +43,8 @@ export class Stand {
   @Column({
     type: 'text',
     transformer: {
-      to: (value: StandModelType) =>
-        Object.keys(StandModel).find((key) => StandModel[key] === value),
-      from: (value: string) => StandModel[value as keyof typeof StandModel],
+      to: toKey(StandModel),
+      from: fromValue(StandModel),
     },
   })
   model: StandModelType;

@@ -6,13 +6,18 @@ import {
 import { Order } from '../entities/orders/order.entity';
 import { Client } from '../entities/clients/client.entity';
 import { Stand } from '../entities/stands/stand.entity';
-import { Context, Update } from 'nestjs-telegraf';
+import { PartIn } from '../entities/partsIn/partsIn.entity';
 
-interface CustomWizardSessionData extends WizardSessionData {
+// export type
+
+export type AllEntities = {
   order?: Order;
   user?: Client;
   stand?: Stand;
-}
+  partsIn?: PartIn;
+};
+
+interface CustomWizardSessionData extends WizardSessionData, AllEntities {}
 
 interface CustomWizardContextWizard<
   D extends CustomWizardSessionData = CustomWizardSessionData,

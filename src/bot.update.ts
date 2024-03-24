@@ -9,9 +9,10 @@ export class BotUpdate {
     await ctx.replyWithHTML(
       'Выберите действие:',
       Markup.inlineKeyboard([
-        Markup.button.callback('Добавить пользователя', 'add_user'),
-        Markup.button.callback('Добавить заказ', 'add_order'),
-        Markup.button.callback('Добавить станок', 'add_stand'),
+        Markup.button.callback('Клиент', 'add_user'),
+        Markup.button.callback('Заказ', 'add_order'),
+        Markup.button.callback('Станок', 'add_stand'),
+        Markup.button.callback('Комплектующее', 'add_partsIn'),
       ]),
     );
   }
@@ -33,5 +34,9 @@ export class BotUpdate {
   @Action('add_stand')
   async onAddStand(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.scene.enter(WIZARDS.ADD_STAND_WIZARD_ID);
+  }
+  @Action('add_partsIn')
+  async onAddPartsIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_PARTS_IN_WIZARD_ID);
   }
 }

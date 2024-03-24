@@ -1,3 +1,5 @@
+import { AllEntities } from './shared/interfaces';
+
 export function printEnum<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
   const enumEntries = keys.map((key, index) => {
@@ -20,6 +22,14 @@ export function getValueByIndex<T>(
   return enumObj[keys[index]];
 }
 
+export function getValueUnionByIndex<T>(
+  obj: T,
+  index: number,
+): T[keyof T] | undefined {
+  const values = Object.values(obj) as T[keyof T][];
+  return values[index];
+}
+
 export function toEnumKey<T extends Record<string, any>>(enumType: T) {
   return (value: T[keyof T]): string => {
     const entry = Object.entries(enumType).find(
@@ -40,4 +50,40 @@ export function fromEnumValue<T extends Record<string, any>>(enumType: T) {
     }
     throw new Error(`Enum value for key "${key}" not found`);
   };
+}
+
+// Функция для преобразования значения enum в ключ
+export function toKey<T>(obj: T) {
+  return (value: T[keyof T]): string | undefined => {
+    return Object.keys(obj).find((key) => obj[key as keyof T] === value);
+  };
+}
+
+// Функция для преобразования ключа в значение enum
+export function fromValue<T>(obj: T) {
+  return (key: string): T[keyof T] | undefined => {
+    return obj[key as keyof T];
+  };
+}
+
+// Создание типа, который объединяет ключи всех объектов в AllEntities
+type KeyOfAllEntities = {
+  [K in keyof AllEntities]: AllEntities[K] extends undefined
+    ? never
+    : keyof AllEntities[K];
+}[keyof AllEntities];
+
+export interface WizardStepType {
+  message: string;
+  // Использование созданного типа для field
+  field: KeyOfAllEntities;
+  enum?: object;
+  union?: object;
+}
+
+export function generateMessage(step: WizardStepType): string {
+  const enumToShow = step.enum ?? step.union;
+  return enumToShow
+    ? `${step.message}\n${printEnum(enumToShow)}`
+    : step.message;
 }
