@@ -1,5 +1,3 @@
-import { StandModel } from './entities/stands/stand.entity';
-
 export function printEnum<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
   const enumEntries = keys.map((key, index) => {
@@ -12,12 +10,6 @@ export function printEnum<T>(e: T): string {
 export function getKeyByIndex(enumObj: any, index: number): string | undefined {
   const keys = Object.keys(enumObj).filter((k) => isNaN(Number(k)));
   return keys[index];
-}
-
-export function getKeyByValue(value: string): string | undefined {
-  return Object.keys(StandModel).find(
-    (key) => StandModel[key as keyof typeof StandModel] === value,
-  );
 }
 
 export function getValueByIndex<T>(
