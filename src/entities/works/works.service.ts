@@ -10,8 +10,10 @@ export class WorksService {
     private standsRepository: Repository<Work>,
   ) {}
 
-  async create(partIn: Work): Promise<Work> {
-    return this.standsRepository.save(partIn);
+  async create(work: Work): Promise<Work> {
+    const partsInReached = { ...work, dateOfReport: new Date() };
+
+    return this.standsRepository.save(partsInReached);
   }
 
   async findAll(): Promise<Work[]> {

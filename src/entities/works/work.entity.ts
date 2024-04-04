@@ -83,10 +83,10 @@ export class Work {
   })
   date: Date;
 
-  // @Column({
-  //   type: 'date',
-  // })
-  // dateOfReport: Date;
+  @Column({
+    type: 'datetime',
+  })
+  dateOfReport: Date;
 
   // @Column({
   //   type: 'date',
@@ -97,7 +97,7 @@ export class Work {
   //   // },
   // })
   // dateArrival: Date;
-  //
+
   // @Column({
   //   type: 'int',
   //   // transformer: {
