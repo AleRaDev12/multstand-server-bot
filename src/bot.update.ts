@@ -6,6 +6,11 @@ import { WIZARDS } from './shared/wizards';
 export class BotUpdate {
   @Start()
   async onStart(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.reply(
+      'this is text',
+      Markup.keyboard(['/start']).oneTime().resize(),
+    );
+
     await ctx.replyWithHTML(
       'Выберите действие:',
       Markup.inlineKeyboard([
