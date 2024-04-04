@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PartIn } from './partIn.entity';
+import { Work } from './work.entity';
 
 @Injectable()
-export class PartsInService {
+export class WorksService {
   constructor(
-    @InjectRepository(PartIn)
-    private standsRepository: Repository<PartIn>,
+    @InjectRepository(Work)
+    private standsRepository: Repository<Work>,
   ) {}
 
-  async create(partIn: PartIn): Promise<PartIn> {
+  async create(partIn: Work): Promise<Work> {
     return this.standsRepository.save(partIn);
   }
 
-  async findAll(): Promise<PartIn[]> {
+  async findAll(): Promise<Work[]> {
     return this.standsRepository.find();
   }
 }

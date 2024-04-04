@@ -1,5 +1,5 @@
 import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { PartIn, Parts } from './partIn.entity';
+import { Tasks, Work } from './work.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
@@ -8,14 +8,11 @@ import {
   getValueUnionByIndex,
   WizardStepType,
 } from '../../helpers';
-import { PartsInService } from './partsIn.service'; // Новый импорт
+import { WorksService } from './works.service'; // Новый импорт
 
 const steps: WizardStepType[] = [
-  { message: 'Комплектующее:', field: 'part', type: 'union', union: Parts },
-  { message: 'Дата заказа:', field: 'dateOrder', type: 'date' },
-  { message: 'Дата получения:', field: 'dateArrival', type: 'date' },
-  { message: 'Стоимость партии:', field: 'amount', type: 'number' },
-  { message: 'Количество шт:', field: 'count', type: 'number' },
+  { message: 'Задача:', field: 'task', type: 'union', union: Tasks },
+  { message: 'Дата выполнения:', field: 'date', type: 'date' },
 ];
 
 function WizardStepHandler(stepIndex: number) {
@@ -40,7 +37,7 @@ function WizardStepHandler(stepIndex: number) {
 
       switch (step.type) {
         case 'union':
-          ctx.wizard.state.partIn[step.field] = getValueUnionByIndex(
+          ctx.wizard.state.work[step.field] = getValueUnionByIndex(
             step.union,
             +msg.text - 1,
           );
@@ -48,7 +45,7 @@ function WizardStepHandler(stepIndex: number) {
         case 'number':
           const number = parseFloat(msg.text);
           if (!isNaN(number)) {
-            ctx.wizard.state.partIn[step.field] = number;
+            ctx.wizard.state.work[step.field] = number;
           } else {
             return 'Введите корректное числовое значение.';
           }
@@ -58,23 +55,21 @@ function WizardStepHandler(stepIndex: number) {
           console.log('*-* Date.parse(msg.text)', Date.parse(msg.text));
 
           if (!isNaN(date)) {
-            ctx.wizard.state.partIn[step.field] = new Date(date);
+            ctx.wizard.state.work[step.field] = new Date(date);
           } else {
             return 'Введите корректную дату.';
           }
           break;
         default:
-          ctx.wizard.state.partIn[step.field] = msg.text;
+          ctx.wizard.state.work[step.field] = msg.text;
           break;
       }
 
       if (stepIndexCorrected === steps.length - 1) {
-        console.log('*-* ctx.wizard.state.partsIn', ctx.wizard.state.partIn);
-        const partIn = await this.partsInService.create(
-          ctx.wizard.state.partIn,
-        );
+        console.log('*-* ctx.wizard.state.work', ctx.wizard.state.work);
+        const work = await this.workService.create(ctx.wizard.state.work);
         await ctx.scene.leave();
-        return `Станок ${JSON.stringify(partIn, null, 2)} добавлен`;
+        return `Работа ${JSON.stringify(work, null, 2)} добавлен`;
       } else {
         ctx.wizard.next();
         return generateMessage(steps[stepIndex - 1]);
@@ -85,16 +80,16 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_PART_IN_WIZARD_ID)
-export class PartsInAddWizard {
+@Wizard(WIZARDS.ADD_WORK_IN_WIZARD_ID)
+export class WorksAddWizard {
   constructor(
-    @Inject(PartsInService)
-    private readonly partsInService: PartsInService,
+    @Inject(WorksService)
+    private readonly workService: WorksService,
   ) {}
 
   @WizardStep(1)
   async start(@Ctx() ctx: CustomWizardContext): Promise<string> {
-    ctx.wizard.state.partIn = new PartIn();
+    ctx.wizard.state.work = new Work();
     ctx.wizard.next();
     return generateMessage(steps[0]);
   }

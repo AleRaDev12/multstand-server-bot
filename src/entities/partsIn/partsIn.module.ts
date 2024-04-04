@@ -1,4 +1,4 @@
-import { PartIn } from './partsIn.entity';
+import { PartIn } from './partIn.entity';
 import { PartsInService } from './partsIn.service';
 import { PartsInAddWizard } from './partsInAdd.wizard';
 import { TypeOrmModule } from '@nestjs/typeorm';

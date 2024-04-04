@@ -9,10 +9,15 @@ export class BotUpdate {
     await ctx.replyWithHTML(
       'Выберите действие:',
       Markup.inlineKeyboard([
-        Markup.button.callback('Клиент', 'add_user'),
-        Markup.button.callback('Заказ', 'add_order'),
-        Markup.button.callback('Станок', 'add_stand'),
-        Markup.button.callback('Комплектующее', 'add_partsIn'),
+        [
+          Markup.button.callback('Клиент', 'add_user'),
+          Markup.button.callback('Заказ', 'add_order'),
+        ],
+        [
+          Markup.button.callback('Станок', 'add_stand'),
+          Markup.button.callback('Комплектующее', 'add_partsIn'),
+        ],
+        [Markup.button.callback('Работа', 'add_work')],
       ]),
     );
   }
@@ -36,7 +41,11 @@ export class BotUpdate {
     await ctx.scene.enter(WIZARDS.ADD_STAND_WIZARD_ID);
   }
   @Action('add_partsIn')
-  async onAddPartsIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_PARTS_IN_WIZARD_ID);
+  async onAddPartIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_PART_IN_WIZARD_ID);
+  }
+  @Action('add_work')
+  async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_WORK_IN_WIZARD_ID);
   }
 }

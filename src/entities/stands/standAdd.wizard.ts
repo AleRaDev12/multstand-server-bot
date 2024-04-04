@@ -11,17 +11,31 @@ import {
 } from '../../helpers'; // Новый импорт
 
 const steps: WizardStepType[] = [
-  { message: 'Модель:', field: 'model', enum: StandModel },
-  { message: 'Покраска:', field: 'painting', enum: PaintingType },
-  { message: 'Количество обычных стёкол:', field: 'glassesRegular' },
-  { message: 'Количество стёкол пп:', field: 'glassesHighTransparency' },
+  { message: 'Модель:', field: 'model', enum: StandModel, type: 'union' },
+  {
+    message: 'Покраска:',
+    field: 'painting',
+    enum: PaintingType,
+    type: 'union',
+  },
+  {
+    message: 'Количество обычных стёкол:',
+    field: 'glassesRegular',
+    type: 'number',
+  },
+  {
+    message: 'Количество стёкол пп:',
+    field: 'glassesHighTransparency',
+    type: 'number',
+  },
   {
     message: 'Светодиодная лента:',
     field: 'ledStripModel',
     enum: LedStripType,
+    type: 'number',
   },
-  { message: 'Ткань для затенения:', field: 'shadingFabric' },
-  { message: 'Штатив для объёмной анимации:', field: 'tripod' },
+  { message: 'Ткань для затенения:', field: 'shadingFabric', type: 'number' },
+  { message: 'Штатив для объёмной анимации:', field: 'tripod', type: 'number' },
 ];
 
 function WizardStepHandler(stepIndex: number) {
