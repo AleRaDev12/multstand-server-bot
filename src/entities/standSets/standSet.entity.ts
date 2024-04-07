@@ -65,7 +65,7 @@ export const Tasks = Object.keys(BaseTasks).reduce((acc, key) => {
 type TasksType = (typeof Tasks)[keyof typeof Tasks];
 
 @Entity()
-export class Work {
+export class StandSet {
   @PrimaryGeneratedColumn()
   id: number;
 

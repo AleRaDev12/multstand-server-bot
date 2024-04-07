@@ -17,4 +17,9 @@ export class TasksService {
   async findAll(): Promise<Task[]> {
     return this.standsRepository.find();
   }
+
+  async getList(): Promise<string> {
+    const tasks = await this.findAll();
+    return `${tasks.map((task, i) => `\n${i + 1}. ${task.category} ${task.taskName} ${task.duration}m ${task.cost}rub`)}`;
+  }
 }
