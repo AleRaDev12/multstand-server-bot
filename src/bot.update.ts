@@ -6,10 +6,7 @@ import { WIZARDS } from './shared/wizards';
 export class BotUpdate {
   @Start()
   async onStart(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.reply(
-      'this is text',
-      Markup.keyboard(['/start']).oneTime().resize(),
-    );
+    await ctx.reply('-', Markup.keyboard(['/start']).oneTime().resize());
 
     await ctx.replyWithHTML(
       'Выберите действие:',
@@ -22,7 +19,10 @@ export class BotUpdate {
           Markup.button.callback('Станок', 'add_stand'),
           Markup.button.callback('Комплектующее', 'add_partsIn'),
         ],
-        [Markup.button.callback('Работа', 'add_work')],
+        [
+          Markup.button.callback('Работа', 'add_work'),
+          Markup.button.callback('Задача', 'add_task'),
+        ],
       ]),
     );
   }
@@ -52,5 +52,9 @@ export class BotUpdate {
   @Action('add_work')
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.scene.enter(WIZARDS.ADD_WORK_IN_WIZARD_ID);
+  }
+  @Action('add_task')
+  async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_TASK_WIZARD_ID);
   }
 }
