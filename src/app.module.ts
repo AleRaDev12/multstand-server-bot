@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { sessionMiddleware } from './middleware/session.middleware';
 import { BotModule } from './bot.module';
+import { SeedService } from './seed.service';
+import { Task } from './entities/tasks/task.entity';
 
 @Module({
   imports: [
@@ -22,8 +24,9 @@ import { BotModule } from './bot.module';
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
+    TypeOrmModule.forFeature([Task]),
     BotModule,
   ],
-  providers: [BotModule],
+  providers: [BotModule, SeedService],
 })
 export class AppModule {}

@@ -12,7 +12,7 @@ import { TasksService } from './tasks.service'; // Новый импорт
 
 const steps: WizardStepType[] = [
   { message: 'Категория:', field: 'category', type: 'string' },
-  { message: 'Задача:', field: 'taskName', type: 'string' },
+  { message: 'Задача:', field: 'shownName', type: 'string' },
   { message: 'Оплата:', field: 'cost', type: 'number' },
   { message: 'Длительность:', field: 'duration', type: 'number' },
 ];
