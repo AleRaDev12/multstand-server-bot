@@ -11,6 +11,9 @@ import { Work } from '../entities/works/work.entity';
 import { Task } from '../entities/tasks/task.entity';
 import { FinancialTransaction } from '../entities/financial-transactions/financial-transaction.entity';
 import { Master } from '../entities/masters/master.entity';
+import { Component } from '../entities/components/component.entity';
+import { StandSet } from '../entities/stand-sets/stand-set.entity';
+import { WizardStepType } from '../helpers';
 
 // export type
 
@@ -23,9 +26,13 @@ export type AllEntities = {
   task?: Task;
   financialTransaction?: FinancialTransaction;
   master?: Master;
+  component?: Component;
+  standSet?: StandSet;
 };
 
-interface CustomWizardSessionData extends WizardSessionData, AllEntities {}
+interface CustomWizardSessionData extends WizardSessionData, AllEntities {
+  steps?: WizardStepType[];
+}
 
 interface CustomWizardContextWizard<
   D extends CustomWizardSessionData = CustomWizardSessionData,

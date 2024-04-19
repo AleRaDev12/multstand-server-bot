@@ -76,7 +76,14 @@ type KeyOfAllEntities = {
 export interface WizardStepType {
   message: string;
   field?: KeyOfAllEntities;
-  type: 'string' | 'number' | 'date' | 'union' | 'taskSelect';
+  type:
+    | 'string'
+    | 'number'
+    | 'date'
+    | 'union'
+    | 'taskSelect'
+    | 'enum'
+    | 'boolean';
   enum?: object;
   union?: object;
 }

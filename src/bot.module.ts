@@ -6,6 +6,7 @@ import { StandsModule } from './entities/stands/stands.module';
 import { PartsInModule } from './entities/partsIn/partsIn.module';
 import { WorksModule } from './entities/works/works.module';
 import { TasksModule } from './entities/tasks/tasks.module';
+import { StandSetsModule } from './entities/stand-sets/stand-sets.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TasksModule } from './entities/tasks/tasks.module';
     PartsInModule,
     WorksModule,
     TasksModule,
+    StandSetsModule,
   ],
   providers: [BotUpdate],
 })

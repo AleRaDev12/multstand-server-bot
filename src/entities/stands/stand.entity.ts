@@ -17,7 +17,7 @@ export const StandModel = {
   ...Stand2D,
   ...Stand3D,
 };
-type StandModelType = (typeof StandModel)[keyof typeof StandModel];
+export type StandModelType = (typeof StandModel)[keyof typeof StandModel];
 
 export enum PaintingType {
   without = 'Без обработки',
