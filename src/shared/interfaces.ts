@@ -9,6 +9,8 @@ import { Stand } from '../entities/stands/stand.entity';
 import { PartIn } from '../entities/partsIn/partIn.entity';
 import { Work } from '../entities/works/work.entity';
 import { Task } from '../entities/tasks/task.entity';
+import { FinancialTransaction } from '../entities/financial-transactions/financial-transaction.entity';
+import { Master } from '../entities/masters/master.entity';
 
 // export type
 
@@ -19,6 +21,8 @@ export type AllEntities = {
   partIn?: PartIn;
   work?: Work;
   task?: Task;
+  financialTransaction?: FinancialTransaction;
+  master?: Master;
 };
 
 interface CustomWizardSessionData extends WizardSessionData, AllEntities {}

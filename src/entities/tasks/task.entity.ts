@@ -23,8 +23,6 @@ export class Task {
   })
   shownName: string;
 
-  // *-* target stands
-
   @Column({
     type: 'int',
   })
@@ -34,7 +32,4 @@ export class Task {
     type: 'int',
   })
   duration: number;
-
-  // @OneToMany(() => Work, (work) => work.task)
-  // works: Work[];
 }

@@ -1,20 +1,16 @@
 import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { Task } from './task.entity';
+import { FinancialTransaction } from './financial-transaction.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
-import {
-  generateMessage,
-  getValueUnionByIndex,
-  WizardStepType,
-} from '../../helpers';
-import { TasksService } from './tasks.service'; // Новый импорт
+import { generateMessage, WizardStepType } from '../../helpers';
+import { FinancialTransactionsService } from './financial-transactions.service';
 
 const steps: WizardStepType[] = [
-  { message: 'Категория:', field: 'category', type: 'string' },
-  { message: 'Задача:', field: 'shownName', type: 'string' },
-  { message: 'Оплата:', field: 'cost', type: 'number' },
-  { message: 'Длительность:', field: 'duration', type: 'number' },
+  { message: 'Дата транзакции:', field: 'transactionDate', type: 'date' },
+  { message: 'Сумма:', field: 'amount', type: 'number' },
+  { message: 'Тип транзакции:', field: 'transactionType', type: 'string' },
+  { message: 'Описание:', field: 'description', type: 'string' },
 ];
 
 function WizardStepHandler(stepIndex: number) {
@@ -31,51 +27,42 @@ function WizardStepHandler(stepIndex: number) {
       const msg = ctx.update?.message;
       const step = steps[stepIndexCorrected];
 
-      if (!msg.text) {
+      if (!msg?.text) {
         return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
       }
 
       switch (step.type) {
-        case 'union':
-          ctx.wizard.state.task[step.field] = getValueUnionByIndex(
-            step.union,
-            +msg.text - 1,
-          );
-          break;
         case 'number':
           const number = parseFloat(msg.text);
           if (!isNaN(number)) {
-            ctx.wizard.state.task[step.field] = number;
+            ctx.wizard.state.financialTransaction[step.field] = number;
           } else {
             return 'Введите корректное числовое значение.';
           }
           break;
-        case 'string':
-          ctx.wizard.state.task[step.field] = msg.text;
-          break;
         case 'date':
           const date = Date.parse(msg.text);
-          console.log('*-* Date.parse(msg.text)', Date.parse(msg.text));
-
           if (!isNaN(date)) {
-            ctx.wizard.state.task[step.field] = new Date(date);
+            ctx.wizard.state.financialTransaction[step.field] = new Date(date);
           } else {
             return 'Введите корректную дату.';
           }
           break;
         default:
-          ctx.wizard.state.task[step.field] = msg.text;
+          ctx.wizard.state.financialTransaction[step.field] = msg.text;
           break;
       }
 
       if (stepIndexCorrected === steps.length - 1) {
-        console.log('*-* ctx.wizard.state.task', ctx.wizard.state.task);
-        const work = await this.service.create(ctx.wizard.state.task);
+        const financialTransaction =
+          await this.financialTransactionsService.create(
+            ctx.wizard.state.financialTransaction,
+          );
         await ctx.scene.leave();
-        return `Работа ${JSON.stringify(work, null, 2)} добавлен`;
+        return `Финансовая транзакция ${JSON.stringify(financialTransaction, null, 2)} добавлена.`;
       } else {
         ctx.wizard.next();
-        return generateMessage(steps[stepIndex - 1]);
+        return generateMessage(steps[stepIndexCorrected + 1]);
       }
     };
 
@@ -83,16 +70,16 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_TASK_WIZARD_ID)
-export class TasksAddWizard {
+@Wizard(WIZARDS.ADD_FINANCIAL_TRANSACTION_WIZARD_ID)
+export class FinancialTransactionsAddWizard {
   constructor(
-    @Inject(TasksService)
-    private readonly service: TasksService,
+    @Inject(FinancialTransactionsService)
+    private readonly financialTransactionsService: FinancialTransactionsService,
   ) {}
 
   @WizardStep(1)
   async start(@Ctx() ctx: CustomWizardContext): Promise<string> {
-    ctx.wizard.state.task = new Task();
+    ctx.wizard.state.financialTransaction = new FinancialTransaction();
     ctx.wizard.next();
     return generateMessage(steps[0]);
   }
