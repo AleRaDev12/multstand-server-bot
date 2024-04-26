@@ -61,6 +61,6 @@ export class ClientAddWizard {
     ctx.wizard.state.user.city = msg.text;
     const user = await this.usersService.create(ctx.wizard.state.user);
     await ctx.scene.leave();
-    return `Пользователь ${user.firstName} ${user.lastName} ${user.phoneNumber} ${user.city} добавлен.`;
+    return `Клиент ${user.firstName} ${user.lastName} ${user.phoneNumber} ${user.city} добавлен.`;
   }
 }

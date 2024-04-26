@@ -8,5 +8,6 @@ import { OrderAddWizard } from './orderAdd.wizard';
 @Module({
   imports: [TypeOrmModule.forFeature([Order]), ClientsModule],
   providers: [OrdersService, OrderAddWizard],
+  exports: [OrdersService],
 })
 export class OrdersModule {}

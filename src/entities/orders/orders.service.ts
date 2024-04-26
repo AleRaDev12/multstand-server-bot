@@ -15,6 +15,11 @@ export class OrdersService {
   }
 
   async findAll(): Promise<Order[]> {
-    return this.ordersRepository.find({ relations: ['user'] });
+    return this.ordersRepository.find({ relations: ['client'] });
+  }
+
+  async getList(): Promise<string> {
+    const orders = await this.findAll();
+    return `${orders.map((order, i) => `\n${i + 1}. ${order.id} ${order.contractDate} ${order.client.firstName}`)}`;
   }
 }

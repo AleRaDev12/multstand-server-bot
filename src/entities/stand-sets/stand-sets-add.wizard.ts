@@ -1,24 +1,26 @@
 import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { StandSet } from './stand-set.entity';
+import { Led, Processing, StandSet, Tripod } from './stand-set.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
-import { generateMessage, WizardStepType } from '../../helpers';
+import {
+  generateMessage,
+  getValueUnionByIndex,
+  WizardStepType,
+} from '../../helpers';
 import { StandSetsService } from './stand-sets.service';
-import { StandModel, StandModelType } from '../stands/stand.entity';
+import { StandModel } from '../stands/stand.entity';
+import { TasksService } from '../tasks/tasks.service';
+import { OrdersService } from '../orders/orders.service';
 
 const commonSteps: WizardStepType[] = [
-  { message: 'Модель:', field: 'model', type: 'enum', enum: StandModel },
+  { message: 'Выберите заказ:', type: 'orderSelect' },
+  { message: 'Модель:', field: 'model', type: 'union', union: StandModel },
   {
     message: 'Тип обработки:',
     field: 'processing',
-    type: 'enum',
-    enum: [
-      'Только шлифовка',
-      'Шлифовка, лак',
-      'Шлифовка, белая эмаль, лак',
-      'Шлифовка, чёрная эмаль, лак',
-    ],
+    type: 'union',
+    union: { ...Processing },
   },
   {
     message: 'Крепление для смартфона (количество):',
@@ -28,14 +30,14 @@ const commonSteps: WizardStepType[] = [
   {
     message: 'Штатив для объёмной анимации:',
     field: 'tripod',
-    type: 'enum',
-    enum: ['Комплект №1', 'Комплект №2', 'Комплект №3'],
+    type: 'union',
+    union: { ...Tripod },
   },
   {
     message: 'Тип светодиодной ленты:',
     field: 'ledType',
-    type: 'enum',
-    enum: ['Эконом', 'Премиум'],
+    type: 'union',
+    union: { ...Led },
   },
 ];
 
@@ -75,60 +77,132 @@ const threeDSteps: WizardStepType[] = [
   },
 ];
 
+const steps: WizardStepType[] = commonSteps;
+
 function WizardStepHandler(stepIndex: number) {
   return function (
     _target: any,
     _propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
-    const stepIndexCorrected = stepIndex - 2;
-
     descriptor.value = async function (ctx: CustomWizardContext) {
+      console.log('*-* -------------------');
+      console.log('*-* stepIndex', stepIndex);
+
+      if (stepIndex === 1) {
+        ctx.wizard.state.standSet = new StandSet();
+      }
+
+      const stepForAnswerNumber = stepIndex - 2;
+      const stepForRequestNumber = stepIndex - 1;
+
+      const stepAnswer = steps[stepForAnswerNumber];
+      const stepRequest = steps[stepForRequestNumber];
+      console.log('*-* stepAnswer', stepAnswer);
+      console.log('*-* stepRequest', stepRequest);
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const msg = ctx.update?.message;
-      const step = ctx.wizard.state.steps[stepIndexCorrected];
 
-      if (!msg?.text) {
-        return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
+      const isAwaitAnswer = !!stepAnswer;
+
+      if (isAwaitAnswer) {
+        // Handle answer
+        console.log('*-* handle answer');
+        if (!msg?.text) {
+          return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
+        }
+
+        switch (stepAnswer.type) {
+          case 'union':
+            ctx.wizard.state.standSet[stepAnswer.field] = getValueUnionByIndex(
+              stepAnswer.union,
+              +msg.text - 1,
+            );
+            break;
+          case 'number':
+            const number = parseFloat(msg.text);
+            if (!isNaN(number)) {
+              ctx.wizard.state.standSet[stepAnswer.field] = number;
+            } else {
+              return 'Введите корректное числовое значение.';
+            }
+            break;
+          case 'boolean':
+            const value = msg.text.toLowerCase();
+            if (value === 'да' || value === 'yes') {
+              ctx.wizard.state.standSet[stepAnswer.field] = true;
+            } else if (value === 'нет' || value === 'no') {
+              ctx.wizard.state.standSet[stepAnswer.field] = false;
+            } else {
+              return 'Введите "да" или "нет".';
+            }
+            break;
+          case 'orderSelect':
+            console.log('*-* orderSelect');
+            console.log('*-* msg.text', msg.text);
+            const selectedIndex = parseInt(msg.text) - 1;
+            console.log('*-* selectedIndex', selectedIndex);
+
+            const orders = await this.orderService.findAll();
+            console.log('*-* orders --------', orders);
+
+            const order = orders[selectedIndex];
+            console.log('*-* order --------', order);
+
+            if (selectedIndex >= 0 && selectedIndex < orders.length) {
+              ctx.wizard.state.standSet.order = order;
+              console.log(
+                '*-* ctx.wizard.state.standSet',
+                ctx.wizard.state.standSet,
+              );
+            } else {
+              return 'Выберите действительный номер заказа из списка.';
+            }
+            break;
+
+          default:
+            return 'Ошибка';
+        }
+
+        const isLastStep = stepForAnswerNumber === steps.length - 1;
+        if (isLastStep) {
+          console.log(
+            '*-* ctx.wizard.state.standSet',
+            ctx.wizard.state.standSet,
+          );
+          const standSet = await this.standSetsService.create(
+            ctx.wizard.state.standSet,
+          );
+          await ctx.scene.leave();
+          return `Набор характеристик станка ${JSON.stringify(standSet, null, 2)} добавлен`;
+        }
       }
 
-      switch (step.type) {
-        case 'enum':
-          ctx.wizard.state.standSet[step.field] = msg.text;
-          break;
-        case 'number':
-          const number = parseInt(msg.text, 10);
-          if (!isNaN(number)) {
-            ctx.wizard.state.standSet[step.field] = number;
-          } else {
-            return 'Введите корректное числовое значение.';
-          }
-          break;
-        case 'boolean':
-          const value = msg.text.toLowerCase();
-          if (value === 'да' || value === 'yes') {
-            ctx.wizard.state.standSet[step.field] = true;
-          } else if (value === 'нет' || value === 'no') {
-            ctx.wizard.state.standSet[step.field] = false;
-          } else {
-            return 'Введите "да" или "нет".';
-          }
-          break;
-        default:
-          ctx.wizard.state.standSet[step.field] = msg.text;
-          break;
-      }
+      const isShouldSendRequest = !!stepRequest;
 
-      if (stepIndexCorrected === ctx.wizard.state.steps.length - 1) {
-        const standSet = await this.standSetsService.create(
-          ctx.wizard.state.standSet,
-        );
-        await ctx.scene.leave();
-        return `Набор характеристик станка ${JSON.stringify(standSet, null, 2)} добавлен.`;
-      } else {
+      if (isShouldSendRequest) {
+        // Send text
+        console.log('*-* send text');
+
+        switch (stepRequest.type) {
+          case 'orderSelect': {
+            const ordersLint = await this.orderService.getList();
+            console.log('*-* ordersLint', ordersLint);
+
+            ctx.wizard.next();
+            return `${steps[stepIndex - 1].message}\n${await this.orderService.getList()}`;
+          }
+
+          default: {
+            console.log('*-* default');
+            break;
+          }
+        }
+
         ctx.wizard.next();
-        return generateMessage(ctx.wizard.state.steps[stepIndexCorrected + 1]);
+        return generateMessage(steps[stepIndex - 1]);
       }
     };
 
@@ -141,19 +215,22 @@ export class StandSetsAddWizard {
   constructor(
     @Inject(StandSetsService)
     private readonly standSetsService: StandSetsService,
+    @Inject(OrdersService)
+    private readonly orderService: OrdersService,
   ) {}
 
   @WizardStep(1)
-  async start(@Ctx() ctx: CustomWizardContext): Promise<string> {
-    ctx.wizard.state.standSet = new StandSet();
-    ctx.wizard.state.steps = [...commonSteps];
-    ctx.wizard.next();
-    return generateMessage(ctx.wizard.state.steps[0]);
-  }
+  @WizardStepHandler(1)
+  async start() {}
 
   @On('text')
   @WizardStep(2)
-  async onModel(@Ctx() ctx: CustomWizardContext): Promise<string> {
+  @WizardStepHandler(2)
+  async step2() {}
+
+  @On('text')
+  @WizardStep(3)
+  async step3(@Ctx() ctx: CustomWizardContext): Promise<string> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const msg = ctx.update?.message;
@@ -161,27 +238,25 @@ export class StandSetsAddWizard {
       return 'Некорректный ввод. Пожалуйста, введите модель станка.';
     }
 
-    ctx.wizard.state.standSet.model = msg.text as unknown as StandModelType;
+    ctx.wizard.state.standSet.model = getValueUnionByIndex(
+      steps[0].union,
+      +msg.text - 1,
+    );
 
-    switch (msg.text) {
+    switch (ctx.wizard.state.standSet.model) {
       case StandModel.mTM15:
       case StandModel.mTL15:
-        ctx.wizard.state.steps.push(...tmtlSteps);
+        steps.push(...tmtlSteps);
         break;
       case StandModel.m3DM5:
       case StandModel.m3DL5:
-        ctx.wizard.state.steps.push(...threeDSteps);
+        steps.push(...threeDSteps);
         break;
     }
 
     ctx.wizard.next();
-    return generateMessage(ctx.wizard.state.steps[1]);
+    return generateMessage(steps[2]);
   }
-
-  @On('text')
-  @WizardStep(3)
-  @WizardStepHandler(3)
-  async step3() {}
 
   @On('text')
   @WizardStep(4)

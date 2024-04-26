@@ -82,6 +82,7 @@ export interface WizardStepType {
     | 'date'
     | 'union'
     | 'taskSelect'
+    | 'orderSelect'
     | 'enum'
     | 'boolean';
   enum?: object;

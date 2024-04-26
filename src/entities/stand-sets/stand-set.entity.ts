@@ -1,25 +1,26 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../orders/order.entity';
 import { StandModel, StandModelType } from '../stands/stand.entity';
-import { fromEnumValue, fromValue, toEnumKey, toKey } from '../../helpers';
+import { fromValue, toKey } from '../../helpers';
 
-export enum ProcessingType {
-  OnlySanding = 'Только шлифовка',
-  SandingAndVarnish = 'Шлифовка, лак',
-  SandingWhiteEnamelVarnish = 'Шлифовка, белая эмаль, лак',
-  SandingBlackEnamelVarnish = 'Шлифовка, чёрная эмаль, лак',
-}
+export const Processing = {
+  OnlySanding: 'Только шлифовка',
+  SandingAndVarnish: 'Шлифовка, лак',
+  SandingWhiteEnamelVarnish: 'Шлифовка, белая эмаль, лак',
+  SandingBlackEnamelVarnish: 'Шлифовка, чёрная эмаль, лак',
+};
 
-export enum TripodType {
-  Set1 = 'Комплект №1',
-  Set2 = 'Комплект №2',
-  Set3 = 'Комплект №3',
-}
+export const Tripod = {
+  No: 'Без штатива',
+  Set1: 'Комплект №1',
+  Set2: 'Комплект №2',
+  Set3: 'Комплект №3',
+};
 
-export enum LedType {
-  Economy = 'Эконом',
-  Premium = 'Премиум',
-}
+export const Led = {
+  Economy: 'Эконом',
+  Premium: 'Премиум',
+};
 
 @Entity()
 export class StandSet {
@@ -42,11 +43,11 @@ export class StandSet {
     type: 'text',
     nullable: true,
     transformer: {
-      to: toEnumKey(ProcessingType),
-      from: fromEnumValue(ProcessingType),
+      to: toKey(Processing),
+      from: fromValue(Processing),
     },
   })
-  processing: ProcessingType;
+  processing: (typeof Processing)[keyof typeof Processing];
 
   @Column({ nullable: true })
   smartphoneMount: number;
@@ -55,21 +56,21 @@ export class StandSet {
     type: 'text',
     nullable: true,
     transformer: {
-      to: toEnumKey(TripodType),
-      from: fromEnumValue(TripodType),
+      to: toKey(Tripod),
+      from: fromValue(Tripod),
     },
   })
-  tripod: TripodType;
+  tripod: (typeof Tripod)[keyof typeof Tripod];
 
   @Column({
     type: 'text',
     nullable: true,
     transformer: {
-      to: toEnumKey(LedType),
-      from: fromEnumValue(LedType),
+      to: toKey(Led),
+      from: fromValue(Led),
     },
   })
-  ledType: LedType;
+  ledType: (typeof Led)[keyof typeof Led];
 
   @Column({ nullable: true })
   regularGlass: number;

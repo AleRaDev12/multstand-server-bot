@@ -23,6 +23,7 @@ export class BotUpdate {
           Markup.button.callback('Работа', 'add_work'),
           Markup.button.callback('Задача', 'add_task'),
         ],
+        [Markup.button.callback('Станок-заказ', 'add_stand_set')],
       ]),
     );
   }
@@ -56,5 +57,10 @@ export class BotUpdate {
   @Action('add_task')
   async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.scene.enter(WIZARDS.ADD_TASK_WIZARD_ID);
+  }
+
+  @Action('add_stand_set')
+  async onAddStandSet(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_STAND_SET_WIZARD_ID);
   }
 }
