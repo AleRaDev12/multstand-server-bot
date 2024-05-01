@@ -1,11 +1,9 @@
-import {
-  generateMessage,
-  getValueUnionByIndex,
-  WizardStepType,
-} from '../../helpers';
+import { WizardStepType } from '../../helpers';
 import { Led, Painting, StandModel, Tripod } from '../unions';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { StandOrder } from './stand-order.entity';
+import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import { StandOrderAddWizard } from './stand-order-add.wizard';
 
 const commonSteps: WizardStepType[] = [
   { message: 'Выберите заказ:', type: 'orderSelect' },
@@ -71,168 +69,67 @@ const threeDSteps: WizardStepType[] = [
   },
 ];
 
-const standOrderSteps: WizardStepType[] = commonSteps;
-const steps = standOrderSteps;
+const standOrderSteps: WizardStepType[] = [...commonSteps];
 
-export function StandOrderWizardHandler(stepIndex: number) {
-  return function (
-    _target: any,
-    _propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) {
-    descriptor.value = async function (ctx: CustomWizardContext) {
-      console.log('*-* -------------------');
-      console.log('*-* stepIndex', stepIndex);
-
-      if (stepIndex === 1) {
-        ctx.wizard.state.standOrder = new StandOrder();
-      }
-
-      const stepForAnswerNumber = stepIndex - 2;
-      const stepForRequestNumber = stepIndex - 1;
-
-      const stepAnswer = steps[stepForAnswerNumber];
-      const stepRequest = steps[stepForRequestNumber];
-      console.log('*-* stepAnswer', stepAnswer);
-      console.log('*-* stepRequest', stepRequest);
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const msg = ctx.update?.message;
-
-      const isAwaitAnswer = !!stepAnswer;
-      if (isAwaitAnswer) {
-        // Handle answer
-        console.log('*-* handle answer');
-        if (!msg?.text) {
-          return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
-        }
-
-        switch (stepAnswer.type) {
-          case 'union':
-            const optionNumber = +msg.text;
-            const unionKeys = Object.keys(stepAnswer.union);
-            if (optionNumber < 1 || optionNumber > unionKeys.length) {
-              return 'Некорректное значение. Пожалуйста, введите значение еще раз.';
-            }
-            ctx.wizard.state.standOrder[stepAnswer.field] =
-              getValueUnionByIndex(stepAnswer.union, optionNumber - 1);
-
-            // additional handler
-            if (stepAnswer.field === 'model') {
-              switch (ctx.wizard.state.standOrder.model) {
-                case StandModel.mTM15:
-                case StandModel.mTL15:
-                  steps.push(...tmtlSteps);
-                  break;
-                case StandModel.m3DM5:
-                case StandModel.m3DL5:
-                  steps.push(...threeDSteps);
-                  break;
-              }
-            }
-            break;
-          case 'number':
-            const number = parseFloat(msg.text);
-            if (!isNaN(number)) {
-              ctx.wizard.state.standOrder[stepAnswer.field] = number;
-            } else {
-              return 'Введите корректное числовое значение.';
-            }
-            break;
-          case 'boolean':
-            const value = msg.text.toLowerCase();
-            let booleanValue;
-
-            switch (value) {
-              case 'да':
-              case 'yes':
-              case '1':
-                booleanValue = true;
-                break;
-              case 'нет':
-              case 'no':
-              case '0':
-                booleanValue = false;
-                break;
-
-              default:
-                return `Введеите "да", "нет", "yes", "no", 1 или 0.`;
-            }
-            ctx.wizard.state.standOrder[stepAnswer.field] = booleanValue;
-            break;
-          case 'orderSelect':
-            console.log('*-* orderSelect');
-            console.log('*-* msg.text', msg.text);
-            const selectedIndex = parseInt(msg.text) - 1;
-            console.log('*-* selectedIndex', selectedIndex);
-
-            const orders = await this.orderService.findAll();
-            console.log('*-* orders --------', orders);
-
-            const order = orders[selectedIndex];
-            console.log('*-* order --------', order);
-
-            if (selectedIndex >= 0 && selectedIndex < orders.length) {
-              ctx.wizard.state.standOrder.order = order;
-              console.log(
-                '*-* ctx.wizard.state.standSet',
-                ctx.wizard.state.standOrder,
-              );
-            } else {
-              return 'Выберите действительный номер заказа из списка.';
-            }
-            break;
-
-          default:
-            return 'Ошибка';
-        }
-
-        const isLastStep = stepForAnswerNumber === steps.length - 1;
-        if (isLastStep) {
-          console.log(
-            '*-* ctx.wizard.state.standSet',
-            ctx.wizard.state.standOrder,
-          );
-          const standSet = await this.standSetsService.create(
-            ctx.wizard.state.standOrder,
-          );
-
-          // additional handler
-          // Reset steps for next iterations
-          steps.length = 0;
-          steps.push(...commonSteps);
-
-          await ctx.scene.leave();
-          return `Набор характеристик станка ${JSON.stringify(standSet, null, 2)} добавлен`;
-        }
-      }
-
-      const isShouldSendRequest = !!stepRequest;
-      if (isShouldSendRequest) {
-        // Send text
-        console.log('*-* send text');
-
-        switch (stepRequest.type) {
-          case 'orderSelect': {
-            const ordersLint = await this.orderService.getList();
-            console.log('*-* ordersLint', ordersLint);
-
-            ctx.wizard.next();
-            return `${steps[stepIndex - 1].message}\n${await this.orderService.getList()}`;
-          }
-
-          default: {
-            console.log('*-* default');
-            break;
-          }
-        }
-
-        ctx.wizard.next();
-        return generateMessage(steps[stepIndex - 1]);
-      }
-    };
-
-    return descriptor;
-  };
+function getEntity(ctx: CustomWizardContext): StandOrder {
+  return ctx.wizard.state.standOrder;
 }
+
+function setEntity(ctx: CustomWizardContext): void {
+  ctx.wizard.state.standOrder = new StandOrder();
+}
+
+function save(entity: StandOrder) {
+  return this.service.create(entity);
+}
+
+async function print(
+  ctx: CustomWizardContext,
+  entity: StandOrder,
+): Promise<void> {
+  await ctx.reply(
+    `Набор характеристик станка ${JSON.stringify(entity, null, 2)} добавлен`,
+  );
+}
+
+async function handleSpecificAnswer(
+  ctx: CustomWizardContext,
+  stepAnswer: WizardStepType,
+  entity: StandOrder,
+): Promise<void> {
+  switch (stepAnswer.field) {
+    case 'model':
+      switch (entity.model) {
+        case StandModel.mTM15:
+        case StandModel.mTL15:
+          standOrderSteps.push(...tmtlSteps);
+          break;
+        case StandModel.m3DM5:
+        case StandModel.m3DL5:
+          standOrderSteps.push(...threeDSteps);
+          break;
+      }
+      break;
+  }
+}
+
+async function handleSpecificRequest(
+  this: StandOrderAddWizard,
+  ctx: CustomWizardContext,
+  stepRequest: WizardStepType,
+): Promise<string> {
+  if (stepRequest.type !== 'orderSelect') return;
+
+  const ordersList = await this.orderService.getList();
+  await ctx.reply(`${stepRequest.message}\n${ordersList}`);
+}
+
+export const StandOrderWizardHandler = UnifiedWizardHandler<StandOrder>({
+  getEntity,
+  setEntity,
+  save,
+  print,
+  steps: standOrderSteps,
+  handleSpecificAnswer,
+  handleSpecificRequest,
+});

@@ -62,12 +62,18 @@ export function UnifiedWizardHandler<T>(
 
         const isAwaitAnswer = !!stepAnswer;
         if (isAwaitAnswer) {
-          await handleAnswer(ctx, stepAnswer, entity, stepForAnswerNumber);
+          await handleAnswer.call(
+            this,
+            ctx,
+            stepAnswer,
+            entity,
+            stepForAnswerNumber,
+          );
         }
 
         const isShouldSendRequest = !!stepRequest;
         if (isShouldSendRequest) {
-          await sendRequest(ctx, stepRequest, stepIndex);
+          await sendRequest.call(this, ctx, stepRequest, stepIndex);
         }
       };
 
@@ -83,7 +89,10 @@ export function UnifiedWizardHandler<T>(
         const msg = ctx.update?.message as { text?: string };
 
         if (!msg?.text) {
-          return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
+          await ctx.reply(
+            'Некорректный ввод. Пожалуйста, введите значение еще раз.',
+          );
+          return;
         }
 
         switch (stepAnswer.type) {
@@ -91,7 +100,10 @@ export function UnifiedWizardHandler<T>(
             const optionNumber = +msg.text;
             const unionKeys = Object.keys(stepAnswer.union);
             if (optionNumber < 1 || optionNumber > unionKeys.length) {
-              return 'Некорректное значение. Пожалуйста, введите значение еще раз.';
+              await ctx.reply(
+                'Некорректное значение. Пожалуйста, введите значение еще раз.',
+              );
+              return;
             }
             entity[stepAnswer.field] = getValueUnionByIndex(
               stepAnswer.union,
@@ -103,7 +115,8 @@ export function UnifiedWizardHandler<T>(
             if (!isNaN(number)) {
               entity[stepAnswer.field] = number;
             } else {
-              return 'Введите корректное числовое значение.';
+              await ctx.reply('Введите корректное числовое значение.');
+              return;
             }
             break;
           case 'boolean':
@@ -123,7 +136,8 @@ export function UnifiedWizardHandler<T>(
                 break;
 
               default:
-                return `Введеите "да", "нет", "yes", "no", 1 или 0.`;
+                await ctx.reply(`Введеите "да", "нет", "yes", "no", 1 или 0.`);
+                return;
             }
             entity[stepAnswer.field] = booleanValue;
             break;
@@ -131,7 +145,8 @@ export function UnifiedWizardHandler<T>(
             if (handleSpecificAnswer) {
               await handleSpecificAnswer(ctx, stepAnswer, entity);
             } else {
-              return 'Ошибка';
+              await ctx.reply('Ошибка');
+              return;
             }
         }
 
@@ -153,12 +168,24 @@ export function UnifiedWizardHandler<T>(
       ) {
         console.log('*-* send text');
 
-        if (handleSpecificRequest) {
-          await handleSpecificRequest(ctx, stepRequest);
+        switch (stepRequest.type) {
+          case 'union':
+          case 'number':
+          case 'boolean': {
+            ctx.wizard.next();
+            await ctx.reply(generateMessage(steps[stepIndex - 1]));
+            break;
+          }
+          default: {
+            if (handleSpecificRequest) {
+              await handleSpecificRequest.call(this, ctx, stepRequest);
+              ctx.wizard.next();
+              return;
+            } else {
+              await ctx.reply('Ошибка');
+            }
+          }
         }
-
-        ctx.wizard.next();
-        return generateMessage(steps[stepIndex - 1]);
       }
 
       return descriptor;

@@ -4,14 +4,16 @@ import { Inject } from '@nestjs/common';
 import { StandOrderService } from './stand-order.service';
 import { OrdersService } from '../orders/orders.service';
 import { StandOrderWizardHandler } from './stand-order.wizard-handler';
+import { CustomWizardContext } from '../../shared/interfaces';
+import { WizardStepType } from '../../helpers';
 
 @Wizard(WIZARDS.ADD_STAND_SET)
 export class StandOrderAddWizard {
   constructor(
     @Inject(StandOrderService)
-    private readonly standSetsService: StandOrderService,
+    private readonly service: StandOrderService,
     @Inject(OrdersService)
-    private readonly orderService: OrdersService,
+    readonly orderService: OrdersService,
   ) {}
 
   @WizardStep(1)
