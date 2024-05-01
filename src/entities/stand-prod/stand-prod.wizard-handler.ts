@@ -1,12 +1,7 @@
-import {
-  generateMessage,
-  getValueUnionByIndex,
-  WizardStepType,
-} from '../../helpers';
+import { WizardStepType } from '../../helpers';
 import { LedStripModel, Painting, StandModel, Tripod } from '../unions';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { StandProd } from './stand-prod.entity';
-import { SCENES } from '../../shared/wizards';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 
 const standProdSteps: WizardStepType[] = [
@@ -42,8 +37,6 @@ const standProdSteps: WizardStepType[] = [
   },
 ];
 
-const steps = standProdSteps;
-
 const getEntity = (ctx: CustomWizardContext): StandProd =>
   ctx.wizard.state.standProd;
 const setEntity = (ctx: CustomWizardContext): void => {
@@ -58,10 +51,10 @@ const print = async (ctx: CustomWizardContext, entity: StandProd) => {
   );
 };
 
-export const StandProdWizardHandler = UnifiedWizardHandler<StandProd>(
+export const StandProdWizardHandler = UnifiedWizardHandler<StandProd>({
   getEntity,
   setEntity,
   save,
   print,
-  standProdSteps,
-);
+  steps: standProdSteps,
+});
