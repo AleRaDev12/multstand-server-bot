@@ -4,9 +4,9 @@ import { OrdersService } from './orders.service';
 import { ClientsService } from '../clients/clients.service';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext, MessageType } from '../../shared/interfaces';
-import { WIZARDS } from '../../shared/wizards';
+import { SCENES, WIZARDS } from '../../shared/wizards';
 
-@Wizard(WIZARDS.ADD_ORDER_WIZARD_ID)
+@Wizard(WIZARDS.ADD_ORDER)
 export class OrderAddWizard {
   constructor(
     @Inject(OrdersService)
@@ -71,10 +71,15 @@ export class OrderAddWizard {
   async onAmount(
     @Ctx() ctx: CustomWizardContext,
     @Message() msg: { text: string },
-  ): Promise<string> {
+  ): Promise<void> {
     ctx.wizard.state.order.amount = parseInt(msg.text);
     const order = await this.ordersService.create(ctx.wizard.state.order);
+
+    await ctx.reply(
+      `Заказ №${order.id} для клиента ${order.client.firstName} ${order.client.lastName} добавлен.`,
+    );
+
     await ctx.scene.leave();
-    return `Заказ №${order.id} для клиента ${order.client.firstName} ${order.client.lastName} добавлен.`;
+    await ctx.scene.enter(SCENES.ENTERING);
   }
 }

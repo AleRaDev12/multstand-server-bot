@@ -5,7 +5,7 @@ import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards'; // Новый импорт
 
-@Wizard(WIZARDS.ADD_USER_WIZARD_ID)
+@Wizard(WIZARDS.ADD_USER)
 export class ClientAddWizard {
   constructor(
     @Inject(ClientsService)

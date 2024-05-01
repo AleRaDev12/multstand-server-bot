@@ -64,7 +64,7 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_MASTER_WIZARD_ID)
+@Wizard(WIZARDS.ADD_MASTER)
 export class MastersAddWizard {
   constructor(
     @Inject(MastersService)

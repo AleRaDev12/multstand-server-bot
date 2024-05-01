@@ -70,7 +70,7 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_FINANCIAL_TRANSACTION_WIZARD_ID)
+@Wizard(WIZARDS.ADD_FINANCIAL_TRANSACTION)
 export class FinancialTransactionsAddWizard {
   constructor(
     @Inject(FinancialTransactionsService)

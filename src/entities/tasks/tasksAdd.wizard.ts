@@ -83,7 +83,7 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_TASK_WIZARD_ID)
+@Wizard(WIZARDS.ADD_TASK)
 export class TasksAddWizard {
   constructor(
     @Inject(TasksService)

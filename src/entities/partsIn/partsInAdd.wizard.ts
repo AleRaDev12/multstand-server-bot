@@ -85,7 +85,7 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_PART_IN_WIZARD_ID)
+@Wizard(WIZARDS.ADD_PART_IN)
 export class PartsInAddWizard {
   constructor(
     @Inject(PartsInService)

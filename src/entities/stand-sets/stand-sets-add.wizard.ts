@@ -228,7 +228,7 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(WIZARDS.ADD_STAND_SET_WIZARD_ID)
+@Wizard(WIZARDS.ADD_STAND_SET)
 export class StandSetsAddWizard {
   constructor(
     @Inject(StandSetsService)
