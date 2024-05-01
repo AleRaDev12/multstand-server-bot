@@ -12,7 +12,7 @@ import {
 } from '../unions';
 
 @Entity()
-export class StandSet {
+export class StandOrder {
   @PrimaryGeneratedColumn()
   id: number;
 

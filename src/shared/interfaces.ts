@@ -12,7 +12,7 @@ import { Task } from '../entities/tasks/task.entity';
 import { FinancialTransaction } from '../entities/financial-transactions/financial-transaction.entity';
 import { Master } from '../entities/masters/master.entity';
 import { Component } from '../entities/components/component.entity';
-import { StandSet } from '../entities/stand-sets/stand-set.entity';
+import { StandOrder } from '../entities/stand-order/stand-order.entity';
 import { WizardStepType } from '../helpers';
 
 // export type
@@ -27,7 +27,7 @@ export type AllEntities = {
   financialTransaction?: FinancialTransaction;
   master?: Master;
   component?: Component;
-  standSet?: StandSet;
+  standSet?: StandOrder;
 };
 
 interface CustomWizardSessionData extends WizardSessionData, AllEntities {

@@ -6,7 +6,7 @@ import { StandsModule } from './entities/stands/stands.module';
 import { PartsInModule } from './entities/partsIn/partsIn.module';
 import { WorksModule } from './entities/works/works.module';
 import { TasksModule } from './entities/tasks/tasks.module';
-import { StandSetsModule } from './entities/stand-sets/stand-sets.module';
+import { StandOrderModule } from './entities/stand-order/stand-order.module';
 import { MainScene } from './main.scene';
 
 @Module({
@@ -17,7 +17,7 @@ import { MainScene } from './main.scene';
     PartsInModule,
     WorksModule,
     TasksModule,
-    StandSetsModule,
+    StandOrderModule,
     MainScene,
   ],
   providers: [BotUpdate],
