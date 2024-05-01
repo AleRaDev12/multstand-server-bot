@@ -16,14 +16,14 @@ export class BotUpdate {
           Markup.button.callback('Заказ', 'add_order'),
         ],
         [
-          Markup.button.callback('Станок', 'add_stand'),
-          Markup.button.callback('Комплектующее', 'add_partsIn'),
+          Markup.button.callback('Станок-заказ', 'add_stand_set'),
+          Markup.button.callback('Станок-изделие', 'add_stand'),
         ],
+        [Markup.button.callback('Комплектующее', 'add_partsIn')],
         [
           Markup.button.callback('Работа', 'add_work'),
           Markup.button.callback('Задача', 'add_task'),
         ],
-        [Markup.button.callback('Станок-заказ', 'add_stand_set')],
       ]),
     );
   }

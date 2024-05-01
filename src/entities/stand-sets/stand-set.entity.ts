@@ -1,27 +1,15 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../orders/order.entity';
-import { StandModel, StandModelType } from '../stands/stand.entity';
 import { fromValue, toKey } from '../../helpers';
-
-export const Processing = {
-  None: 'Без обработки',
-  GrindingOnly: 'Только шлифовка',
-  Lac: 'Шлифовка, лак',
-  WhiteLac: 'Шлифовка, белая эмаль, лак',
-  BlackLac: 'Шлифовка, чёрная эмаль, лак',
-};
-
-export const Tripod = {
-  No: 'Без штатива',
-  Set1: 'Комплект №1',
-  Set2: 'Комплект №2',
-  Set3: 'Комплект №3',
-};
-
-export const Led = {
-  Economy: 'Эконом',
-  Premium: 'Премиум',
-};
+import {
+  Led,
+  Painting,
+  PaintingType,
+  StandModel,
+  StandModelType,
+  Tripod,
+  TripodType,
+} from '../unions';
 
 @Entity()
 export class StandSet {
@@ -44,11 +32,11 @@ export class StandSet {
     type: 'text',
     nullable: true,
     transformer: {
-      to: toKey(Processing),
-      from: fromValue(Processing),
+      to: toKey(Painting),
+      from: fromValue(Painting),
     },
   })
-  processing: (typeof Processing)[keyof typeof Processing];
+  painting: PaintingType;
 
   @Column({ nullable: true })
   smartphoneMount: number;
@@ -61,7 +49,7 @@ export class StandSet {
       from: fromValue(Tripod),
     },
   })
-  tripod: (typeof Tripod)[keyof typeof Tripod];
+  tripod: TripodType;
 
   @Column({
     type: 'text',
@@ -74,16 +62,16 @@ export class StandSet {
   ledType: (typeof Led)[keyof typeof Led];
 
   @Column({ nullable: true })
-  regularGlass: number;
+  glassesRegular: number;
 
   @Column({ nullable: true })
-  highTransparencyGlass: number;
+  glassesHighTransparency: number;
 
   @Column({ nullable: true })
   dimmersCount: number;
 
-  @Column({ nullable: true })
-  shadingFabric: boolean;
+  @Column({ type: 'int', nullable: true })
+  shadingFabric: number; // Ткань для затенения, 0 если нет
 
   @Column({ nullable: true })
   sideWallsCount: number;

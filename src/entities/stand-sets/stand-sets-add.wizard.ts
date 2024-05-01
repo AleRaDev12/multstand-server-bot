@@ -1,25 +1,25 @@
-import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { Led, Processing, StandSet, Tripod } from './stand-set.entity';
-import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../../shared/interfaces';
-import { WIZARDS } from '../../shared/wizards';
 import {
   generateMessage,
   getValueUnionByIndex,
   WizardStepType,
 } from '../../helpers';
+import { CustomWizardContext } from '../../shared/interfaces';
+import { StandSet } from './stand-set.entity';
+import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
+import { WIZARDS } from '../../shared/wizards';
+import { Inject } from '@nestjs/common';
 import { StandSetsService } from './stand-sets.service';
-import { StandModel } from '../stands/stand.entity';
 import { OrdersService } from '../orders/orders.service';
+import { Led, Painting, StandModel, Tripod } from '../unions';
 
 const commonSteps: WizardStepType[] = [
   { message: 'Выберите заказ:', type: 'orderSelect' },
   { message: 'Модель:', field: 'model', type: 'union', union: StandModel },
   {
     message: 'Тип обработки:',
-    field: 'processing',
+    field: 'painting',
     type: 'union',
-    union: { ...Processing },
+    union: Painting,
   },
   {
     message: 'Крепление для смартфона (количество):',
@@ -43,12 +43,12 @@ const commonSteps: WizardStepType[] = [
 const tmtlSteps: WizardStepType[] = [
   {
     message: 'Количество стёкол обычных:',
-    field: 'regularGlass',
+    field: 'glassesRegular',
     type: 'number',
   },
   {
     message: 'Количество стёкол повышенной прозрачности:',
-    field: 'highTransparencyGlass',
+    field: 'glassesHighTransparency',
     type: 'number',
   },
   {

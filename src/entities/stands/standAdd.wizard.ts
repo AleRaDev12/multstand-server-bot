@@ -1,5 +1,4 @@
 import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { LedStripType, PaintingType, Stand, StandModel } from './stand.entity';
 import { StandsService } from './stands.service';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
@@ -8,14 +7,16 @@ import {
   generateMessage,
   getValueByIndex,
   WizardStepType,
-} from '../../helpers'; // Новый импорт
+} from '../../helpers';
+import { LedStripType, Painting, StandModel } from '../unions';
+import { Stand } from './stand.entity';
 
 const steps: WizardStepType[] = [
   { message: 'Модель:', field: 'model', enum: StandModel, type: 'union' },
   {
     message: 'Покраска:',
     field: 'painting',
-    enum: PaintingType,
+    union: Painting,
     type: 'union',
   },
   {
@@ -32,7 +33,7 @@ const steps: WizardStepType[] = [
     message: 'Светодиодная лента:',
     field: 'ledStripModel',
     enum: LedStripType,
-    type: 'number',
+    type: 'union',
   },
   { message: 'Ткань для затенения:', field: 'shadingFabric', type: 'number' },
   { message: 'Штатив для объёмной анимации:', field: 'tripod', type: 'number' },
