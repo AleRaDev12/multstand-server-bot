@@ -7,7 +7,8 @@ import { PartInModule } from './entities/part-in/part-in.module';
 import { WorksModule } from './entities/works/works.module';
 import { TasksModule } from './entities/tasks/tasks.module';
 import { StandOrderModule } from './entities/stand-order/stand-order.module';
-import { MainScene } from './main.scene';
+import { EnteringScene } from './entering.scene';
+import { PartOutModule } from './entities/part-out/part-out.module';
 
 @Module({
   imports: [
@@ -15,10 +16,11 @@ import { MainScene } from './main.scene';
     OrdersModule,
     StandProdModule,
     PartInModule,
+    PartOutModule,
     WorksModule,
     TasksModule,
     StandOrderModule,
-    MainScene,
+    EnteringScene,
   ],
   providers: [BotUpdate],
 })

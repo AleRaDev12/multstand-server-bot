@@ -14,6 +14,7 @@ import { Master } from '../entities/masters/master.entity';
 import { Component } from '../entities/components/component.entity';
 import { StandOrder } from '../entities/stand-order/stand-order.entity';
 import { WizardStepType } from '../helpers';
+import { PartOut } from '../entities/part-out/part-out.entity';
 
 // export type
 
@@ -22,6 +23,7 @@ export type AllEntities = {
   user?: Client;
   standProd?: StandProd;
   partIn?: PartIn;
+  PartOut?: PartOut;
   work?: Work;
   task?: Task;
   financialTransaction?: FinancialTransaction;

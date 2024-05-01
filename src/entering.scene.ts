@@ -3,7 +3,7 @@ import { Markup, Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './shared/wizards';
 
 @Scene(SCENES.ENTERING)
-export class MainScene {
+export class EnteringScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(
@@ -17,7 +17,8 @@ export class MainScene {
           Markup.button.callback('Станок-заказ', 'add_stand_set'),
           Markup.button.callback('Станок-изделие', 'add_stand'),
         ],
-        [Markup.button.callback('Комплектующее', 'add_partsIn')],
+        [Markup.button.callback('Комплектующее заказ/приход', 'add_partsIn')],
+        [Markup.button.callback('Комплектующее расход', 'add_partsOut')],
         [
           Markup.button.callback('Работа', 'add_work'),
           Markup.button.callback('Задача', 'add_task'),
@@ -48,6 +49,11 @@ export class MainScene {
   @Action('add_partsIn')
   async onAddPartIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.scene.enter(WIZARDS.ADD_PART_IN);
+  }
+
+  @Action('add_partsOut')
+  async onAddPartOut(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_PART_OUT);
   }
 
   @Action('add_work')
