@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { fromEnumValue, fromValue, toEnumKey, toKey } from '../../helpers';
 import {
-  LedStripType,
+  LedStripModel,
+  LedStripModelType,
   Painting,
   PaintingType,
   StandModel,
@@ -11,7 +12,7 @@ import {
 } from '../unions';
 
 @Entity()
-export class Stand {
+export class StandProd {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -44,11 +45,11 @@ export class Stand {
     type: 'text',
     nullable: true,
     transformer: {
-      to: toEnumKey(LedStripType),
-      from: fromEnumValue(LedStripType),
+      to: toEnumKey(LedStripModel),
+      from: fromEnumValue(LedStripModel),
     },
   })
-  ledStripModel: LedStripType;
+  ledStripModel: LedStripModelType;
 
   @Column({ type: 'int', nullable: true })
   shadingFabric: number; // Ткань для затенения, 0 если нет

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { BotUpdate } from './bot.update';
 import { ClientsModule } from './entities/clients/clients.module';
 import { OrdersModule } from './entities/orders/orders.module';
-import { StandsModule } from './entities/stands/stands.module';
+import { StandProdModule } from './entities/stand-prod/stand-prod.module';
 import { PartsInModule } from './entities/partsIn/partsIn.module';
 import { WorksModule } from './entities/works/works.module';
 import { TasksModule } from './entities/tasks/tasks.module';
@@ -13,7 +13,7 @@ import { MainScene } from './main.scene';
   imports: [
     ClientsModule,
     OrdersModule,
-    StandsModule,
+    StandProdModule,
     PartsInModule,
     WorksModule,
     TasksModule,

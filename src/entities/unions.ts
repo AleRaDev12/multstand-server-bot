@@ -38,10 +38,12 @@ export const StandModel = {
 };
 export type StandModelType = (typeof StandModel)[keyof typeof StandModel];
 
-export enum LedStripType {
-  seastar12v1 = 'Seastar 12v -lm 12W -CRI',
-  seastar24v1 = 'Seastar 24v -lm 12W -CRI',
-  arlight24v19913 = 'Arlight 19913 24v 1250lm 10W 85CRI',
-  arlight24v24534 = 'Arlight 24534 24v 1800lm 12W 85CRI',
-  arlight24v21451 = 'Arlight 21451 24v 1000lm 10W 98CRI',
-}
+export const LedStripModel = {
+  seastar12v1: 'Seastar 12v -lm 12W -CRI',
+  seastar24v1: 'Seastar 24v -lm 12W -CRI',
+  arlight24v19913: 'Arlight 19913 24v 1250lm 10W 85CRI',
+  arlight24v24534: 'Arlight 24534 24v 1800lm 12W 85CRI',
+  arlight24v21451: 'Arlight 21451 24v 1000lm 10W 98CRI',
+};
+export type LedStripModelType =
+  (typeof LedStripModel)[keyof typeof LedStripModel];

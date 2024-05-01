@@ -1,115 +1,112 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { WIZARDS } from '../../shared/wizards';
+import { StandProdService } from './stand-prod.service';
 import { Inject } from '@nestjs/common';
-import { StandOrderService } from './stand-order.service';
-import { OrdersService } from '../orders/orders.service';
-import { StandOrderWizardHandler } from './stand-order.wizard-handler';
+import { WIZARDS } from '../../shared/wizards';
+import { StandProdWizardHandler } from './stand-prod.wizard-handler';
 
-@Wizard(WIZARDS.ADD_STAND_SET)
-export class StandOrderAddWizard {
+@Wizard(WIZARDS.ADD_STAND)
+export class StandProdAddWizard {
   constructor(
-    @Inject(StandOrderService)
-    private readonly standSetsService: StandOrderService,
-    @Inject(OrdersService)
-    private readonly orderService: OrdersService,
+    @Inject(StandProdService)
+    private readonly service: StandProdService,
   ) {}
 
   @WizardStep(1)
-  @StandOrderWizardHandler(1)
+  @StandProdWizardHandler(1)
   async start() {}
 
   @On('text')
   @WizardStep(2)
-  @StandOrderWizardHandler(2)
+  @StandProdWizardHandler(2)
   async step2() {}
 
   @On('text')
   @WizardStep(3)
-  @StandOrderWizardHandler(3)
+  @StandProdWizardHandler(3)
   async step3() {}
 
   @On('text')
   @WizardStep(4)
-  @StandOrderWizardHandler(4)
+  @StandProdWizardHandler(4)
   async step4() {}
 
   @On('text')
   @WizardStep(5)
-  @StandOrderWizardHandler(5)
+  @StandProdWizardHandler(5)
   async step5() {}
 
   @On('text')
   @WizardStep(6)
-  @StandOrderWizardHandler(6)
+  @StandProdWizardHandler(6)
   async step6() {}
 
   @On('text')
   @WizardStep(7)
-  @StandOrderWizardHandler(7)
+  @StandProdWizardHandler(7)
   async step7() {}
 
   @On('text')
   @WizardStep(8)
-  @StandOrderWizardHandler(8)
+  @StandProdWizardHandler(8)
   async step8() {}
 
   @On('text')
   @WizardStep(9)
-  @StandOrderWizardHandler(9)
+  @StandProdWizardHandler(9)
   async step9() {}
 
   @On('text')
   @WizardStep(10)
-  @StandOrderWizardHandler(10)
+  @StandProdWizardHandler(10)
   async step10() {}
 
   @On('text')
   @WizardStep(11)
-  @StandOrderWizardHandler(11)
+  @StandProdWizardHandler(11)
   async step11() {}
 
   @On('text')
   @WizardStep(12)
-  @StandOrderWizardHandler(12)
+  @StandProdWizardHandler(12)
   async step12() {}
 
   @On('text')
   @WizardStep(13)
-  @StandOrderWizardHandler(13)
+  @StandProdWizardHandler(13)
   async step13() {}
 
   @On('text')
   @WizardStep(14)
-  @StandOrderWizardHandler(14)
+  @StandProdWizardHandler(14)
   async step14() {}
 
   @On('text')
   @WizardStep(15)
-  @StandOrderWizardHandler(15)
+  @StandProdWizardHandler(15)
   async step15() {}
 
   @On('text')
   @WizardStep(16)
-  @StandOrderWizardHandler(16)
+  @StandProdWizardHandler(16)
   async step16() {}
 
   @On('text')
   @WizardStep(17)
-  @StandOrderWizardHandler(17)
+  @StandProdWizardHandler(17)
   async step17() {}
 
   @On('text')
   @WizardStep(18)
-  @StandOrderWizardHandler(18)
+  @StandProdWizardHandler(18)
   async step18() {}
 
   @On('text')
   @WizardStep(19)
-  @StandOrderWizardHandler(19)
+  @StandProdWizardHandler(19)
   async step19() {}
 
   @On('text')
   @WizardStep(20)
-  @StandOrderWizardHandler(20)
+  @StandProdWizardHandler(20)
   async step20() {}
 }

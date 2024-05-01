@@ -5,7 +5,7 @@ import {
 } from 'telegraf/typings/scenes';
 import { Order } from '../entities/orders/order.entity';
 import { Client } from '../entities/clients/client.entity';
-import { Stand } from '../entities/stands/stand.entity';
+import { StandProd } from '../entities/stand-prod/stand-prod.entity';
 import { PartIn } from '../entities/partsIn/partIn.entity';
 import { Work } from '../entities/works/work.entity';
 import { Task } from '../entities/tasks/task.entity';
@@ -20,14 +20,14 @@ import { WizardStepType } from '../helpers';
 export type AllEntities = {
   order?: Order;
   user?: Client;
-  stand?: Stand;
+  standProd?: StandProd;
   partIn?: PartIn;
   work?: Work;
   task?: Task;
   financialTransaction?: FinancialTransaction;
   master?: Master;
   component?: Component;
-  standSet?: StandOrder;
+  standOrder?: StandOrder;
 };
 
 interface CustomWizardSessionData extends WizardSessionData, AllEntities {

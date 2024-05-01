@@ -1,6 +1,6 @@
 import { AllEntities } from './shared/interfaces';
 
-export function printEnum<T>(e: T): string {
+export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
   const enumEntries = keys.map((key, index) => {
     const value = (e as any)[key];
@@ -73,25 +73,28 @@ type KeyOfAllEntities = {
     : keyof AllEntities[K];
 }[keyof AllEntities];
 
-export interface WizardStepType {
+export type WizardStepType = {
   message: string;
   field?: KeyOfAllEntities;
-  type:
-    | 'string'
-    | 'number'
-    | 'date'
-    | 'union'
-    | 'taskSelect'
-    | 'orderSelect'
-    | 'enum'
-    | 'boolean';
-  enum?: object;
-  union?: object;
-}
+} & (
+  | {
+      type:
+        | 'string'
+        | 'number'
+        | 'date'
+        | 'taskSelect'
+        | 'orderSelect'
+        | 'boolean';
+      union?: undefined;
+    }
+  | {
+      type: 'union';
+      union: object;
+    }
+);
 
 export function generateMessage(step: WizardStepType): string {
-  const enumToShow = step.enum ?? step.union;
-  return enumToShow
-    ? `${step.message}\n${printEnum(enumToShow)}`
+  return step.union
+    ? `${step.message}\n${printUnion(step.union)}`
     : step.message;
 }

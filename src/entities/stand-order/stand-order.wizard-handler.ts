@@ -71,9 +71,10 @@ const threeDSteps: WizardStepType[] = [
   },
 ];
 
-export const standOrdersSteps: WizardStepType[] = commonSteps;
+const standOrderSteps: WizardStepType[] = commonSteps;
+const steps = standOrderSteps;
 
-export function StandOrderWizardStepHandler(stepIndex: number) {
+export function StandOrderWizardHandler(stepIndex: number) {
   return function (
     _target: any,
     _propertyKey: string,
@@ -84,14 +85,14 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
       console.log('*-* stepIndex', stepIndex);
 
       if (stepIndex === 1) {
-        ctx.wizard.state.standSet = new StandOrder();
+        ctx.wizard.state.standOrder = new StandOrder();
       }
 
       const stepForAnswerNumber = stepIndex - 2;
       const stepForRequestNumber = stepIndex - 1;
 
-      const stepAnswer = standOrdersSteps[stepForAnswerNumber];
-      const stepRequest = standOrdersSteps[stepForRequestNumber];
+      const stepAnswer = steps[stepForAnswerNumber];
+      const stepRequest = steps[stepForRequestNumber];
       console.log('*-* stepAnswer', stepAnswer);
       console.log('*-* stepRequest', stepRequest);
 
@@ -114,20 +115,19 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
             if (optionNumber < 1 || optionNumber > unionKeys.length) {
               return 'Некорректное значение. Пожалуйста, введите значение еще раз.';
             }
-            ctx.wizard.state.standSet[stepAnswer.field] = getValueUnionByIndex(
-              stepAnswer.union,
-              optionNumber - 1,
-            );
+            ctx.wizard.state.standOrder[stepAnswer.field] =
+              getValueUnionByIndex(stepAnswer.union, optionNumber - 1);
 
+            // additional handler
             if (stepAnswer.field === 'model') {
-              switch (ctx.wizard.state.standSet.model) {
+              switch (ctx.wizard.state.standOrder.model) {
                 case StandModel.mTM15:
                 case StandModel.mTL15:
-                  standOrdersSteps.push(...tmtlSteps);
+                  steps.push(...tmtlSteps);
                   break;
                 case StandModel.m3DM5:
                 case StandModel.m3DL5:
-                  standOrdersSteps.push(...threeDSteps);
+                  steps.push(...threeDSteps);
                   break;
               }
             }
@@ -135,7 +135,7 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
           case 'number':
             const number = parseFloat(msg.text);
             if (!isNaN(number)) {
-              ctx.wizard.state.standSet[stepAnswer.field] = number;
+              ctx.wizard.state.standOrder[stepAnswer.field] = number;
             } else {
               return 'Введите корректное числовое значение.';
             }
@@ -159,7 +159,7 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
               default:
                 return `Введеите "да", "нет", "yes", "no", 1 или 0.`;
             }
-            ctx.wizard.state.standSet[stepAnswer.field] = booleanValue;
+            ctx.wizard.state.standOrder[stepAnswer.field] = booleanValue;
             break;
           case 'orderSelect':
             console.log('*-* orderSelect');
@@ -174,10 +174,10 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
             console.log('*-* order --------', order);
 
             if (selectedIndex >= 0 && selectedIndex < orders.length) {
-              ctx.wizard.state.standSet.order = order;
+              ctx.wizard.state.standOrder.order = order;
               console.log(
                 '*-* ctx.wizard.state.standSet',
-                ctx.wizard.state.standSet,
+                ctx.wizard.state.standOrder,
               );
             } else {
               return 'Выберите действительный номер заказа из списка.';
@@ -188,19 +188,20 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
             return 'Ошибка';
         }
 
-        const isLastStep = stepForAnswerNumber === standOrdersSteps.length - 1;
+        const isLastStep = stepForAnswerNumber === steps.length - 1;
         if (isLastStep) {
           console.log(
             '*-* ctx.wizard.state.standSet',
-            ctx.wizard.state.standSet,
+            ctx.wizard.state.standOrder,
           );
           const standSet = await this.standSetsService.create(
-            ctx.wizard.state.standSet,
+            ctx.wizard.state.standOrder,
           );
 
+          // additional handler
           // Reset steps for next iterations
-          standOrdersSteps.length = 0;
-          standOrdersSteps.push(...commonSteps);
+          steps.length = 0;
+          steps.push(...commonSteps);
 
           await ctx.scene.leave();
           return `Набор характеристик станка ${JSON.stringify(standSet, null, 2)} добавлен`;
@@ -218,7 +219,7 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
             console.log('*-* ordersLint', ordersLint);
 
             ctx.wizard.next();
-            return `${standOrdersSteps[stepIndex - 1].message}\n${await this.orderService.getList()}`;
+            return `${steps[stepIndex - 1].message}\n${await this.orderService.getList()}`;
           }
 
           default: {
@@ -228,7 +229,7 @@ export function StandOrderWizardStepHandler(stepIndex: number) {
         }
 
         ctx.wizard.next();
-        return generateMessage(standOrdersSteps[stepIndex - 1]);
+        return generateMessage(steps[stepIndex - 1]);
       }
     };
 
