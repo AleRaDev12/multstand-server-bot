@@ -1,6 +1,6 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { SCENES, WIZARDS } from './shared/wizards';
+import { SCENES, WIZARDS } from '../shared/wizards';
 
 @Scene(SCENES.ENTERING)
 export class EnteringScene {
@@ -17,6 +17,7 @@ export class EnteringScene {
           Markup.button.callback('Станок-заказ', 'add_stand_set'),
           Markup.button.callback('Станок-изделие', 'add_stand'),
         ],
+        [Markup.button.callback('Комплектующие', 'add_component')],
         [Markup.button.callback('Комплектующее заказ/приход', 'add_partsIn')],
         [Markup.button.callback('Комплектующее расход', 'add_partsOut')],
         [
@@ -42,8 +43,8 @@ export class EnteringScene {
   }
 
   @Action('add_stand')
-  async onAddStand(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_STAND);
+  async onAddStandProd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_STAND_PROD);
   }
 
   @Action('add_partsIn')
@@ -67,7 +68,12 @@ export class EnteringScene {
   }
 
   @Action('add_stand_set')
-  async onAddStandSet(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_STAND_SET);
+  async onAddStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_STAND_ORDER);
+  }
+
+  @Action('add_component')
+  async onAddComponent(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_COMPONENT);
   }
 }

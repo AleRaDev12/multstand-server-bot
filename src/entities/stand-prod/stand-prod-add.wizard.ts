@@ -4,7 +4,7 @@ import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/wizards';
 import { StandProdWizardHandler } from './stand-prod.wizard-handler';
 
-@Wizard(WIZARDS.ADD_STAND)
+@Wizard(WIZARDS.ADD_STAND_PROD)
 export class StandProdAddWizard {
   constructor(
     @Inject(StandProdService)

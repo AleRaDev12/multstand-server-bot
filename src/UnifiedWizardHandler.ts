@@ -119,6 +119,9 @@ export function UnifiedWizardHandler<T>(
               return;
             }
             break;
+          case 'string':
+            entity[stepAnswer.field] = msg.text;
+            break;
           case 'boolean':
             const value = msg.text.toLowerCase();
             let booleanValue: boolean;
@@ -181,6 +184,7 @@ export function UnifiedWizardHandler<T>(
         switch (stepRequest.type) {
           case 'union':
           case 'number':
+          case 'string':
           case 'boolean':
           case 'date': {
             ctx.wizard.next();

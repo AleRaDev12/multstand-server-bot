@@ -5,7 +5,7 @@ import { StandOrderService } from './stand-order.service';
 import { OrdersService } from '../orders/orders.service';
 import { StandOrderWizardHandler } from './stand-order.wizard-handler';
 
-@Wizard(WIZARDS.ADD_STAND_SET)
+@Wizard(WIZARDS.ADD_STAND_ORDER)
 export class StandOrderAddWizard {
   constructor(
     @Inject(StandOrderService)

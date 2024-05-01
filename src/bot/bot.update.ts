@@ -1,4 +1,4 @@
-import { SCENES } from './shared/wizards';
+import { SCENES } from '../shared/wizards';
 import { Ctx, Start, Update } from 'nestjs-telegraf';
 import { Scenes } from 'telegraf';
 

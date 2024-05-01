@@ -1,91 +1,112 @@
-import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { Component } from './component.entity';
+import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
-import { generateMessage, WizardStepType } from '../../helpers';
 import { ComponentsService } from './components.service';
-
-const steps: WizardStepType[] = [
-  { message: 'Название комплектующего:', field: 'name', type: 'string' },
-  { message: 'Тип комплектующего:', field: 'type', type: 'string' },
-  { message: 'Описание:', field: 'description', type: 'string' },
-  { message: 'Ссылка:', field: 'link', type: 'string' },
-  { message: 'Комментарий:', field: 'comment', type: 'string' },
-];
-
-function WizardStepHandler(stepIndex: number) {
-  return function (
-    _target: any,
-    _propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) {
-    const stepIndexCorrected = stepIndex - 2;
-
-    descriptor.value = async function (ctx: CustomWizardContext) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const msg = ctx.update?.message;
-      const step = steps[stepIndexCorrected];
-
-      if (!msg?.text) {
-        return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
-      }
-
-      ctx.wizard.state.component[step.field] = msg.text;
-
-      if (stepIndexCorrected === steps.length - 1) {
-        const component = await this.componentsService.create(
-          ctx.wizard.state.component,
-        );
-        await ctx.scene.leave();
-        return `Комплектующее ${JSON.stringify(component, null, 2)} добавлено.`;
-      } else {
-        ctx.wizard.next();
-        return generateMessage(steps[stepIndexCorrected + 1]);
-      }
-    };
-
-    return descriptor;
-  };
-}
+import { ComponentsWizardHandler } from './components.wizard-handler';
 
 @Wizard(WIZARDS.ADD_COMPONENT)
 export class ComponentsAddWizard {
   constructor(
     @Inject(ComponentsService)
-    private readonly componentsService: ComponentsService,
+    private readonly service: ComponentsService,
   ) {}
 
   @WizardStep(1)
-  async start(@Ctx() ctx: CustomWizardContext): Promise<string> {
-    ctx.wizard.state.component = new Component();
-    ctx.wizard.next();
-    return generateMessage(steps[0]);
-  }
+  @ComponentsWizardHandler(1)
+  async start() {}
 
   @On('text')
   @WizardStep(2)
-  @WizardStepHandler(2)
+  @ComponentsWizardHandler(2)
   async step2() {}
 
   @On('text')
   @WizardStep(3)
-  @WizardStepHandler(3)
+  @ComponentsWizardHandler(3)
   async step3() {}
 
   @On('text')
   @WizardStep(4)
-  @WizardStepHandler(4)
+  @ComponentsWizardHandler(4)
   async step4() {}
 
   @On('text')
   @WizardStep(5)
-  @WizardStepHandler(5)
+  @ComponentsWizardHandler(5)
   async step5() {}
 
   @On('text')
   @WizardStep(6)
-  @WizardStepHandler(6)
+  @ComponentsWizardHandler(6)
   async step6() {}
+
+  @On('text')
+  @WizardStep(7)
+  @ComponentsWizardHandler(7)
+  async step7() {}
+
+  @On('text')
+  @WizardStep(8)
+  @ComponentsWizardHandler(8)
+  async step8() {}
+
+  @On('text')
+  @WizardStep(9)
+  @ComponentsWizardHandler(9)
+  async step9() {}
+
+  @On('text')
+  @WizardStep(10)
+  @ComponentsWizardHandler(10)
+  async step10() {}
+
+  @On('text')
+  @WizardStep(11)
+  @ComponentsWizardHandler(11)
+  async step11() {}
+
+  @On('text')
+  @WizardStep(12)
+  @ComponentsWizardHandler(12)
+  async step12() {}
+
+  @On('text')
+  @WizardStep(13)
+  @ComponentsWizardHandler(13)
+  async step13() {}
+
+  @On('text')
+  @WizardStep(14)
+  @ComponentsWizardHandler(14)
+  async step14() {}
+
+  @On('text')
+  @WizardStep(15)
+  @ComponentsWizardHandler(15)
+  async step15() {}
+
+  @On('text')
+  @WizardStep(16)
+  @ComponentsWizardHandler(16)
+  async step16() {}
+
+  @On('text')
+  @WizardStep(17)
+  @ComponentsWizardHandler(17)
+  async step17() {}
+
+  @On('text')
+  @WizardStep(18)
+  @ComponentsWizardHandler(18)
+  async step18() {}
+
+  @On('text')
+  @WizardStep(19)
+  @ComponentsWizardHandler(19)
+  async step19() {}
+
+  @On('text')
+  @WizardStep(20)
+  @ComponentsWizardHandler(20)
+  async step20() {}
 }

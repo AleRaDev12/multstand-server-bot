@@ -30,6 +30,7 @@ export type AllEntities = {
   master?: Master;
   component?: Component;
   standOrder?: StandOrder;
+  Component?: Component;
 };
 
 interface CustomWizardSessionData extends WizardSessionData, AllEntities {

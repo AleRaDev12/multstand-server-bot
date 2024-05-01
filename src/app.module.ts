@@ -3,7 +3,7 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { sessionMiddleware } from './middleware/session.middleware';
-import { BotModule } from './bot.module';
+import { BotModule } from './bot/bot.module';
 import { SeedService } from './seed.service';
 import { Task } from './entities/tasks/task.entity';
 
