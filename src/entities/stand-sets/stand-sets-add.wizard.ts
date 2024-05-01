@@ -10,7 +10,6 @@ import {
 } from '../../helpers';
 import { StandSetsService } from './stand-sets.service';
 import { StandModel } from '../stands/stand.entity';
-import { TasksService } from '../tasks/tasks.service';
 import { OrdersService } from '../orders/orders.service';
 
 const commonSteps: WizardStepType[] = [
@@ -106,7 +105,6 @@ function WizardStepHandler(stepIndex: number) {
       const msg = ctx.update?.message;
 
       const isAwaitAnswer = !!stepAnswer;
-
       if (isAwaitAnswer) {
         // Handle answer
         console.log('*-* handle answer');
@@ -116,9 +114,14 @@ function WizardStepHandler(stepIndex: number) {
 
         switch (stepAnswer.type) {
           case 'union':
+            const optionNumber = +msg.text;
+            const unionKeys = Object.keys(stepAnswer.union);
+            if (optionNumber < 1 || optionNumber > unionKeys.length) {
+              return 'Некорректное значение. Пожалуйста, введите значение еще раз.';
+            }
             ctx.wizard.state.standSet[stepAnswer.field] = getValueUnionByIndex(
               stepAnswer.union,
-              +msg.text - 1,
+              optionNumber - 1,
             );
             break;
           case 'number':
@@ -131,13 +134,24 @@ function WizardStepHandler(stepIndex: number) {
             break;
           case 'boolean':
             const value = msg.text.toLowerCase();
-            if (value === 'да' || value === 'yes') {
-              ctx.wizard.state.standSet[stepAnswer.field] = true;
-            } else if (value === 'нет' || value === 'no') {
-              ctx.wizard.state.standSet[stepAnswer.field] = false;
-            } else {
-              return 'Введите "да" или "нет".';
+            let booleanValue;
+
+            switch (value) {
+              case 'да':
+              case 'yes':
+              case '1':
+                booleanValue = true;
+                break;
+              case 'нет':
+              case 'no':
+              case '0':
+                booleanValue = false;
+                break;
+
+              default:
+                return `Введеите "да", "нет", "yes", "no", 1 или 0.`;
             }
+            ctx.wizard.state.standSet[stepAnswer.field] = booleanValue;
             break;
           case 'orderSelect':
             console.log('*-* orderSelect');
@@ -175,13 +189,17 @@ function WizardStepHandler(stepIndex: number) {
           const standSet = await this.standSetsService.create(
             ctx.wizard.state.standSet,
           );
+
+          // Reset steps for next iterations
+          steps.length = 0;
+          steps.push(...commonSteps);
+
           await ctx.scene.leave();
           return `Набор характеристик станка ${JSON.stringify(standSet, null, 2)} добавлен`;
         }
       }
 
       const isShouldSendRequest = !!stepRequest;
-
       if (isShouldSendRequest) {
         // Send text
         console.log('*-* send text');
@@ -239,7 +257,7 @@ export class StandSetsAddWizard {
     }
 
     ctx.wizard.state.standSet.model = getValueUnionByIndex(
-      steps[0].union,
+      steps[1].union,
       +msg.text - 1,
     );
 
@@ -302,4 +320,44 @@ export class StandSetsAddWizard {
   @WizardStep(12)
   @WizardStepHandler(12)
   async step12() {}
+
+  @On('text')
+  @WizardStep(13)
+  @WizardStepHandler(13)
+  async step13() {}
+
+  @On('text')
+  @WizardStep(14)
+  @WizardStepHandler(14)
+  async step14() {}
+
+  @On('text')
+  @WizardStep(15)
+  @WizardStepHandler(15)
+  async step15() {}
+
+  @On('text')
+  @WizardStep(16)
+  @WizardStepHandler(16)
+  async step16() {}
+
+  @On('text')
+  @WizardStep(17)
+  @WizardStepHandler(17)
+  async step17() {}
+
+  @On('text')
+  @WizardStep(18)
+  @WizardStepHandler(18)
+  async step18() {}
+
+  @On('text')
+  @WizardStep(19)
+  @WizardStepHandler(19)
+  async step19() {}
+
+  @On('text')
+  @WizardStep(20)
+  @WizardStepHandler(20)
+  async step20() {}
 }

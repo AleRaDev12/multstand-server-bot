@@ -4,10 +4,11 @@ import { StandModel, StandModelType } from '../stands/stand.entity';
 import { fromValue, toKey } from '../../helpers';
 
 export const Processing = {
-  OnlySanding: 'Только шлифовка',
-  SandingAndVarnish: 'Шлифовка, лак',
-  SandingWhiteEnamelVarnish: 'Шлифовка, белая эмаль, лак',
-  SandingBlackEnamelVarnish: 'Шлифовка, чёрная эмаль, лак',
+  None: 'Без обработки',
+  GrindingOnly: 'Только шлифовка',
+  Lac: 'Шлифовка, лак',
+  WhiteLac: 'Шлифовка, белая эмаль, лак',
+  BlackLac: 'Шлифовка, чёрная эмаль, лак',
 };
 
 export const Tripod = {
