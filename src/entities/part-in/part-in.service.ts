@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PartIn } from './partIn.entity';
+import { PartIn } from './part-in.entity';
 
 @Injectable()
-export class PartsInService {
+export class PartInService {
   constructor(
     @InjectRepository(PartIn)
     private standsRepository: Repository<PartIn>,

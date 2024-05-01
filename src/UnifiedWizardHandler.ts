@@ -141,6 +141,16 @@ export function UnifiedWizardHandler<T>(
             }
             entity[stepAnswer.field] = booleanValue;
             break;
+          case 'date':
+            const date = Date.parse(msg.text);
+            console.log('*-* Date.parse(msg.text)', Date.parse(msg.text));
+
+            if (!isNaN(date)) {
+              entity[stepAnswer.field] = new Date(date);
+            } else {
+              return 'Введите корректную дату.';
+            }
+            break;
           default:
             if (handleSpecificAnswer) {
               await handleSpecificAnswer(ctx, stepAnswer, entity);
@@ -171,7 +181,8 @@ export function UnifiedWizardHandler<T>(
         switch (stepRequest.type) {
           case 'union':
           case 'number':
-          case 'boolean': {
+          case 'boolean':
+          case 'date': {
             ctx.wizard.next();
             await ctx.reply(generateMessage(steps[stepIndex - 1]));
             break;
