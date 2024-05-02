@@ -7,15 +7,15 @@ import { Task } from './task.entity';
 export class TasksService {
   constructor(
     @InjectRepository(Task)
-    private standsRepository: Repository<Task>,
+    private repository: Repository<Task>,
   ) {}
 
   async create(task: Task): Promise<Task> {
-    return this.standsRepository.save(task);
+    return this.repository.save(task);
   }
 
   async findAll(): Promise<Task[]> {
-    return this.standsRepository.find();
+    return this.repository.find();
   }
 
   async getList(): Promise<string> {

@@ -12,11 +12,11 @@ const steps: WizardStepType[] = [
 ];
 
 function getEntity(ctx: CustomWizardContext): Component {
-  return ctx.wizard.state.Component;
+  return ctx.wizard.state.component;
 }
 
 function setEntity(ctx: CustomWizardContext): void {
-  ctx.wizard.state.Component = new Component();
+  ctx.wizard.state.component = new Component();
 }
 
 function save(entity: Component) {
@@ -30,7 +30,7 @@ async function print(
   await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
 }
 
-export const ComponentsWizardHandler = UnifiedWizardHandler<Component>({
+export const ComponentWizardHandler = UnifiedWizardHandler<Component>({
   getEntity,
   setEntity,
   save,

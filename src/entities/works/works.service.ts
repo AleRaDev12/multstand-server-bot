@@ -7,16 +7,16 @@ import { Work } from './work.entity';
 export class WorksService {
   constructor(
     @InjectRepository(Work)
-    private standsRepository: Repository<Work>,
+    private repository: Repository<Work>,
   ) {}
 
   async create(work: Work): Promise<Work> {
     const partsInReached = { ...work, dateOfReport: new Date() };
 
-    return this.standsRepository.save(partsInReached);
+    return this.repository.save(partsInReached);
   }
 
   async findAll(): Promise<Work[]> {
-    return this.standsRepository.find();
+    return this.repository.find();
   }
 }

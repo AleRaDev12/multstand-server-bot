@@ -82,9 +82,10 @@ export type WizardStepType = {
         | 'string'
         | 'number'
         | 'date'
+        | 'boolean'
         | 'taskSelect'
         | 'orderSelect'
-        | 'boolean';
+        | 'clientSelect';
       union?: undefined;
     }
   | {

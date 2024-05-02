@@ -7,14 +7,14 @@ import { StandOrder } from './stand-order.entity';
 export class StandOrderService {
   constructor(
     @InjectRepository(StandOrder)
-    private standSetsRepository: Repository<StandOrder>,
+    private repository: Repository<StandOrder>,
   ) {}
 
   async create(standSet: StandOrder): Promise<StandOrder> {
-    return this.standSetsRepository.save(standSet);
+    return this.repository.save(standSet);
   }
 
   async findAll(): Promise<StandOrder[]> {
-    return this.standSetsRepository.find({ relations: ['order'] });
+    return this.repository.find({ relations: ['order'] });
   }
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Order } from '../orders/order.entity';
+import { Order } from '../order/order.entity';
 import { PartIn } from '../part-in/part-in.entity';
 import { Master } from '../masters/master.entity';
 

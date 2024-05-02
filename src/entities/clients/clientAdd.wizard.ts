@@ -1,6 +1,6 @@
 import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Client } from './client.entity';
-import { ClientsService } from './clients.service';
+import { ClientService } from './client.service';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards'; // Новый импорт
@@ -8,8 +8,8 @@ import { WIZARDS } from '../../shared/wizards'; // Новый импорт
 @Wizard(WIZARDS.ADD_USER)
 export class ClientAddWizard {
   constructor(
-    @Inject(ClientsService)
-    private readonly usersService: ClientsService,
+    @Inject(ClientService)
+    private readonly usersService: ClientService,
   ) {}
 
   @WizardStep(1)

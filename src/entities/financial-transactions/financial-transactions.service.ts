@@ -7,17 +7,17 @@ import { FinancialTransaction } from './financial-transaction.entity';
 export class FinancialTransactionsService {
   constructor(
     @InjectRepository(FinancialTransaction)
-    private financialTransactionsRepository: Repository<FinancialTransaction>,
+    private repository: Repository<FinancialTransaction>,
   ) {}
 
   async create(
     financialTransaction: FinancialTransaction,
   ): Promise<FinancialTransaction> {
-    return this.financialTransactionsRepository.save(financialTransaction);
+    return this.repository.save(financialTransaction);
   }
 
   async findAll(): Promise<FinancialTransaction[]> {
-    return this.financialTransactionsRepository.find({
+    return this.repository.find({
       relations: ['order', 'componentPurchase', 'master'],
     });
   }

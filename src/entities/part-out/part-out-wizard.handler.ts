@@ -12,11 +12,11 @@ const steps: WizardStepType[] = [
 ];
 
 function getEntity(ctx: CustomWizardContext): PartOut {
-  return ctx.wizard.state.PartOut;
+  return ctx.wizard.state.partOut;
 }
 
 function setEntity(ctx: CustomWizardContext): void {
-  ctx.wizard.state.PartOut = new PartOut();
+  ctx.wizard.state.partOut = new PartOut();
 }
 
 function save(entity: PartOut) {

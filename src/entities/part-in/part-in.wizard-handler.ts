@@ -1,7 +1,8 @@
 import { WizardStepType } from '../../helpers';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
-import { PartIn, Parts } from './part-in.entity';
+import { PartIn } from './part-in.entity';
+import { Parts } from '../part-out/part-out.entity';
 
 const steps: WizardStepType[] = [
   { message: 'Комплектующее:', field: 'part', type: 'union', union: Parts },

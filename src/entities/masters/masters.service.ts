@@ -7,14 +7,14 @@ import { Master } from './master.entity';
 export class MastersService {
   constructor(
     @InjectRepository(Master)
-    private mastersRepository: Repository<Master>,
+    private repository: Repository<Master>,
   ) {}
 
   async create(master: Master): Promise<Master> {
-    return this.mastersRepository.save(master);
+    return this.repository.save(master);
   }
 
   async findAll(): Promise<Master[]> {
-    return this.mastersRepository.find();
+    return this.repository.find();
   }
 }

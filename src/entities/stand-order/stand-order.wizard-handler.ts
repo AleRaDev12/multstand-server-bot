@@ -96,7 +96,7 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
   entity: StandOrder,
-): Promise<void> {
+): Promise<boolean> {
   switch (stepAnswer.field) {
     case 'model':
       switch (entity.model) {
@@ -111,17 +111,19 @@ async function handleSpecificAnswer(
       }
       break;
   }
+  return true;
 }
 
 async function handleSpecificRequest(
   this: StandOrderAddWizard,
   ctx: CustomWizardContext,
   stepRequest: WizardStepType,
-): Promise<string> {
-  if (stepRequest.type !== 'orderSelect') return;
+): Promise<boolean> {
+  if (stepRequest.type !== 'orderSelect') return false;
 
   const ordersList = await this.orderService.getList();
   await ctx.reply(`${stepRequest.message}\n${ordersList}`);
+  return true;
 }
 
 export const StandOrderWizardHandler = UnifiedWizardHandler<StandOrder>({

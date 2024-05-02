@@ -7,14 +7,14 @@ import { PartIn } from './part-in.entity';
 export class PartInService {
   constructor(
     @InjectRepository(PartIn)
-    private standsRepository: Repository<PartIn>,
+    private repository: Repository<PartIn>,
   ) {}
 
   async create(partIn: PartIn): Promise<PartIn> {
-    return this.standsRepository.save(partIn);
+    return this.repository.save(partIn);
   }
 
   async findAll(): Promise<PartIn[]> {
-    return this.standsRepository.find();
+    return this.repository.find();
   }
 }

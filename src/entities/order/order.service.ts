@@ -4,18 +4,18 @@ import { Repository } from 'typeorm';
 import { Order } from './order.entity';
 
 @Injectable()
-export class OrdersService {
+export class OrderService {
   constructor(
     @InjectRepository(Order)
-    private ordersRepository: Repository<Order>,
+    private repository: Repository<Order>,
   ) {}
 
   async create(order: Order): Promise<Order> {
-    return this.ordersRepository.save(order);
+    return this.repository.save(order);
   }
 
   async findAll(): Promise<Order[]> {
-    return this.ordersRepository.find({ relations: ['client'] });
+    return this.repository.find({ relations: ['client'] });
   }
 
   async getList(): Promise<string> {
