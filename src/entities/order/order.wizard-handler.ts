@@ -4,8 +4,10 @@ import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 import { Order } from './order.entity';
 import { OrderAddWizard } from './order-add.wizard';
 
+const selectTypeName = 'clientSelect';
+
 const steps: WizardStepType[] = [
-  { message: 'Выберите клиента:', field: 'client', type: 'clientSelect' },
+  { message: 'Выберите клиента:', field: 'client', type: selectTypeName },
   { message: 'Дата договора:', field: 'contractDate', type: 'date' },
   {
     message: 'Количество дней на выполнение заказа:',
@@ -35,9 +37,8 @@ async function handleSpecificAnswer(
   this: OrderAddWizard,
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
-  entity: Order,
 ): Promise<boolean> {
-  if (stepAnswer.type !== 'clientSelect') return true;
+  if (stepAnswer.type !== selectTypeName) return true;
 
   // TODO: update types
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -62,10 +63,10 @@ async function handleSpecificRequest(
   ctx: CustomWizardContext,
   stepRequest: WizardStepType,
 ): Promise<boolean> {
-  if (stepRequest.type !== 'clientSelect') return true;
+  if (stepRequest.type !== selectTypeName) return true;
 
   const ordersList = await this.clientService.getList();
-  await ctx.reply(`${stepRequest.message}\n${ordersList}`);
+  await ctx.reply(`${stepRequest.message}${ordersList}`);
   return true;
 }
 

@@ -73,19 +73,18 @@ type KeyOfAllEntities = {
     : keyof AllEntities[K];
 }[keyof AllEntities];
 
+type DbEntities =
+  | 'taskSelect'
+  | 'orderSelect'
+  | 'clientSelect'
+  | 'componentSelect';
+
 export type WizardStepType = {
   message: string;
   field?: KeyOfAllEntities;
 } & (
   | {
-      type:
-        | 'string'
-        | 'number'
-        | 'date'
-        | 'boolean'
-        | 'taskSelect'
-        | 'orderSelect'
-        | 'clientSelect';
+      type: 'string' | 'number' | 'date' | 'boolean' | DbEntities;
       union?: undefined;
     }
   | {
