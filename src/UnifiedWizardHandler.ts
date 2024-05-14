@@ -1,9 +1,5 @@
-import {
-  generateMessage,
-  getValueUnionByIndex,
-  WizardStepType,
-} from './helpers';
-import { CustomWizardContext } from './shared/interfaces';
+import { generateMessage, getValueUnionByIndex } from './helpers';
+import { CustomWizardContext, WizardStepType } from './shared/interfaces';
 import { SCENES } from './shared/wizards';
 
 interface UnifiedWizardHandlerOptions<T> {

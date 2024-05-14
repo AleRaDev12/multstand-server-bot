@@ -1,6 +1,5 @@
 import { PartOut, Parts } from './part-out.entity';
-import { WizardStepType } from '../../helpers';
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 
 const steps: WizardStepType[] = [

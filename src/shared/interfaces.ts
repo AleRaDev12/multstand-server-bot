@@ -13,10 +13,33 @@ import { FinancialTransaction } from '../entities/financial-transactions/financi
 import { Master } from '../entities/masters/master.entity';
 import { Component } from '../entities/component/component.entity';
 import { StandOrder } from '../entities/stand-order/stand-order.entity';
-import { WizardStepType } from '../helpers';
 import { PartOut } from '../entities/part-out/part-out.entity';
 
-// export type
+export type KeyOfAllEntities = {
+  [K in keyof AllEntities]: AllEntities[K] extends undefined
+    ? never
+    : keyof AllEntities[K];
+}[keyof AllEntities];
+
+type DbEntities =
+  | 'taskSelect'
+  | 'orderSelect'
+  | 'clientSelect'
+  | 'componentSelect';
+
+export type WizardStepType = {
+  message: string;
+  field?: KeyOfAllEntities;
+} & (
+  | {
+      type: 'string' | 'number' | 'date' | 'boolean' | DbEntities;
+      union?: undefined;
+    }
+  | {
+      type: 'union';
+      union: object;
+    }
+);
 
 export type AllEntities = {
   order?: Order;

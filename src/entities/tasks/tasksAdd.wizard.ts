@@ -1,13 +1,9 @@
 import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Task } from './task.entity';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
-import {
-  generateMessage,
-  getValueUnionByIndex,
-  WizardStepType,
-} from '../../helpers';
+import { generateMessage, getValueUnionByIndex } from '../../helpers';
 import { TasksService } from './tasks.service'; // Новый импорт
 
 const steps: WizardStepType[] = [

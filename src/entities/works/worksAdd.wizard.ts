@@ -1,13 +1,9 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Work } from './work.entity';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
-import {
-  generateMessage,
-  getValueUnionByIndex,
-  WizardStepType,
-} from '../../helpers';
+import { generateMessage, getValueUnionByIndex } from '../../helpers';
 import { WorksService } from './works.service';
 import { TasksService } from '../tasks/tasks.service'; // Новый импорт
 

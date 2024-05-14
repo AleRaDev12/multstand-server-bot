@@ -1,6 +1,5 @@
-import { WizardStepType } from '../../helpers';
 import { LedStripModel, Painting, StandModel, Tripod } from '../unions';
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { StandProd } from './stand-prod.entity';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 

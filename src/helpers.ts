@@ -1,4 +1,4 @@
-import { AllEntities } from './shared/interfaces';
+import { WizardStepType } from './shared/interfaces';
 
 export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
@@ -65,33 +65,6 @@ export function fromValue<T>(obj: T) {
     return obj[key as keyof T];
   };
 }
-
-// Создание типа, который объединяет ключи всех объектов в AllEntities
-type KeyOfAllEntities = {
-  [K in keyof AllEntities]: AllEntities[K] extends undefined
-    ? never
-    : keyof AllEntities[K];
-}[keyof AllEntities];
-
-type DbEntities =
-  | 'taskSelect'
-  | 'orderSelect'
-  | 'clientSelect'
-  | 'componentSelect';
-
-export type WizardStepType = {
-  message: string;
-  field?: KeyOfAllEntities;
-} & (
-  | {
-      type: 'string' | 'number' | 'date' | 'boolean' | DbEntities;
-      union?: undefined;
-    }
-  | {
-      type: 'union';
-      union: object;
-    }
-);
 
 export function generateMessage(step: WizardStepType): string {
   return step.union

@@ -15,7 +15,7 @@ export class ClientAddWizard {
   @WizardStep(1)
   async onPhoneNumber(@Ctx() ctx: CustomWizardContext): Promise<string> {
     ctx.wizard.state.user = new Client();
-    await ctx.wizard.next();
+    ctx.wizard.next();
     return 'Введите имя:';
   }
 

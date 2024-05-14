@@ -1,5 +1,4 @@
-import { WizardStepType } from '../../helpers';
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 import { Component } from './component.entity';
 
