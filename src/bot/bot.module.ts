@@ -4,7 +4,7 @@ import { ClientsModule } from '../entities/clients/clients.module';
 import { OrderModule } from '../entities/order/order.module';
 import { StandProdModule } from '../entities/stand-prod/stand-prod.module';
 import { PartInModule } from '../entities/part-in/part-in.module';
-import { WorksModule } from '../entities/works/works.module';
+import { WorkModule } from '../entities/work/work.module';
 import { TasksModule } from '../entities/tasks/tasks.module';
 import { StandOrderModule } from '../entities/stand-order/stand-order.module';
 import { EnteringScene } from './entering.scene';
@@ -20,7 +20,7 @@ import { ComponentModule } from '../entities/component/component.module';
     StandProdModule,
     PartInModule,
     PartOutModule,
-    WorksModule,
+    WorkModule,
     TasksModule,
     StandOrderModule,
     ComponentModule,

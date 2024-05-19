@@ -59,7 +59,7 @@ export class EnteringScene {
 
   @Action('add_work')
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_WORK_IN);
+    await ctx.scene.enter(WIZARDS.ADD_WORK);
   }
 
   @Action('add_task')

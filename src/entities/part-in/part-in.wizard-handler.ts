@@ -1,12 +1,16 @@
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import {
+  CustomWizardContext,
+  DbEntities,
+  WizardStepType,
+} from '../../shared/interfaces';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
 
-const selectTypeName = 'componentSelect';
+const selectTypeName: DbEntities = 'componentSelect';
 
 const steps: WizardStepType[] = [
-  { message: 'Комплектующее:', field: 'part', type: selectTypeName },
+  { message: 'Комплектующее:', field: 'component', type: selectTypeName },
   { message: 'Дата заказа:', field: 'dateOrder', type: 'date' },
   { message: 'Дата получения:', field: 'dateArrival', type: 'date' },
   { message: 'Стоимость партии:', field: 'amount', type: 'number' },

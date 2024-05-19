@@ -4,7 +4,7 @@ import { Inject } from '@nestjs/common';
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/wizards';
 import { generateMessage, getValueUnionByIndex } from '../../helpers';
-import { TasksService } from './tasks.service'; // Новый импорт
+import { TaskService } from './task.service'; // Новый импорт
 
 const steps: WizardStepType[] = [
   { message: 'Категория:', field: 'category', type: 'string' },
@@ -82,8 +82,8 @@ function WizardStepHandler(stepIndex: number) {
 @Wizard(WIZARDS.ADD_TASK)
 export class TasksAddWizard {
   constructor(
-    @Inject(TasksService)
-    private readonly service: TasksService,
+    @Inject(TaskService)
+    private readonly service: TaskService,
   ) {}
 
   @WizardStep(1)

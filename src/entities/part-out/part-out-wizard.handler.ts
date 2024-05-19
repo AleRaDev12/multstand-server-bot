@@ -1,9 +1,15 @@
-import { PartOut, Parts } from './part-out.entity';
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import { PartOut } from './part-out.entity';
+import {
+  CustomWizardContext,
+  DbEntities,
+  WizardStepType,
+} from '../../shared/interfaces';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 
+const selectTypeName: DbEntities = 'componentSelect';
+
 const steps: WizardStepType[] = [
-  { message: 'Комплектующее:', field: 'part', type: 'union', union: Parts },
+  { message: 'Комплектующее:', field: 'component', type: selectTypeName },
   { message: 'Дата заказа:', field: 'dateOrder', type: 'date' },
   { message: 'Дата получения:', field: 'dateArrival', type: 'date' },
   { message: 'Стоимость партии:', field: 'amount', type: 'number' },

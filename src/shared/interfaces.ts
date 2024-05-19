@@ -7,7 +7,7 @@ import { Order } from '../entities/order/order.entity';
 import { Client } from '../entities/clients/client.entity';
 import { StandProd } from '../entities/stand-prod/stand-prod.entity';
 import { PartIn } from '../entities/part-in/part-in.entity';
-import { Work } from '../entities/works/work.entity';
+import { Work } from '../entities/work/work.entity';
 import { Task } from '../entities/tasks/task.entity';
 import { FinancialTransaction } from '../entities/financial-transactions/financial-transaction.entity';
 import { Master } from '../entities/masters/master.entity';
@@ -21,7 +21,7 @@ export type KeyOfAllEntities = {
     : keyof AllEntities[K];
 }[keyof AllEntities];
 
-type DbEntities =
+export type DbEntities =
   | 'taskSelect'
   | 'orderSelect'
   | 'clientSelect'
