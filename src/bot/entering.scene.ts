@@ -17,9 +17,11 @@ export class EnteringScene {
           Markup.button.callback('Станок-заказ', 'add_stand_set'),
           Markup.button.callback('Станок-изделие', 'add_stand'),
         ],
-        [Markup.button.callback('Комплектующие', 'add_component')],
-        [Markup.button.callback('Комплектующее заказ/приход', 'add_partsIn')],
-        [Markup.button.callback('Комплектующее расход', 'add_partsOut')],
+        [
+          Markup.button.callback('Комплектующие', 'add_component'),
+          Markup.button.callback('заказ/приход', 'add_partsIn'),
+          Markup.button.callback('расход', 'add_partsOut'),
+        ],
         [
           Markup.button.callback('Работа', 'add_work'),
           Markup.button.callback('Задача', 'add_task'),
