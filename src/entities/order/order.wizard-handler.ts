@@ -1,5 +1,8 @@
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import {
+  replyWithCancelButton,
+  UnifiedWizardHandler,
+} from '../../UnifiedWizardHandler';
 import { Order } from './order.entity';
 import { OrderAddWizard } from './order-add.wizard';
 
@@ -49,7 +52,7 @@ async function handleSpecificAnswer(
   const clients = await this.clientService.findAll();
   const client = clients[selectedNumber - 1];
   if (!client) {
-    await ctx.reply('Клиент не найден. Выберите из списка:');
+    await replyWithCancelButton(ctx, 'Клиент не найден. Выберите из списка:');
     return false;
   }
 
@@ -65,7 +68,7 @@ async function handleSpecificRequest(
   if (stepRequest.type !== selectTypeName) return true;
 
   const ordersList = await this.clientService.getList();
-  await ctx.reply(`${stepRequest.message}${ordersList}`);
+  await replyWithCancelButton(ctx, `${stepRequest.message}${ordersList}`);
   return true;
 }
 

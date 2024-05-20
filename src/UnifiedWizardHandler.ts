@@ -1,6 +1,7 @@
 import { generateMessage, getValueUnionByIndex } from './helpers';
 import { CustomWizardContext, WizardStepType } from './shared/interfaces';
 import { SCENES } from './shared/wizards';
+import { Markup } from 'telegraf';
 
 interface UnifiedWizardHandlerOptions<T> {
   getEntity: (ctx: CustomWizardContext) => T;
@@ -86,7 +87,8 @@ export function UnifiedWizardHandler<T>(
         const message = ctx.update?.message as { text?: string };
 
         if (!message?.text) {
-          await ctx.reply(
+          await replyWithCancelButton(
+            ctx,
             'Некорректный ввод. Пожалуйста, введите значение еще раз.',
           );
           return false;
@@ -97,7 +99,8 @@ export function UnifiedWizardHandler<T>(
             const optionNumber = +message.text;
             const unionKeys = Object.keys(stepAnswer.union);
             if (optionNumber < 1 || optionNumber > unionKeys.length) {
-              await ctx.reply(
+              await replyWithCancelButton(
+                ctx,
                 'Некорректное значение. Пожалуйста, введите значение еще раз.',
               );
               return false;
@@ -112,7 +115,10 @@ export function UnifiedWizardHandler<T>(
             if (!isNaN(number)) {
               entity[stepAnswer.field] = number;
             } else {
-              await ctx.reply('Введите корректное числовое значение.');
+              await replyWithCancelButton(
+                ctx,
+                'Введите корректное числовое значение.',
+              );
               return false;
             }
             break;
@@ -136,7 +142,10 @@ export function UnifiedWizardHandler<T>(
                 break;
 
               default:
-                await ctx.reply(`Введеите "да", "нет", "yes", "no", 1 или 0.`);
+                await replyWithCancelButton(
+                  ctx,
+                  `Введеите "да", "нет", "yes", "no", 1 или 0.`,
+                );
                 return false;
             }
             entity[stepAnswer.field] = booleanValue;
@@ -151,7 +160,7 @@ export function UnifiedWizardHandler<T>(
             if (!isNaN(date)) {
               entity[stepAnswer.field] = new Date(date);
             } else {
-              await ctx.reply('Введите корректную дату.');
+              await replyWithCancelButton(ctx, 'Введите корректную дату.');
               return false;
             }
             break;
@@ -165,7 +174,7 @@ export function UnifiedWizardHandler<T>(
               );
               return result;
             } else {
-              await ctx.reply('Ошибка 1');
+              await replyWithCancelButton(ctx, 'Ошибка 1');
               return false;
             }
         }
@@ -196,7 +205,10 @@ export function UnifiedWizardHandler<T>(
           case 'string':
           case 'boolean':
           case 'date': {
-            await ctx.reply(generateMessage(steps[stepIndex - 1]));
+            await replyWithCancelButton(
+              ctx,
+              generateMessage(steps[stepIndex - 1]),
+            );
             ctx.wizard.next();
             return true;
           }
@@ -210,7 +222,7 @@ export function UnifiedWizardHandler<T>(
               if (result) ctx.wizard.next();
               return result;
             } else {
-              await ctx.reply('Ошибка 2');
+              await replyWithCancelButton(ctx, 'Ошибка 2');
               return false;
             }
           }
@@ -220,4 +232,14 @@ export function UnifiedWizardHandler<T>(
       return descriptor;
     };
   };
+}
+
+export async function replyWithCancelButton(
+  ctx: CustomWizardContext,
+  message: string,
+) {
+  await ctx.reply(
+    message,
+    Markup.inlineKeyboard([Markup.button.callback('Отмена', 'cancel')]),
+  );
 }

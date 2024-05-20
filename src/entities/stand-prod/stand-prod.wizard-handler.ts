@@ -4,7 +4,10 @@ import {
   WizardStepType,
 } from '../../shared/interfaces';
 import { StandProd } from './stand-prod.entity';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import {
+  replyWithCancelButton,
+  UnifiedWizardHandler,
+} from '../../UnifiedWizardHandler';
 import { StandProdAddWizard } from './stand-prod-add.wizard';
 
 const standOrderSelectType: DbEntities = 'standOrderSelect';
@@ -46,7 +49,7 @@ async function handleSpecificAnswer(
       const standsOrder = await this.standOrderService.findAll();
       const standOrder = standsOrder[selectedNumber - 1];
       if (!standOrder) {
-        await ctx.reply('Не найдено. Выберите из списка.');
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
         return false;
       }
 
@@ -67,7 +70,10 @@ async function handleSpecificRequest(
   switch (stepRequest.type) {
     case standOrderSelectType: {
       const standsProdList = await this.standOrderService.getList();
-      await ctx.reply(`${stepRequest.message}${standsProdList}`);
+      await replyWithCancelButton(
+        ctx,
+        `${stepRequest.message}${standsProdList}`,
+      );
       return true;
     }
 

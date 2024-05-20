@@ -3,7 +3,10 @@ import {
   DbEntities,
   WizardStepType,
 } from '../../shared/interfaces';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import {
+  replyWithCancelButton,
+  UnifiedWizardHandler,
+} from '../../UnifiedWizardHandler';
 import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
 
@@ -51,7 +54,7 @@ async function handleSpecificAnswer(
       const tasks = await this.taskService.findAll();
       const task = tasks[selectedNumber - 1];
       if (!task) {
-        await ctx.reply('Не найдено. Выберите из списка.');
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
         return false;
       }
 
@@ -71,7 +74,7 @@ async function handleSpecificAnswer(
       const standsProd = await this.standProdService.findAll();
       const standProd = standsProd[selectedNumber - 1];
       if (!standProd) {
-        await ctx.reply('Не найдено. Выберите из списка.');
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
         return false;
       }
 
@@ -92,13 +95,16 @@ async function handleSpecificRequest(
   switch (stepRequest.type) {
     case taskSelectType: {
       const tasksList = await this.taskService.getList();
-      await ctx.reply(`${stepRequest.message}${tasksList}`);
+      await replyWithCancelButton(ctx, `${stepRequest.message}${tasksList}`);
       return true;
     }
 
     case standProdSelectType: {
       const standsProdList = await this.standProdService.getList();
-      await ctx.reply(`${stepRequest.message}${standsProdList}`);
+      await replyWithCancelButton(
+        ctx,
+        `${stepRequest.message}${standsProdList}`,
+      );
       return true;
     }
 

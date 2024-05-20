@@ -5,7 +5,10 @@ import {
   WizardStepType,
 } from '../../shared/interfaces';
 import { StandOrder } from './stand-order.entity';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import {
+  replyWithCancelButton,
+  UnifiedWizardHandler,
+} from '../../UnifiedWizardHandler';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
 
 const orderSelectType: DbEntities = 'orderSelect';
@@ -117,7 +120,7 @@ async function handleSpecificAnswer(
       const standsOrder = await this.orderService.findAll();
       const standOrder = standsOrder[selectedNumber - 1];
       if (!standOrder) {
-        await ctx.reply('Не найдено. Выберите из списка.');
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
         return false;
       }
 
@@ -135,7 +138,10 @@ async function handleSpecificAnswer(
       if (!isNaN(number)) {
         entity[stepAnswer.field] = number;
       } else {
-        await ctx.reply('Введите корректное числовое значение.');
+        await replyWithCancelButton(
+          ctx,
+          'Введите корректное числовое значение.',
+        );
         return false;
       }
 
@@ -162,7 +168,7 @@ async function handleSpecificRequest(
   if (stepRequest.type !== orderSelectType) return false;
 
   const ordersList = await this.orderService.getList();
-  await ctx.reply(`${stepRequest.message}\n${ordersList}`);
+  await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
   return true;
 }
 

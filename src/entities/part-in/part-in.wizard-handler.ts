@@ -3,7 +3,10 @@ import {
   DbEntities,
   WizardStepType,
 } from '../../shared/interfaces';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import {
+  replyWithCancelButton,
+  UnifiedWizardHandler,
+} from '../../UnifiedWizardHandler';
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
 
@@ -50,7 +53,7 @@ async function handleSpecificAnswer(
   const components = await this.componentService.findAll();
   const component = components[selectedNumber - 1];
   if (!component) {
-    await ctx.reply('Не найдено. Выберите из списка.');
+    await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
     return false;
   }
 
@@ -66,7 +69,7 @@ async function handleSpecificRequest(
   if (stepRequest.type !== selectTypeName) return true;
 
   const componentsList = await this.componentService.getList();
-  await ctx.reply(`${stepRequest.message}${componentsList}`);
+  await replyWithCancelButton(ctx, `${stepRequest.message}${componentsList}`);
   return true;
 }
 
