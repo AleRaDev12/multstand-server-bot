@@ -1,11 +1,19 @@
 import { Led, Painting, StandModel, Tripod } from '../unions';
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import {
+  CustomWizardContext,
+  DbEntities,
+  WizardStepType,
+} from '../../shared/interfaces';
 import { StandOrder } from './stand-order.entity';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
 
+const orderSelectType: DbEntities = 'orderSelect';
+const orderModelSelectType: DbEntities = 'orderModelSelect';
+const entityName = 'standOrder';
+
 const commonSteps: WizardStepType[] = [
-  { message: 'Выберите заказ:', type: 'orderSelect' },
+  { message: 'Выберите заказ:', type: orderSelectType },
   { message: 'Модель:', field: 'model', type: 'union', union: StandModel },
   {
     message: 'Тип обработки:',
@@ -68,17 +76,17 @@ const threeDSteps: WizardStepType[] = [
   },
 ];
 
-const standOrderSteps: WizardStepType[] = [...commonSteps];
+const steps: WizardStepType[] = [...commonSteps];
 
 function getEntity(ctx: CustomWizardContext): StandOrder {
-  return ctx.wizard.state.standOrder;
+  return ctx.wizard.state[entityName];
 }
 
 function setEntity(ctx: CustomWizardContext): void {
-  ctx.wizard.state.standOrder = new StandOrder();
+  ctx.wizard.state[entityName] = new StandOrder();
 }
 
-function save(entity: StandOrder) {
+function save(this: StandOrderAddWizard, entity: StandOrder) {
   return this.service.create(entity);
 }
 
@@ -92,25 +100,58 @@ async function print(
 }
 
 async function handleSpecificAnswer(
+  this: StandOrderAddWizard,
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
   entity: StandOrder,
 ): Promise<boolean> {
-  switch (stepAnswer.field) {
-    case 'model':
+  switch (stepAnswer.type) {
+    case orderSelectType: {
+      // TODO: update types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const message = ctx.update?.message as { text?: string };
+
+      const selectedNumber = parseInt(message.text);
+
+      const standsOrder = await this.orderService.findAll();
+      const standOrder = standsOrder[selectedNumber - 1];
+      if (!standOrder) {
+        await ctx.reply('Не найдено. Выберите из списка.');
+        return false;
+      }
+
+      ctx.wizard.state[entityName][entityName] = standOrder;
+      return true;
+    }
+
+    case orderModelSelectType: {
+      // TODO: update types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const message = ctx.update?.message as { text?: string };
+
+      const number = parseFloat(message.text);
+      if (!isNaN(number)) {
+        entity[stepAnswer.field] = number;
+      } else {
+        await ctx.reply('Введите корректное числовое значение.');
+        return false;
+      }
+
       switch (entity.model) {
         case StandModel.mTM15:
         case StandModel.mTL15:
-          standOrderSteps.push(...tmtlSteps);
+          steps.push(...tmtlSteps);
           break;
         case StandModel.m3DM5:
         case StandModel.m3DL5:
-          standOrderSteps.push(...threeDSteps);
+          steps.push(...threeDSteps);
           break;
       }
-      break;
+      return true;
+    }
   }
-  return true;
 }
 
 async function handleSpecificRequest(
@@ -118,7 +159,7 @@ async function handleSpecificRequest(
   ctx: CustomWizardContext,
   stepRequest: WizardStepType,
 ): Promise<boolean> {
-  if (stepRequest.type !== 'orderSelect') return false;
+  if (stepRequest.type !== orderSelectType) return false;
 
   const ordersList = await this.orderService.getList();
   await ctx.reply(`${stepRequest.message}\n${ordersList}`);
@@ -130,7 +171,7 @@ export const StandOrderWizardHandler = UnifiedWizardHandler<StandOrder>({
   setEntity,
   save,
   print,
-  steps: standOrderSteps,
+  steps,
   handleSpecificAnswer,
   handleSpecificRequest,
 });

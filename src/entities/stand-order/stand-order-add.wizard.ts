@@ -9,7 +9,7 @@ import { StandOrderWizardHandler } from './stand-order.wizard-handler';
 export class StandOrderAddWizard {
   constructor(
     @Inject(StandOrderService)
-    private readonly service: StandOrderService,
+    readonly service: StandOrderService,
     @Inject(OrderService)
     readonly orderService: OrderService,
   ) {}
