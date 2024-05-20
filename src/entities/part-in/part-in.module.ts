@@ -4,15 +4,11 @@ import { PartInAddWizard } from './part-in-add.wizard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { ComponentModule } from '../component/component.module';
-import { FinancialTransaction } from '../financial-transactions/financial-transaction.entity';
-import { FinancialTransactionModule } from '../financial-transactions/financial-transaction.module';
+import { Money } from '../money/money.entity';
+import { MoneyModule } from '../money/money.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([PartIn]),
-    ComponentModule,
-    FinancialTransactionModule,
-  ],
+  imports: [TypeOrmModule.forFeature([PartIn]), ComponentModule, MoneyModule],
   providers: [PartInService, PartInAddWizard],
   exports: [PartInService],
 })

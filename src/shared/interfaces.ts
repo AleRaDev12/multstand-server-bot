@@ -9,7 +9,7 @@ import { StandProd } from '../entities/stand-prod/stand-prod.entity';
 import { PartIn } from '../entities/part-in/part-in.entity';
 import { Work } from '../entities/work/work.entity';
 import { Task } from '../entities/tasks/task.entity';
-import { FinancialTransaction } from '../entities/financial-transactions/financial-transaction.entity';
+import { Money } from '../entities/money/money.entity';
 import { Master } from '../entities/masters/master.entity';
 import { Component } from '../entities/component/component.entity';
 import { StandOrder } from '../entities/stand-order/stand-order.entity';
@@ -52,7 +52,7 @@ export type AllEntities = {
   partOut?: PartOut;
   work?: Work;
   task?: Task;
-  financialTransaction?: FinancialTransaction;
+  money?: Money;
   master?: Master;
   component?: Component;
   standOrder?: StandOrder;

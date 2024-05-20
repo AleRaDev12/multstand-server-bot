@@ -4,7 +4,7 @@ import { PartIn } from '../part-in/part-in.entity';
 import { Master } from '../masters/master.entity';
 
 @Entity()
-export class FinancialTransaction {
+export class Money {
   @PrimaryGeneratedColumn()
   id: number;
 

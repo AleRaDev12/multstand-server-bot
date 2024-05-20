@@ -4,7 +4,7 @@ import { WIZARDS } from '../../shared/wizards';
 import { PartInService } from './part-in.service';
 import { PartInWizardHandler } from './part-in.wizard-handler';
 import { ComponentService } from '../component/component.service';
-import { FinancialTransactionService } from '../financial-transactions/financial-transaction.service';
+import { MoneyService } from '../money/money.service';
 
 @Wizard(WIZARDS.ADD_PART_IN)
 export class PartInAddWizard {
@@ -13,8 +13,8 @@ export class PartInAddWizard {
     readonly service: PartInService,
     @Inject(ComponentService)
     readonly componentService: ComponentService,
-    @Inject(FinancialTransactionService)
-    readonly financialTransactionsService: FinancialTransactionService,
+    @Inject(MoneyService)
+    readonly moneyService: MoneyService,
   ) {}
 
   @WizardStep(1)
