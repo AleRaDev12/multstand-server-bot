@@ -26,6 +26,7 @@ export class EnteringScene {
           Markup.button.callback('Работа', 'add_work'),
           Markup.button.callback('Задача', 'add_task'),
         ],
+        [Markup.button.callback('Деньги', 'add_money')],
       ]),
     );
   }
@@ -77,5 +78,10 @@ export class EnteringScene {
   @Action('add_component')
   async onAddComponent(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.scene.enter(WIZARDS.ADD_COMPONENT);
+  }
+
+  @Action('add_money')
+  async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await ctx.scene.enter(WIZARDS.ADD_MONEY);
   }
 }
