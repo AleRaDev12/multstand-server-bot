@@ -33,7 +33,7 @@ export class EnteringScene {
   @Action('add_user')
   async onAddUser(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(WIZARDS.ADD_USER);
+      await ctx.scene.enter(WIZARDS.ADD_CLIENT);
     } catch (e) {
       await ctx.reply(e.message);
     }
