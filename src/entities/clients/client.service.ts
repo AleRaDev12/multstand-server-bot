@@ -10,8 +10,12 @@ export class ClientService {
     private repository: Repository<Client>,
   ) {}
 
-  async create(user: Client): Promise<Client> {
-    return this.repository.save(user);
+  async create(client: Client): Promise<Client> {
+    return this.repository.save(client);
+  }
+
+  async findOne(id: number): Promise<Client> {
+    return this.repository.findOne({ where: { id } });
   }
 
   async findAll(): Promise<Client[]> {

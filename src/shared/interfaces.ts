@@ -44,9 +44,23 @@ export type WizardStepType = {
     }
 );
 
+export type WizardStepTypeN<T> = {
+  message: string;
+  field?: keyof T;
+} & (
+  | {
+      type: 'string' | 'number' | 'date' | 'boolean' | DbEntities;
+      union?: undefined;
+    }
+  | {
+      type: 'union';
+      union: object;
+    }
+);
+
 export type AllEntities = {
   order?: Order;
-  user?: Client;
+  client?: Client;
   standProd?: StandProd;
   partIn?: PartIn;
   partOut?: PartOut;

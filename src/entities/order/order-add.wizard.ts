@@ -5,7 +5,7 @@ import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/wizards';
 import { OrderWizardHandler } from './order.wizard-handler';
 
-@Wizard(WIZARDS.ADD_ORDER)
+@Wizard(WIZARDS.ORDER_ADD)
 export class OrderAddWizard {
   constructor(
     @Inject(OrderService)

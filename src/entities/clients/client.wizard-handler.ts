@@ -1,15 +1,18 @@
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepTypeN } from '../../shared/interfaces';
 import { Client } from './client.entity';
-import { ClientAddWizard } from './clientAdd.wizard';
+import { ClientAddWizard } from './client-add.wizard';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 
 const entityName = 'client';
 
-const steps: WizardStepType[] = [
-  { message: 'Введите имя:', field: 'firstName', type: 'string' },
-  { message: 'Введите фамилию:', field: 'lastName', type: 'string' },
-  { message: 'Введите номер телефона:', field: 'phoneNumber', type: 'string' },
-  { message: 'Введите город:', field: 'city', type: 'string' },
+const steps: WizardStepTypeN<Client>[] = [
+  { message: 'Имя:', field: 'firstName', type: 'string' },
+  { message: 'Фамилия:', field: 'lastName', type: 'string' },
+  { message: 'Номер телефона:', field: 'phoneNumber', type: 'string' },
+  { message: 'Город:', field: 'city', type: 'string' },
+  { message: 'Email:', field: 'email', type: 'string' },
+  { message: 'Организация:', field: 'organization', type: 'string' },
+  { message: 'Пометки:', field: 'description', type: 'string' },
 ];
 
 function getEntity(ctx: CustomWizardContext): Client {

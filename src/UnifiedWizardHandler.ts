@@ -152,11 +152,6 @@ export function UnifiedWizardHandler<T>(
             break;
           case 'date':
             const date = Date.parse(message.text);
-            console.log(
-              '*-* Date.parse(message.text)',
-              Date.parse(message.text),
-            );
-
             if (!isNaN(date)) {
               entity[stepAnswer.field] = new Date(date);
             } else {
@@ -181,7 +176,6 @@ export function UnifiedWizardHandler<T>(
 
         const isLastStep = stepForAnswerNumber === steps.length - 1;
         if (isLastStep) {
-          console.log('*-* entity', entity);
           const creatingEntity = await save.call(this, entity);
           await print(ctx, creatingEntity);
 
@@ -197,8 +191,6 @@ export function UnifiedWizardHandler<T>(
         stepRequest: WizardStepType,
         stepIndex: number,
       ): Promise<boolean> {
-        console.log('*-* send text');
-
         switch (stepRequest.type) {
           case 'union':
           case 'number':

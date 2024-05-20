@@ -10,9 +10,10 @@ export class EnteringScene {
       'Выберите действие:',
       Markup.inlineKeyboard([
         [
-          Markup.button.callback('Клиент', 'add_user'),
-          Markup.button.callback('Заказ', 'add_order'),
+          Markup.button.callback('Клиент', 'client_add'),
+          // Markup.button.callback('Клиент изменить (не работает)', 'client_update'),
         ],
+        [Markup.button.callback('Заказ', 'add_order')],
         [
           Markup.button.callback('Станок-заказ', 'add_stand_set'),
           Markup.button.callback('Станок-изделие', 'add_stand'),
@@ -31,10 +32,19 @@ export class EnteringScene {
     );
   }
 
-  @Action('add_user')
-  async onAddUser(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('client_add')
+  async onAddClient(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(WIZARDS.ADD_CLIENT);
+      await ctx.scene.enter(WIZARDS.CLIENT_ADD);
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('client_update')
+  async onClientUpdate(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await ctx.scene.enter(WIZARDS.CLIENT_UPDATE);
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -42,7 +52,7 @@ export class EnteringScene {
 
   @Action('add_order')
   async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_ORDER);
+    await ctx.scene.enter(WIZARDS.ORDER_ADD);
   }
 
   @Action('add_stand')

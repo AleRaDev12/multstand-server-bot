@@ -4,7 +4,7 @@ import { WIZARDS } from '../../shared/wizards';
 import { ClientService } from './client.service';
 import { ClientWizardHandler } from './client.wizard-handler';
 
-@Wizard(WIZARDS.ADD_CLIENT)
+@Wizard(WIZARDS.CLIENT_ADD)
 export class ClientAddWizard {
   constructor(
     @Inject(ClientService)
