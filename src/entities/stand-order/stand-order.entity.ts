@@ -28,6 +28,9 @@ export class StandOrder {
   })
   model: StandModelType;
 
+  @Column({ type: 'decimal', nullable: true })
+  cost: number;
+
   @Column({
     type: 'text',
     nullable: true,

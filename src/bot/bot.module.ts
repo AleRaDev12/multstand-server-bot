@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BotUpdate } from './bot.update';
-import { ClientsModule } from '../entities/clients/clients.module';
+import { ClientsModule } from '../entities/client/clients.module';
 import { OrderModule } from '../entities/order/order.module';
 import { StandProdModule } from '../entities/stand-prod/stand-prod.module';
 import { PartInModule } from '../entities/part-in/part-in.module';

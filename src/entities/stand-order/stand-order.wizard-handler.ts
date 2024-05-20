@@ -3,6 +3,7 @@ import {
   CustomWizardContext,
   DbEntities,
   WizardStepType,
+  WizardStepTypeN,
 } from '../../shared/interfaces';
 import { StandOrder } from './stand-order.entity';
 import {
@@ -17,11 +18,16 @@ const orderSelectType: DbEntities = 'orderSelect';
 const orderModelSelectType: DbEntities = 'orderModelSelect';
 const entityName = 'standOrder';
 
-const commonSteps: WizardStepType[] = [
+const commonSteps: WizardStepTypeN<StandOrder>[] = [
   { message: 'Выберите заказ:', type: orderSelectType },
   {
     message: 'Модель:',
     type: orderModelSelectType,
+  },
+  {
+    message: 'Стоимость:',
+    field: 'cost',
+    type: 'number',
   },
   {
     message: 'Тип обработки:',
@@ -129,7 +135,7 @@ async function handleSpecificAnswer(
         return false;
       }
 
-      ctx.wizard.state[entityName][entityName] = standOrder;
+      ctx.wizard.state[entityName].order = standOrder;
       return true;
     }
 

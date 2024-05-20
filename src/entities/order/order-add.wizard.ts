@@ -1,6 +1,6 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { OrderService } from './order.service';
-import { ClientService } from '../clients/client.service';
+import { ClientService } from '../client/client.service';
 import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/wizards';
 import { OrderWizardHandler } from './order.wizard-handler';

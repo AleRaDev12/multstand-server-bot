@@ -4,13 +4,13 @@ import {
   WizardSessionData,
 } from 'telegraf/typings/scenes';
 import { Order } from '../entities/order/order.entity';
-import { Client } from '../entities/clients/client.entity';
+import { Client } from '../entities/client/client.entity';
 import { StandProd } from '../entities/stand-prod/stand-prod.entity';
 import { PartIn } from '../entities/part-in/part-in.entity';
 import { Work } from '../entities/work/work.entity';
 import { Task } from '../entities/tasks/task.entity';
 import { Money } from '../entities/money/money.entity';
-import { Master } from '../entities/masters/master.entity';
+import { Master } from '../entities/master/master.entity';
 import { Component } from '../entities/component/component.entity';
 import { StandOrder } from '../entities/stand-order/stand-order.entity';
 import { PartOut } from '../entities/part-out/part-out.entity';
