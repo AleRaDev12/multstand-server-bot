@@ -6,10 +6,10 @@ import {
 } from '../../shared/interfaces';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
 
-const selectTypeName: DbEntities = 'componentSelect';
+const componentTypeName: DbEntities = 'componentSelect';
 
 const steps: WizardStepType[] = [
-  { message: 'Комплектующее:', field: 'component', type: selectTypeName },
+  { message: 'Комплектующее:', type: componentTypeName },
   { message: 'Дата заказа:', field: 'dateOrder', type: 'date' },
   { message: 'Дата получения:', field: 'dateArrival', type: 'date' },
   { message: 'Стоимость партии:', field: 'amount', type: 'number' },

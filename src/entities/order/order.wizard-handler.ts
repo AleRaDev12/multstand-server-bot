@@ -9,7 +9,7 @@ import { OrderAddWizard } from './order-add.wizard';
 const selectTypeName = 'clientSelect';
 
 const steps: WizardStepType[] = [
-  { message: 'Выберите клиента:', field: 'client', type: selectTypeName },
+  { message: 'Выберите клиента:', type: selectTypeName },
   { message: 'Дата договора:', field: 'contractDate', type: 'date' },
   {
     message: 'Количество дней на выполнение заказа:',

@@ -6,10 +6,12 @@ import {
 } from '../../shared/interfaces';
 import { StandOrder } from './stand-order.entity';
 import {
+  handleAnswerUnion,
   replyWithCancelButton,
   UnifiedWizardHandler,
 } from '../../UnifiedWizardHandler';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
+import { printUnion } from '../../helpers';
 
 const orderSelectType: DbEntities = 'orderSelect';
 const orderModelSelectType: DbEntities = 'orderModelSelect';
@@ -17,7 +19,10 @@ const entityName = 'standOrder';
 
 const commonSteps: WizardStepType[] = [
   { message: 'Выберите заказ:', type: orderSelectType },
-  { message: 'Модель:', field: 'model', type: 'union', union: StandModel },
+  {
+    message: 'Модель:',
+    type: orderModelSelectType,
+  },
   {
     message: 'Тип обработки:',
     field: 'painting',
@@ -129,21 +134,8 @@ async function handleSpecificAnswer(
     }
 
     case orderModelSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
-
-      const number = parseFloat(message.text);
-      if (!isNaN(number)) {
-        entity[stepAnswer.field] = number;
-      } else {
-        await replyWithCancelButton(
-          ctx,
-          'Введите корректное числовое значение.',
-        );
-        return false;
-      }
+      const result = await handleAnswerUnion(ctx, 'model', StandModel, entity);
+      if (!result) return false;
 
       switch (entity.model) {
         case StandModel.mTM15:
@@ -165,11 +157,23 @@ async function handleSpecificRequest(
   ctx: CustomWizardContext,
   stepRequest: WizardStepType,
 ): Promise<boolean> {
-  if (stepRequest.type !== orderSelectType) return false;
+  switch (stepRequest.type) {
+    case orderSelectType: {
+      const ordersList = await this.orderService.getList();
+      await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
+      return true;
+    }
 
-  const ordersList = await this.orderService.getList();
-  await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
-  return true;
+    case orderModelSelectType: {
+      await replyWithCancelButton(
+        ctx,
+        `${stepRequest.message}\n${printUnion(StandModel)}`,
+      );
+      return true;
+    }
+  }
+
+  if (stepRequest.type !== orderSelectType) return false;
 }
 
 export const StandOrderWizardHandler = UnifiedWizardHandler<StandOrder>({

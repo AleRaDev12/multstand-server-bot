@@ -22,45 +22,45 @@ function WizardStepHandler(stepIndex: number) {
     _propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
-    const stepIndexCorrected = stepIndex - 2;
-
-    descriptor.value = async function (ctx: CustomWizardContext) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const msg = ctx.update?.message;
-      const step = steps[stepIndexCorrected];
-
-      if (!msg?.text) {
-        return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
-      }
-
-      switch (step.type) {
-        case 'number':
-          const number = parseFloat(msg.text);
-          if (!isNaN(number)) {
-            ctx.wizard.state.master[step.field] = number;
-          } else {
-            return 'Введите корректное числовое значение.';
-          }
-          break;
-        default:
-          ctx.wizard.state.master[step.field] = msg.text;
-          break;
-      }
-
-      if (stepIndexCorrected === steps.length - 1) {
-        const master = await this.mastersService.create(
-          ctx.wizard.state.master,
-        );
-        await ctx.scene.leave();
-        return `Мастер ${JSON.stringify(master, null, 2)} добавлен.`;
-      } else {
-        ctx.wizard.next();
-        return generateMessage(steps[stepIndexCorrected + 1]);
-      }
-    };
-
-    return descriptor;
+    // const stepIndexCorrected = stepIndex - 2;
+    //
+    // descriptor.value = async function (ctx: CustomWizardContext) {
+    //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //   // @ts-expect-error
+    //   const msg = ctx.update?.message;
+    //   const step = steps[stepIndexCorrected];
+    //
+    //   if (!msg?.text) {
+    //     return 'Некорректный ввод. Пожалуйста, введите значение еще раз.';
+    //   }
+    //
+    //   switch (step.type) {
+    //     case 'number':
+    //       const number = parseFloat(msg.text);
+    //       if (!isNaN(number)) {
+    //         ctx.wizard.state.master[step.field] = number;
+    //       } else {
+    //         return 'Введите корректное числовое значение.';
+    //       }
+    //       break;
+    //     default:
+    //       ctx.wizard.state.master[step.field] = msg.text;
+    //       break;
+    //   }
+    //
+    //   if (stepIndexCorrected === steps.length - 1) {
+    //     const master = await this.mastersService.create(
+    //       ctx.wizard.state.master,
+    //     );
+    //     await ctx.scene.leave();
+    //     return `Мастер ${JSON.stringify(master, null, 2)} добавлен.`;
+    //   } else {
+    //     ctx.wizard.next();
+    //     return generateMessage(steps[stepIndexCorrected + 1]);
+    //   }
+    // };
+    //
+    // return descriptor;
   };
 }
 

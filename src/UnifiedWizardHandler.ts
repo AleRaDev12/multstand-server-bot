@@ -1,5 +1,9 @@
 import { generateMessage, getValueUnionByIndex } from './helpers';
-import { CustomWizardContext, WizardStepType } from './shared/interfaces';
+import {
+  AllEntities,
+  CustomWizardContext,
+  WizardStepType,
+} from './shared/interfaces';
 import { SCENES } from './shared/wizards';
 import { Markup } from 'telegraf';
 
@@ -96,19 +100,13 @@ export function UnifiedWizardHandler<T>(
 
         switch (stepAnswer.type) {
           case 'union':
-            const optionNumber = +message.text;
-            const unionKeys = Object.keys(stepAnswer.union);
-            if (optionNumber < 1 || optionNumber > unionKeys.length) {
-              await replyWithCancelButton(
-                ctx,
-                'Некорректное значение. Пожалуйста, введите значение еще раз.',
-              );
-              return false;
-            }
-            entity[stepAnswer.field] = getValueUnionByIndex(
+            const result = await handleAnswerUnion(
+              ctx,
+              stepAnswer.field,
               stepAnswer.union,
-              optionNumber - 1,
+              entity,
             );
+            if (!result) return false;
             break;
           case 'number':
             const number = parseFloat(message.text);
@@ -234,4 +232,31 @@ export async function replyWithCancelButton(
     message,
     Markup.inlineKeyboard([Markup.button.callback('Отмена', 'cancel')]),
   );
+}
+
+export async function handleAnswerUnion<T>(
+  ctx: CustomWizardContext,
+  field: string,
+  union: object,
+  entity: T,
+) {
+  // TODO: update types
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const message = ctx.update?.message as { text?: string };
+
+  const optionNumber = +message.text;
+  const unionKeys = Object.keys(union);
+
+  if (optionNumber < 1 || optionNumber > unionKeys.length) {
+    await replyWithCancelButton(
+      ctx,
+      'Некорректное значение. Пожалуйста, введите значение еще раз.',
+    );
+    return false;
+  }
+
+  entity[field] = getValueUnionByIndex(union, optionNumber - 1);
+
+  return true;
 }

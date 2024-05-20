@@ -11,10 +11,10 @@ import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
 import { Money } from '../money/money.entity';
 
-const selectTypeName: DbEntities = 'componentSelect';
+const componentTypeName: DbEntities = 'componentSelect';
 
 const steps: WizardStepType[] = [
-  { message: 'Комплектующее:', field: 'component', type: selectTypeName },
+  { message: 'Комплектующее:', type: componentTypeName },
   { message: 'Дата заказа:', field: 'dateOrder', type: 'date' },
   { message: 'Дата получения:', field: 'dateArrival', type: 'date' },
   { message: 'Стоимость партии:', field: 'amount', type: 'number' },
@@ -52,7 +52,7 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
-  if (stepAnswer.type !== selectTypeName) return true;
+  if (stepAnswer.type !== componentTypeName) return true;
 
   // TODO: update types
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -77,7 +77,7 @@ async function handleSpecificRequest(
   ctx: CustomWizardContext,
   stepRequest: WizardStepType,
 ): Promise<boolean> {
-  if (stepRequest.type !== selectTypeName) return true;
+  if (stepRequest.type !== componentTypeName) return true;
 
   const componentsList = await this.componentService.getList();
   await replyWithCancelButton(ctx, `${stepRequest.message}${componentsList}`);

@@ -60,7 +60,7 @@ function WizardStepHandler(stepIndex: number) {
           }
           break;
         default:
-          ctx.wizard.state.task[step.field] = msg.text;
+          // ctx.wizard.state.task[step.field] = msg.text;
           break;
       }
 

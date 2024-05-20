@@ -32,29 +32,41 @@ export type DbEntities =
 
 export type WizardStepType = {
   message: string;
-  field?: KeyOfAllEntities;
 } & (
   | {
-      type: 'string' | 'number' | 'date' | 'boolean' | DbEntities;
+      field?: KeyOfAllEntities;
+      type: 'string' | 'number' | 'date' | 'boolean';
       union?: undefined;
     }
   | {
+      field?: KeyOfAllEntities;
       type: 'union';
       union: object;
+    }
+  | {
+      field?: undefined;
+      type: DbEntities;
+      union?: undefined;
     }
 );
 
 export type WizardStepTypeN<T> = {
   message: string;
-  field?: keyof T;
 } & (
   | {
-      type: 'string' | 'number' | 'date' | 'boolean' | DbEntities;
+      field?: keyof T;
+      type: 'string' | 'number' | 'date' | 'boolean';
       union?: undefined;
     }
   | {
+      field?: keyof T;
       type: 'union';
       union: object;
+    }
+  | {
+      field?: undefined;
+      type: DbEntities;
+      union?: undefined;
     }
 );
 
