@@ -1,39 +1,18 @@
-import { LedStripModel, Painting, StandModel, Tripod } from '../unions';
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import {
+  CustomWizardContext,
+  DbEntities,
+  WizardStepType,
+} from '../../shared/interfaces';
 import { StandProd } from './stand-prod.entity';
 import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import { StandProdAddWizard } from './stand-prod-add.wizard';
 
-const standProdSteps: WizardStepType[] = [
-  { message: 'Модель:', field: 'model', union: StandModel, type: 'union' },
-  {
-    message: 'Покраска:',
-    field: 'painting',
-    union: Painting,
-    type: 'union',
-  },
-  {
-    message: 'Количество обычных стёкол:',
-    field: 'glassesRegular',
-    type: 'number',
-  },
-  {
-    message: 'Количество стёкол пп:',
-    field: 'glassesHighTransparency',
-    type: 'number',
-  },
-  {
-    message: 'Светодиодная лента:',
-    field: 'ledStripModel',
-    union: LedStripModel,
-    type: 'union',
-  },
-  { message: 'Ткань для затенения:', field: 'shadingFabric', type: 'number' },
-  {
-    message: 'Штатив для объёмной анимации:',
-    field: 'tripod',
-    type: 'union',
-    union: Tripod,
-  },
+const standOrderSelectType: DbEntities = 'standOrderSelect';
+const entityName = 'standProd';
+
+const steps: WizardStepType[] = [
+  { message: 'Станок-заказ:', type: standOrderSelectType },
+  { message: 'Описание:', type: 'string', field: 'description' },
 ];
 
 const getEntity = (ctx: CustomWizardContext): StandProd =>
@@ -41,7 +20,7 @@ const getEntity = (ctx: CustomWizardContext): StandProd =>
 const setEntity = (ctx: CustomWizardContext): void => {
   ctx.wizard.state.standProd = new StandProd();
 };
-const save = function (entity: StandProd) {
+const save = function (this: StandProdAddWizard, entity: StandProd) {
   return this.service.create(entity);
 };
 const print = async (ctx: CustomWizardContext, entity: StandProd) => {
@@ -50,10 +29,59 @@ const print = async (ctx: CustomWizardContext, entity: StandProd) => {
   );
 };
 
+async function handleSpecificAnswer(
+  this: StandProdAddWizard,
+  ctx: CustomWizardContext,
+  stepAnswer: WizardStepType,
+): Promise<boolean> {
+  switch (stepAnswer.type) {
+    case standOrderSelectType: {
+      // TODO: update types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const message = ctx.update?.message as { text?: string };
+
+      const selectedNumber = parseInt(message.text);
+
+      const standsOrder = await this.standOrderService.findAll();
+      const standOrder = standsOrder[selectedNumber - 1];
+      if (!standOrder) {
+        await ctx.reply('Не найдено. Выберите из списка.');
+        return false;
+      }
+
+      ctx.wizard.state[entityName].standOrder = standOrder;
+      return true;
+    }
+
+    default:
+      return true;
+  }
+}
+
+async function handleSpecificRequest(
+  this: StandProdAddWizard,
+  ctx: CustomWizardContext,
+  stepRequest: WizardStepType,
+): Promise<boolean> {
+  switch (stepRequest.type) {
+    case standOrderSelectType: {
+      const standsProdList = await this.standOrderService.getList();
+      await ctx.reply(`${stepRequest.message}${standsProdList}`);
+      return true;
+    }
+
+    default:
+      return true;
+  }
+}
+
 export const StandProdWizardHandler = UnifiedWizardHandler<StandProd>({
   getEntity,
   setEntity,
   save,
   print,
-  steps: standProdSteps,
+  handleSpecificAnswer,
+  handleSpecificRequest,
+  steps,
 });

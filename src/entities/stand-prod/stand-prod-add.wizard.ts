@@ -3,12 +3,15 @@ import { StandProdService } from './stand-prod.service';
 import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/wizards';
 import { StandProdWizardHandler } from './stand-prod.wizard-handler';
+import { StandOrderService } from '../stand-order/stand-order.service';
 
 @Wizard(WIZARDS.ADD_STAND_PROD)
 export class StandProdAddWizard {
   constructor(
     @Inject(StandProdService)
-    private readonly service: StandProdService,
+    readonly service: StandProdService,
+    @Inject(StandOrderService)
+    readonly standOrderService: StandOrderService,
   ) {}
 
   @WizardStep(1)

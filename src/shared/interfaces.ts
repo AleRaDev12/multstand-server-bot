@@ -25,7 +25,10 @@ export type DbEntities =
   | 'taskSelect'
   | 'orderSelect'
   | 'clientSelect'
-  | 'componentSelect';
+  | 'componentSelect'
+  | 'standOrderSelect'
+  | 'standProdSelect'
+  | 'orderModelSelect';
 
 export type WizardStepType = {
   message: string;
