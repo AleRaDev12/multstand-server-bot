@@ -8,11 +8,12 @@ import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
 
 const taskSelectType: DbEntities = 'taskSelect';
-const componentSelectType: DbEntities = 'componentSelect';
+const standProdSelectType: DbEntities = 'standProdSelect';
 const entityName = 'work';
 
 const steps: WizardStepType[] = [
   { message: 'Задача:', type: taskSelectType },
+  { message: 'Станок-изделие:', type: standProdSelectType },
   { message: 'Количество:', field: 'count', type: 'number' },
   { message: 'Дата выполнения:', field: 'date', type: 'date' },
 ];
@@ -59,6 +60,25 @@ async function handleSpecificAnswer(
       return true;
     }
 
+    case standProdSelectType: {
+      // TODO: update types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const message = ctx.update?.message as { text?: string };
+
+      const selectedNumber = parseInt(message.text);
+
+      const standsProd = await this.standProdService.findAll();
+      const standProd = standsProd[selectedNumber - 1];
+      if (!standProd) {
+        await ctx.reply('Не найдено. Выберите из списка.');
+        return false;
+      }
+
+      ctx.wizard.state[entityName].standProd = standProd;
+      return true;
+    }
+
     default:
       return true;
   }
@@ -73,6 +93,12 @@ async function handleSpecificRequest(
     case taskSelectType: {
       const tasksList = await this.taskService.getList();
       await ctx.reply(`${stepRequest.message}${tasksList}`);
+      return true;
+    }
+
+    case standProdSelectType: {
+      const standsProdList = await this.standProdService.getList();
+      await ctx.reply(`${stepRequest.message}${standsProdList}`);
       return true;
     }
 
