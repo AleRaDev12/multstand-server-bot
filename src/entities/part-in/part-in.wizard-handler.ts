@@ -9,6 +9,7 @@ import {
 } from '../../UnifiedWizardHandler';
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
+import { FinancialTransaction } from '../financial-transactions/financial-transaction.entity';
 
 const selectTypeName: DbEntities = 'componentSelect';
 
@@ -28,8 +29,18 @@ function setEntity(ctx: CustomWizardContext): void {
   ctx.wizard.state.partIn = new PartIn();
 }
 
-function save(entity: PartIn) {
-  return this.service.create(entity);
+async function save(this: PartInAddWizard, entity: PartIn) {
+  const partIn = await this.service.create(entity);
+
+  const financialTransaction = new FinancialTransaction();
+
+  financialTransaction.transactionDate = new Date();
+  financialTransaction.amount = entity.amount;
+  financialTransaction.description = `Покупка комплектующего: ${entity.component.name} в количестве ${entity.count} на сумму ${entity.amount}`;
+  financialTransaction.partIn = partIn;
+
+  await this.financialTransactionsService.create(financialTransaction);
+  return partIn;
 }
 
 async function print(ctx: CustomWizardContext, entity: PartIn): Promise<void> {

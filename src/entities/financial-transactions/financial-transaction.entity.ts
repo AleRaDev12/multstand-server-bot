@@ -14,9 +14,6 @@ export class FinancialTransaction {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   amount: number;
 
-  @Column()
-  transactionType: string;
-
   @Column({ nullable: true })
   description: string;
 
@@ -24,7 +21,7 @@ export class FinancialTransaction {
   order: Order;
 
   @ManyToOne(() => PartIn, { nullable: true })
-  componentPurchase: PartIn;
+  partIn: PartIn;
 
   @ManyToOne(() => Master, { nullable: true })
   master: Master;

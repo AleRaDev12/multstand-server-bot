@@ -21,7 +21,7 @@ export class PartIn {
   dateArrival: Date;
 
   @Column({
-    type: 'int',
+    type: 'decimal',
   })
   amount: number;
 
