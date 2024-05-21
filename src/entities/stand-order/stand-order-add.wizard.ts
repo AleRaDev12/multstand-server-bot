@@ -1,11 +1,11 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { WIZARDS } from '../../shared/wizards';
+import { ScenesWizards } from '../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { StandOrderService } from './stand-order.service';
 import { OrderService } from '../order/order.service';
 import { StandOrderWizardHandler } from './stand-order.wizard-handler';
 
-@Wizard(WIZARDS.ADD_STAND_ORDER)
+@Wizard(ScenesWizards.ADD_STAND_ORDER)
 export class StandOrderAddWizard {
   constructor(
     @Inject(StandOrderService)

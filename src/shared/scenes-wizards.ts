@@ -1,4 +1,4 @@
-export enum WIZARDS {
+export enum ScenesWizards {
   CLIENT_ADD = 'CLIENT_ADD',
   CLIENT_UPDATE = 'CLIENT_UPDATE',
   ORDER_ADD = 'ORDER_ADD',
@@ -15,4 +15,6 @@ export enum WIZARDS {
 
 export enum SCENES {
   ENTERING = 'ENTERING',
+  CLIENT = 'CLIENT',
+  CLIENT_LIST = 'CLIENT_LIST',
 }

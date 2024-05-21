@@ -4,7 +4,7 @@ import {
   CustomWizardContext,
   WizardStepType,
 } from './shared/interfaces';
-import { SCENES } from './shared/wizards';
+import { SCENES } from './shared/scenes-wizards';
 import { Markup } from 'telegraf';
 
 interface UnifiedWizardHandlerOptions<T> {

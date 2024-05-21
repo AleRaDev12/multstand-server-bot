@@ -1,6 +1,6 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { SCENES, WIZARDS } from '../shared/wizards';
+import { SCENES, ScenesWizards } from '../shared/scenes-wizards';
 
 @Scene(SCENES.ENTERING)
 export class EnteringScene {
@@ -9,10 +9,7 @@ export class EnteringScene {
     await ctx.reply(
       'Выберите действие:',
       Markup.inlineKeyboard([
-        [
-          Markup.button.callback('Клиент', 'client_add'),
-          // Markup.button.callback('Клиент изменить (не работает)', 'client_update'),
-        ],
+        [Markup.button.callback('Клиенты', 'client')],
         [Markup.button.callback('Заказ', 'add_order')],
         [
           Markup.button.callback('Станок-заказ', 'add_stand_set'),
@@ -32,19 +29,10 @@ export class EnteringScene {
     );
   }
 
-  @Action('client_add')
-  async onAddClient(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('client')
+  async onClient(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(WIZARDS.CLIENT_ADD);
-    } catch (e) {
-      await ctx.reply(e.message);
-    }
-  }
-
-  @Action('client_update')
-  async onClientUpdate(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    try {
-      await ctx.scene.enter(WIZARDS.CLIENT_UPDATE);
+      await ctx.scene.enter(SCENES.CLIENT);
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -52,46 +40,46 @@ export class EnteringScene {
 
   @Action('add_order')
   async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ORDER_ADD);
+    await ctx.scene.enter(ScenesWizards.ORDER_ADD);
   }
 
   @Action('add_stand')
   async onAddStandProd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_STAND_PROD);
+    await ctx.scene.enter(ScenesWizards.ADD_STAND_PROD);
   }
 
   @Action('add_partsIn')
   async onAddPartIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_PART_IN);
+    await ctx.scene.enter(ScenesWizards.ADD_PART_IN);
   }
 
   @Action('add_partsOut')
   async onAddPartOut(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_PART_OUT);
+    await ctx.scene.enter(ScenesWizards.ADD_PART_OUT);
   }
 
   @Action('add_work')
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_WORK);
+    await ctx.scene.enter(ScenesWizards.ADD_WORK);
   }
 
   @Action('add_task')
   async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_TASK);
+    await ctx.scene.enter(ScenesWizards.ADD_TASK);
   }
 
   @Action('add_stand_set')
   async onAddStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_STAND_ORDER);
+    await ctx.scene.enter(ScenesWizards.ADD_STAND_ORDER);
   }
 
   @Action('add_component')
   async onAddComponent(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_COMPONENT);
+    await ctx.scene.enter(ScenesWizards.ADD_COMPONENT);
   }
 
   @Action('add_money')
   async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_MONEY);
+    await ctx.scene.enter(ScenesWizards.ADD_MONEY);
   }
 }
