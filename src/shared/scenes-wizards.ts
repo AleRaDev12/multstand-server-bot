@@ -16,5 +16,7 @@ export enum SCENES_WIZARDS {
 export enum SCENES {
   ENTERING = 'ENTERING',
   CLIENT = 'CLIENT',
+  ORDER = 'ORDER',
   CLIENT_LIST = 'CLIENT_LIST',
+  ORDER_LIST = 'ORDER_LIST',
 }

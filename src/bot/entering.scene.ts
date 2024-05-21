@@ -10,7 +10,7 @@ export class EnteringScene {
       'Выберите действие:',
       Markup.inlineKeyboard([
         [Markup.button.callback('Клиенты', 'client')],
-        [Markup.button.callback('Заказ', 'add_order')],
+        [Markup.button.callback('Заказы', 'order')],
         [
           Markup.button.callback('Станок-заказ', 'add_stand_set'),
           Markup.button.callback('Станок-изделие', 'add_stand'),
@@ -38,9 +38,13 @@ export class EnteringScene {
     }
   }
 
-  @Action('add_order')
-  async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ORDER_ADD);
+  @Action('order')
+  async onOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await ctx.scene.enter(SCENES.ORDER);
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
   }
 
   @Action('add_stand')

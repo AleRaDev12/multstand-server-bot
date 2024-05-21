@@ -2,16 +2,15 @@ import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
 import { SCENES, SCENES_WIZARDS } from '../../shared/scenes-wizards';
 
-@Scene(SCENES.CLIENT)
-export class ClientScene {
+@Scene(SCENES.ORDER)
+export class OrderScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(
-      'Клиенты:',
+      'Заказы:',
       Markup.inlineKeyboard([
         [Markup.button.callback('Список', 'list')],
         [Markup.button.callback('Лобавить', 'add')],
-        [Markup.button.callback('Изменить (не работает)', 'update')],
       ]),
     );
   }
@@ -19,7 +18,7 @@ export class ClientScene {
   @Action('list')
   async onList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(SCENES.CLIENT_LIST);
+      await ctx.scene.enter(SCENES.ORDER_LIST);
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -27,16 +26,7 @@ export class ClientScene {
   @Action('add')
   async onAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(SCENES_WIZARDS.CLIENT_ADD);
-    } catch (e) {
-      await ctx.reply(e.message);
-    }
-  }
-
-  @Action('update')
-  async onUpdate(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    try {
-      await ctx.scene.enter(SCENES_WIZARDS.CLIENT_UPDATE);
+      await ctx.scene.enter(SCENES_WIZARDS.ORDER_ADD);
     } catch (e) {
       await ctx.reply(e.message);
     }
