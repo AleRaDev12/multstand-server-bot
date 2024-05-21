@@ -178,7 +178,7 @@ export function UnifiedWizardHandler<T>(
           await print(ctx, creatingEntity);
 
           await ctx.scene.leave();
-          await ctx.scene.enter(SCENES.ENTERING);
+          await ctx.scene.enter(SCENES.MENU);
         }
 
         return true;

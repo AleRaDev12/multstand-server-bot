@@ -2,7 +2,7 @@ import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Task } from './task.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
-import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
+import { WIZARDS } from '../../shared/scenes-wizards';
 import { generateMessage, getValueUnionByIndex } from '../../helpers';
 import { TaskService } from './task.service'; // Новый импорт
 
@@ -79,7 +79,7 @@ function WizardStepHandler(stepIndex: number) {
   };
 }
 
-@Wizard(SCENES_WIZARDS.ADD_TASK)
+@Wizard(WIZARDS.ADD_TASK)
 export class TasksAddWizard {
   constructor(
     @Inject(TaskService)

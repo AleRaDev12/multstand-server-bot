@@ -24,6 +24,6 @@ export class ClientService {
 
   async getList(): Promise<string> {
     const clients = await this.findAll();
-    return `${clients.map((client, i) => `\n${i + 1}. ${client.id} ${client.firstName} ${client.lastName} ${client.city} ${client.phoneNumber}`)}`;
+    return `${clients.map((client, i) => `\n${i + 1}. #${client.id} ${client.firstName} ${client.lastName} ${client.city} ${client.phoneNumber} ${client.email} ${client.organization} ${client.description}\n`)}`;
   }
 }

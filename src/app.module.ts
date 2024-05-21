@@ -6,7 +6,7 @@ import { sessionMiddleware } from './middleware/session.middleware';
 import { BotModule } from './bot/bot.module';
 import { SeedService } from './seed.service';
 import { Task } from './entities/tasks/task.entity';
-import { Component } from './entities/component/component.entity';
+import { Component } from './entities/component/component/component.entity';
 
 @Module({
   imports: [

@@ -2,12 +2,12 @@ import {
   CustomWizardContext,
   DbEntities,
   WizardStepType,
-} from '../../shared/interfaces';
+} from '../../../shared/interfaces';
 import { StandProd } from './stand-prod.entity';
 import {
   replyWithCancelButton,
   UnifiedWizardHandler,
-} from '../../UnifiedWizardHandler';
+} from '../../../UnifiedWizardHandler';
 import { StandProdAddWizard } from './stand-prod-add.wizard';
 
 const standOrderSelectType: DbEntities = 'standOrderSelect';

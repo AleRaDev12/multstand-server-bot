@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Component } from '../component/component.entity';
-import { StandProd } from '../stand-prod/stand-prod.entity';
+import { StandProd } from '../../stand/stand-prod/stand-prod.entity';
 
 @Entity()
 export class PartOut {

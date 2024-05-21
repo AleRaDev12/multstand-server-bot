@@ -5,7 +5,7 @@ import { Inject } from '@nestjs/common';
 import { ClientService } from './client.service';
 
 @Scene(SCENES.CLIENT_LIST)
-export class EnteringScene {
+export class ClientListScene {
   constructor(
     @Inject(ClientService)
     readonly service: ClientService,
@@ -15,5 +15,6 @@ export class EnteringScene {
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(await this.service.getList());
     await ctx.scene.leave();
+    await ctx.scene.enter(SCENES.CLIENT);
   }
 }

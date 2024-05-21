@@ -4,8 +4,8 @@ import { PartInAddWizard } from './part-in-add.wizard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { ComponentModule } from '../component/component.module';
-import { Money } from '../money/money.entity';
-import { MoneyModule } from '../money/money.module';
+import { Money } from '../../money/money.entity';
+import { MoneyModule } from '../../money/money.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PartIn]), ComponentModule, MoneyModule],

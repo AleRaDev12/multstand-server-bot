@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Task } from '../tasks/task.entity';
-import { StandProd } from '../stand-prod/stand-prod.entity';
+import { StandProd } from '../stand/stand-prod/stand-prod.entity';
 
 @Entity()
 export class Work {

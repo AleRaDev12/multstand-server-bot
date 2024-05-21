@@ -1,9 +1,9 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { SCENES, SCENES_WIZARDS } from '../shared/scenes-wizards';
+import { SCENES, WIZARDS } from '../shared/scenes-wizards';
 
-@Scene(SCENES.ENTERING)
-export class EnteringScene {
+@Scene(SCENES.MENU)
+export class MenuScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(
@@ -49,41 +49,41 @@ export class EnteringScene {
 
   @Action('add_stand')
   async onAddStandProd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_STAND_PROD);
+    await ctx.scene.enter(WIZARDS.ADD_STAND_PROD);
   }
 
   @Action('add_partsIn')
   async onAddPartIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_PART_IN);
+    await ctx.scene.enter(WIZARDS.ADD_PART_IN);
   }
 
   @Action('add_partsOut')
   async onAddPartOut(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_PART_OUT);
+    await ctx.scene.enter(WIZARDS.ADD_PART_OUT);
   }
 
   @Action('add_work')
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_WORK);
+    await ctx.scene.enter(WIZARDS.ADD_WORK);
   }
 
   @Action('add_task')
   async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_TASK);
+    await ctx.scene.enter(WIZARDS.ADD_TASK);
   }
 
   @Action('add_stand_set')
   async onAddStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_STAND_ORDER);
+    await ctx.scene.enter(WIZARDS.ADD_STAND_ORDER);
   }
 
   @Action('add_component')
   async onAddComponent(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_COMPONENT);
+    await ctx.scene.enter(WIZARDS.ADD_COMPONENT);
   }
 
   @Action('add_money')
   async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(SCENES_WIZARDS.ADD_MONEY);
+    await ctx.scene.enter(WIZARDS.ADD_MONEY);
   }
 }

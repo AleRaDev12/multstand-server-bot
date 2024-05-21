@@ -1,13 +1,13 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
-import { ComponentService } from '../component/component.service';
+import { WIZARDS } from '../../shared/scenes-wizards';
+import { ComponentService } from '../component/component/component.service';
 import { WorkService } from './work.service';
 import { WorkWizardHandler } from './work.wizard-handler';
-import { StandProdService } from '../stand-prod/stand-prod.service';
+import { StandProdService } from '../stand/stand-prod/stand-prod.service';
 import { TaskService } from '../tasks/task.service';
 
-@Wizard(SCENES_WIZARDS.ADD_WORK)
+@Wizard(WIZARDS.ADD_WORK)
 export class WorkAddWizard {
   constructor(
     @Inject(WorkService)

@@ -3,8 +3,8 @@ import {
   CustomWizardContext,
   DbEntities,
   WizardStepType,
-} from '../../shared/interfaces';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+} from '../../../shared/interfaces';
+import { UnifiedWizardHandler } from '../../../UnifiedWizardHandler';
 
 const componentTypeName: DbEntities = 'componentSelect';
 

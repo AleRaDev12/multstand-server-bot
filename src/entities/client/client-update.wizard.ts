@@ -7,7 +7,7 @@ import {
   replyWithCancelButton,
   UnifiedWizardHandler,
 } from '../../UnifiedWizardHandler';
-import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
+import { WIZARDS } from '../../shared/scenes-wizards';
 
 const entityName = 'client';
 
@@ -47,7 +47,7 @@ export const ClientUpdateWizardHandler = UnifiedWizardHandler<Client>({
   steps,
 });
 
-@Wizard(SCENES_WIZARDS.CLIENT_UPDATE)
+@Wizard(WIZARDS.CLIENT_UPDATE)
 export class ClientUpdateWizard {
   constructor(
     @Inject(ClientService)

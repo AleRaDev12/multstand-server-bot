@@ -1,115 +1,112 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
-import { StandOrderService } from './stand-order.service';
-import { OrderService } from '../order/order.service';
-import { StandOrderWizardHandler } from './stand-order.wizard-handler';
+import { WIZARDS } from '../../../shared/scenes-wizards';
+import { PartOutService } from './part-out.service';
+import { PartOutWizardHandler } from './part-out-wizard.handler';
 
-@Wizard(SCENES_WIZARDS.ADD_STAND_ORDER)
-export class StandOrderAddWizard {
+@Wizard(WIZARDS.ADD_PART_OUT)
+export class PartOutAddWizard {
   constructor(
-    @Inject(StandOrderService)
-    readonly service: StandOrderService,
-    @Inject(OrderService)
-    readonly orderService: OrderService,
+    @Inject(PartOutService)
+    private readonly service: PartOutService,
   ) {}
 
   @WizardStep(1)
-  @StandOrderWizardHandler(1)
+  @PartOutWizardHandler(1)
   async start() {}
 
   @On('text')
   @WizardStep(2)
-  @StandOrderWizardHandler(2)
+  @PartOutWizardHandler(2)
   async step2() {}
 
   @On('text')
   @WizardStep(3)
-  @StandOrderWizardHandler(3)
+  @PartOutWizardHandler(3)
   async step3() {}
 
   @On('text')
   @WizardStep(4)
-  @StandOrderWizardHandler(4)
+  @PartOutWizardHandler(4)
   async step4() {}
 
   @On('text')
   @WizardStep(5)
-  @StandOrderWizardHandler(5)
+  @PartOutWizardHandler(5)
   async step5() {}
 
   @On('text')
   @WizardStep(6)
-  @StandOrderWizardHandler(6)
+  @PartOutWizardHandler(6)
   async step6() {}
 
   @On('text')
   @WizardStep(7)
-  @StandOrderWizardHandler(7)
+  @PartOutWizardHandler(7)
   async step7() {}
 
   @On('text')
   @WizardStep(8)
-  @StandOrderWizardHandler(8)
+  @PartOutWizardHandler(8)
   async step8() {}
 
   @On('text')
   @WizardStep(9)
-  @StandOrderWizardHandler(9)
+  @PartOutWizardHandler(9)
   async step9() {}
 
   @On('text')
   @WizardStep(10)
-  @StandOrderWizardHandler(10)
+  @PartOutWizardHandler(10)
   async step10() {}
 
   @On('text')
   @WizardStep(11)
-  @StandOrderWizardHandler(11)
+  @PartOutWizardHandler(11)
   async step11() {}
 
   @On('text')
   @WizardStep(12)
-  @StandOrderWizardHandler(12)
+  @PartOutWizardHandler(12)
   async step12() {}
 
   @On('text')
   @WizardStep(13)
-  @StandOrderWizardHandler(13)
+  @PartOutWizardHandler(13)
   async step13() {}
 
   @On('text')
   @WizardStep(14)
-  @StandOrderWizardHandler(14)
+  @PartOutWizardHandler(14)
   async step14() {}
 
   @On('text')
   @WizardStep(15)
-  @StandOrderWizardHandler(15)
+  @PartOutWizardHandler(15)
   async step15() {}
 
   @On('text')
   @WizardStep(16)
-  @StandOrderWizardHandler(16)
+  @PartOutWizardHandler(16)
   async step16() {}
 
   @On('text')
   @WizardStep(17)
-  @StandOrderWizardHandler(17)
+  @PartOutWizardHandler(17)
   async step17() {}
 
   @On('text')
   @WizardStep(18)
-  @StandOrderWizardHandler(18)
+  @PartOutWizardHandler(18)
   async step18() {}
 
   @On('text')
   @WizardStep(19)
-  @StandOrderWizardHandler(19)
+  @PartOutWizardHandler(19)
   async step19() {}
 
   @On('text')
   @WizardStep(20)
-  @StandOrderWizardHandler(20)
+  @PartOutWizardHandler(20)
   async step20() {}
 }

@@ -2,14 +2,14 @@ import {
   CustomWizardContext,
   DbEntities,
   WizardStepType,
-} from '../../shared/interfaces';
+} from '../../../shared/interfaces';
 import {
   replyWithCancelButton,
   UnifiedWizardHandler,
-} from '../../UnifiedWizardHandler';
+} from '../../../UnifiedWizardHandler';
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
-import { Money } from '../money/money.entity';
+import { Money } from '../../money/money.entity';
 
 const componentTypeName: DbEntities = 'componentSelect';
 

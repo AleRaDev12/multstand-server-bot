@@ -1,5 +1,8 @@
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import {
+  CustomWizardContext,
+  WizardStepType,
+} from '../../../shared/interfaces';
+import { UnifiedWizardHandler } from '../../../UnifiedWizardHandler';
 import { Component } from './component.entity';
 
 const steps: WizardStepType[] = [

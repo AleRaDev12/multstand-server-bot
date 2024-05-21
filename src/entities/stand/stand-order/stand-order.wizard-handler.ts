@@ -1,18 +1,18 @@
-import { Led, Painting, StandModel, Tripod } from '../unions';
+import { Led, Painting, StandModel, Tripod } from '../../unions';
 import {
   CustomWizardContext,
   DbEntities,
   WizardStepType,
   WizardStepTypeN,
-} from '../../shared/interfaces';
+} from '../../../shared/interfaces';
 import { StandOrder } from './stand-order.entity';
 import {
   handleAnswerUnion,
   replyWithCancelButton,
   UnifiedWizardHandler,
-} from '../../UnifiedWizardHandler';
+} from '../../../UnifiedWizardHandler';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
-import { printUnion } from '../../helpers';
+import { printUnion } from '../../../helpers';
 
 const orderSelectType: DbEntities = 'orderSelect';
 const orderModelSelectType: DbEntities = 'orderModelSelect';

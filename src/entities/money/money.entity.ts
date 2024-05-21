@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../order/order.entity';
-import { PartIn } from '../part-in/part-in.entity';
+import { PartIn } from '../component/part-in/part-in.entity';
 import { Master } from '../master/master.entity';
 
 @Entity()

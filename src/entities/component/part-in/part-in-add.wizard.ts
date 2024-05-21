@@ -1,112 +1,118 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
-import { PartOutService } from './part-out.service';
-import { PartOutWizardHandler } from './part-out-wizard.handler';
+import { WIZARDS } from '../../../shared/scenes-wizards';
+import { PartInService } from './part-in.service';
+import { PartInWizardHandler } from './part-in.wizard-handler';
+import { ComponentService } from '../component/component.service';
+import { MoneyService } from '../../money/money.service';
 
-@Wizard(SCENES_WIZARDS.ADD_PART_OUT)
-export class PartOutAddWizard {
+@Wizard(WIZARDS.ADD_PART_IN)
+export class PartInAddWizard {
   constructor(
-    @Inject(PartOutService)
-    private readonly service: PartOutService,
+    @Inject(PartInService)
+    readonly service: PartInService,
+    @Inject(ComponentService)
+    readonly componentService: ComponentService,
+    @Inject(MoneyService)
+    readonly moneyService: MoneyService,
   ) {}
 
   @WizardStep(1)
-  @PartOutWizardHandler(1)
+  @PartInWizardHandler(1)
   async start() {}
 
   @On('text')
   @WizardStep(2)
-  @PartOutWizardHandler(2)
+  @PartInWizardHandler(2)
   async step2() {}
 
   @On('text')
   @WizardStep(3)
-  @PartOutWizardHandler(3)
+  @PartInWizardHandler(3)
   async step3() {}
 
   @On('text')
   @WizardStep(4)
-  @PartOutWizardHandler(4)
+  @PartInWizardHandler(4)
   async step4() {}
 
   @On('text')
   @WizardStep(5)
-  @PartOutWizardHandler(5)
+  @PartInWizardHandler(5)
   async step5() {}
 
   @On('text')
   @WizardStep(6)
-  @PartOutWizardHandler(6)
+  @PartInWizardHandler(6)
   async step6() {}
 
   @On('text')
   @WizardStep(7)
-  @PartOutWizardHandler(7)
+  @PartInWizardHandler(7)
   async step7() {}
 
   @On('text')
   @WizardStep(8)
-  @PartOutWizardHandler(8)
+  @PartInWizardHandler(8)
   async step8() {}
 
   @On('text')
   @WizardStep(9)
-  @PartOutWizardHandler(9)
+  @PartInWizardHandler(9)
   async step9() {}
 
   @On('text')
   @WizardStep(10)
-  @PartOutWizardHandler(10)
+  @PartInWizardHandler(10)
   async step10() {}
 
   @On('text')
   @WizardStep(11)
-  @PartOutWizardHandler(11)
+  @PartInWizardHandler(11)
   async step11() {}
 
   @On('text')
   @WizardStep(12)
-  @PartOutWizardHandler(12)
+  @PartInWizardHandler(12)
   async step12() {}
 
   @On('text')
   @WizardStep(13)
-  @PartOutWizardHandler(13)
+  @PartInWizardHandler(13)
   async step13() {}
 
   @On('text')
   @WizardStep(14)
-  @PartOutWizardHandler(14)
+  @PartInWizardHandler(14)
   async step14() {}
 
   @On('text')
   @WizardStep(15)
-  @PartOutWizardHandler(15)
+  @PartInWizardHandler(15)
   async step15() {}
 
   @On('text')
   @WizardStep(16)
-  @PartOutWizardHandler(16)
+  @PartInWizardHandler(16)
   async step16() {}
 
   @On('text')
   @WizardStep(17)
-  @PartOutWizardHandler(17)
+  @PartInWizardHandler(17)
   async step17() {}
 
   @On('text')
   @WizardStep(18)
-  @PartOutWizardHandler(18)
+  @PartInWizardHandler(18)
   async step18() {}
 
   @On('text')
   @WizardStep(19)
-  @PartOutWizardHandler(19)
+  @PartInWizardHandler(19)
   async step19() {}
 
   @On('text')
   @WizardStep(20)
-  @PartOutWizardHandler(20)
+  @PartInWizardHandler(20)
   async step20() {}
 }

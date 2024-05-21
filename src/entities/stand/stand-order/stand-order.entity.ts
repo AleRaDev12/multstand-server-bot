@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Order } from '../order/order.entity';
-import { fromValue, toKey } from '../../helpers';
+import { Order } from '../../order/order.entity';
+import { fromValue, toKey } from '../../../helpers';
 import {
   Led,
   Painting,
@@ -9,7 +9,7 @@ import {
   StandModelType,
   Tripod,
   TripodType,
-} from '../unions';
+} from '../../unions';
 
 @Entity()
 export class StandOrder {
