@@ -2,10 +2,10 @@ import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { OrderService } from './order.service';
 import { ClientService } from '../client/client.service';
 import { Inject } from '@nestjs/common';
-import { ScenesWizards } from '../../shared/scenes-wizards';
+import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
 import { OrderWizardHandler } from './order.wizard-handler';
 
-@Wizard(ScenesWizards.ORDER_ADD)
+@Wizard(SCENES_WIZARDS.ORDER_ADD)
 export class OrderAddWizard {
   constructor(
     @Inject(OrderService)

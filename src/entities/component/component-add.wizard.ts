@@ -1,10 +1,10 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { ScenesWizards } from '../../shared/scenes-wizards';
+import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
 import { ComponentService } from './component.service';
 import { ComponentWizardHandler } from './component.wizard-handler';
 
-@Wizard(ScenesWizards.ADD_COMPONENT)
+@Wizard(SCENES_WIZARDS.ADD_COMPONENT)
 export class ComponentAddWizard {
   constructor(
     @Inject(ComponentService)

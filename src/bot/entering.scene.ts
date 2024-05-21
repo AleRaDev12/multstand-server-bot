@@ -1,6 +1,6 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { SCENES, ScenesWizards } from '../shared/scenes-wizards';
+import { SCENES, SCENES_WIZARDS } from '../shared/scenes-wizards';
 
 @Scene(SCENES.ENTERING)
 export class EnteringScene {
@@ -40,46 +40,46 @@ export class EnteringScene {
 
   @Action('add_order')
   async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ORDER_ADD);
+    await ctx.scene.enter(SCENES_WIZARDS.ORDER_ADD);
   }
 
   @Action('add_stand')
   async onAddStandProd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_STAND_PROD);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_STAND_PROD);
   }
 
   @Action('add_partsIn')
   async onAddPartIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_PART_IN);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_PART_IN);
   }
 
   @Action('add_partsOut')
   async onAddPartOut(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_PART_OUT);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_PART_OUT);
   }
 
   @Action('add_work')
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_WORK);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_WORK);
   }
 
   @Action('add_task')
   async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_TASK);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_TASK);
   }
 
   @Action('add_stand_set')
   async onAddStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_STAND_ORDER);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_STAND_ORDER);
   }
 
   @Action('add_component')
   async onAddComponent(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_COMPONENT);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_COMPONENT);
   }
 
   @Action('add_money')
   async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(ScenesWizards.ADD_MONEY);
+    await ctx.scene.enter(SCENES_WIZARDS.ADD_MONEY);
   }
 }

@@ -1,4 +1,4 @@
-export enum ScenesWizards {
+export enum SCENES_WIZARDS {
   CLIENT_ADD = 'CLIENT_ADD',
   CLIENT_UPDATE = 'CLIENT_UPDATE',
   ORDER_ADD = 'ORDER_ADD',

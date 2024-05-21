@@ -1,10 +1,10 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { ScenesWizards } from '../../shared/scenes-wizards';
+import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
 import { PartOutService } from './part-out.service';
 import { PartOutWizardHandler } from './part-out-wizard.handler';
 
-@Wizard(ScenesWizards.ADD_PART_OUT)
+@Wizard(SCENES_WIZARDS.ADD_PART_OUT)
 export class PartOutAddWizard {
   constructor(
     @Inject(PartOutService)

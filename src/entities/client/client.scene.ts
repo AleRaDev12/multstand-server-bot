@@ -1,6 +1,6 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { SCENES, ScenesWizards } from '../../shared/scenes-wizards';
+import { SCENES, SCENES_WIZARDS } from '../../shared/scenes-wizards';
 
 @Scene(SCENES.CLIENT)
 export class EnteringScene {
@@ -27,7 +27,7 @@ export class EnteringScene {
   @Action('add')
   async onAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(ScenesWizards.CLIENT_ADD);
+      await ctx.scene.enter(SCENES_WIZARDS.CLIENT_ADD);
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -36,7 +36,7 @@ export class EnteringScene {
   @Action('update')
   async onUpdate(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(ScenesWizards.CLIENT_UPDATE);
+      await ctx.scene.enter(SCENES_WIZARDS.CLIENT_UPDATE);
     } catch (e) {
       await ctx.reply(e.message);
     }

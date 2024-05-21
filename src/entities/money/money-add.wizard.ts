@@ -1,10 +1,10 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { ScenesWizards } from '../../shared/scenes-wizards';
+import { SCENES_WIZARDS } from '../../shared/scenes-wizards';
 import { MoneyService } from './money.service';
 import { MoneyWizardHandler } from './money.wizard-handler';
 
-@Wizard(ScenesWizards.ADD_MONEY)
+@Wizard(SCENES_WIZARDS.ADD_MONEY)
 export class MoneyAddWizard {
   constructor(
     @Inject(MoneyService)
