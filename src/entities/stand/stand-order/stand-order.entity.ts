@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../../order/order.entity';
-import { fromValue, toKey } from '../../../helpers';
+import { fromValue, toKey } from '../../../shared/helpers';
 import {
   Led,
   Painting,

@@ -12,7 +12,7 @@ import {
   UnifiedWizardHandler,
 } from '../../../UnifiedWizardHandler';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
-import { printUnion } from '../../../helpers';
+import { printUnion } from '../../../shared/helpers';
 
 const orderSelectType: DbEntities = 'orderSelect';
 const orderModelSelectType: DbEntities = 'orderModelSelect';

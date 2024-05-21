@@ -1,4 +1,6 @@
-import { WizardStepType } from './shared/interfaces';
+import { WizardStepType } from './interfaces';
+import { Scenes } from 'telegraf';
+import { SCENES, WIZARDS } from './scenes-wizards';
 
 export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
@@ -70,4 +72,30 @@ export function generateMessage(step: WizardStepType): string {
   return step.union
     ? `${step.message}\n${printUnion(step.union)}`
     : step.message;
+}
+
+export async function goToSceneOrWizard(
+  ctx: Scenes.SceneContext,
+  target: SCENES | WIZARDS,
+) {
+  try {
+    await ctx.scene.enter(target);
+  } catch (e) {
+    await ctx.reply(e.message);
+  } finally {
+    await ctx.answerCbQuery();
+  }
+}
+
+export async function handleButtonPress(
+  ctx: Scenes.SceneContext,
+  action: () => Promise<any>,
+) {
+  try {
+    await action();
+  } catch (e) {
+    await ctx.reply(e.message);
+  } finally {
+    await ctx.answerCbQuery();
+  }
 }

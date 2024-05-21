@@ -1,9 +1,5 @@
-import { generateMessage, getValueUnionByIndex } from './helpers';
-import {
-  AllEntities,
-  CustomWizardContext,
-  WizardStepType,
-} from './shared/interfaces';
+import { generateMessage, getValueUnionByIndex } from './shared/helpers';
+import { CustomWizardContext, WizardStepType } from './shared/interfaces';
 import { SCENES } from './shared/scenes-wizards';
 import { Markup } from 'telegraf';
 

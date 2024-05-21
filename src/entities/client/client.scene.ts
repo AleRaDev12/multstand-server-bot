@@ -1,9 +1,11 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
+import { BaseScene } from '../../shared/base.scene';
+import { handleButtonPress } from '../../shared/helpers';
 
 @Scene(SCENES.CLIENT)
-export class ClientScene {
+export class ClientScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(
@@ -12,7 +14,7 @@ export class ClientScene {
         [Markup.button.callback('Список', 'list')],
         [Markup.button.callback('Лобавить', 'add')],
         [Markup.button.callback('Изменить (не работает)', 'update')],
-        [Markup.button.callback('Меню', 'menu')],
+        [this.menuButton],
       ]),
     );
   }
@@ -20,7 +22,7 @@ export class ClientScene {
   @Action('list')
   async onList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(SCENES.CLIENT_LIST);
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.CLIENT_LIST));
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -28,7 +30,7 @@ export class ClientScene {
   @Action('add')
   async onAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(WIZARDS.CLIENT_ADD);
+      await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.CLIENT_ADD));
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -37,16 +39,9 @@ export class ClientScene {
   @Action('update')
   async onUpdate(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(WIZARDS.CLIENT_UPDATE);
-    } catch (e) {
-      await ctx.reply(e.message);
-    }
-  }
-
-  @Action('menu')
-  async onMenu(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    try {
-      await ctx.scene.enter(SCENES.MENU);
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(WIZARDS.CLIENT_UPDATE),
+      );
     } catch (e) {
       await ctx.reply(e.message);
     }

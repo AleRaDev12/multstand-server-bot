@@ -3,7 +3,7 @@ import { Master } from './master.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/scenes-wizards';
-import { generateMessage } from '../../helpers';
+import { generateMessage } from '../../shared/helpers';
 import { MasterService } from './master.service';
 
 const steps: WizardStepType[] = [

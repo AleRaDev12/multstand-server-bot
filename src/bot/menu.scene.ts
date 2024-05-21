@@ -1,6 +1,7 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from '../shared/scenes-wizards';
+import { handleButtonPress } from '../shared/helpers';
 
 @Scene(SCENES.MENU)
 export class MenuScene {
@@ -32,7 +33,7 @@ export class MenuScene {
   @Action('client')
   async onClient(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(SCENES.CLIENT);
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.CLIENT));
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -41,7 +42,7 @@ export class MenuScene {
   @Action('order')
   async onOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await ctx.scene.enter(SCENES.ORDER);
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDER));
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -49,41 +50,43 @@ export class MenuScene {
 
   @Action('add_stand')
   async onAddStandProd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_STAND_PROD);
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_STAND_PROD));
   }
 
   @Action('add_partsIn')
   async onAddPartIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_PART_IN);
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_PART_IN));
   }
 
   @Action('add_partsOut')
   async onAddPartOut(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_PART_OUT);
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_PART_OUT));
   }
 
   @Action('add_work')
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_WORK);
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_WORK));
   }
 
   @Action('add_task')
   async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_TASK);
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_TASK));
   }
 
   @Action('add_stand_set')
   async onAddStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_STAND_ORDER);
+    await handleButtonPress(ctx, () =>
+      ctx.scene.enter(WIZARDS.ADD_STAND_ORDER),
+    );
   }
 
   @Action('add_component')
   async onAddComponent(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_COMPONENT);
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_COMPONENT));
   }
 
   @Action('add_money')
   async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.scene.enter(WIZARDS.ADD_MONEY);
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_MONEY));
   }
 }

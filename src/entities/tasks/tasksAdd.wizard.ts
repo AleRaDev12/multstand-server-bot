@@ -3,7 +3,7 @@ import { Task } from './task.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/scenes-wizards';
-import { generateMessage, getValueUnionByIndex } from '../../helpers';
+import { generateMessage, getValueUnionByIndex } from '../../shared/helpers';
 import { TaskService } from './task.service'; // Новый импорт
 
 const steps: WizardStepType[] = [
