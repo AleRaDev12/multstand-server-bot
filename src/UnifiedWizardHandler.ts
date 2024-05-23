@@ -2,6 +2,7 @@ import { generateMessage, getValueUnionByIndex } from './shared/helpers';
 import { CustomWizardContext, WizardStepType } from './shared/interfaces';
 import { SCENES } from './shared/scenes-wizards';
 import { Markup } from 'telegraf';
+import { isColumnNullable } from './shared/isColumnNullable';
 
 interface UnifiedWizardHandlerOptions<T> {
   getEntity: (ctx: CustomWizardContext) => T;
@@ -94,78 +95,95 @@ export function UnifiedWizardHandler<T>(
           return false;
         }
 
-        switch (stepAnswer.type) {
-          case 'union':
-            const result = await handleAnswerUnion(
+        if (message.text === '-') {
+          const isNullable = await isColumnNullable(
+            dataSource,
+            entityClass,
+            stepAnswer.field,
+          );
+          if (!isNullable) {
+            await replyWithCancelButton(
               ctx,
-              stepAnswer.field,
-              stepAnswer.union,
-              entity,
+              'Некорректный ввод. Поле не может быть пустым. Пожалуйста, введите значение ещё раз.',
             );
-            if (!result) return false;
-            break;
-          case 'number':
-            const number = parseFloat(message.text);
-            if (!isNaN(number)) {
-              entity[stepAnswer.field] = number;
-            } else {
-              await replyWithCancelButton(
-                ctx,
-                'Введите корректное числовое значение.',
-              );
-              return false;
-            }
-            break;
-          case 'string':
-            entity[stepAnswer.field] = message.text;
-            break;
-          case 'boolean':
-            const value = message.text.toLowerCase();
-            let booleanValue: boolean;
+            return false;
+          }
+        }
 
-            switch (value) {
-              case 'да':
-              case 'yes':
-              case '1':
-                booleanValue = true;
-                break;
-              case 'нет':
-              case 'no':
-              case '0':
-                booleanValue = false;
-                break;
-
-              default:
-                await replyWithCancelButton(
-                  ctx,
-                  `Введеите "да", "нет", "yes", "no", 1 или 0.`,
-                );
-                return false;
-            }
-            entity[stepAnswer.field] = booleanValue;
-            break;
-          case 'date':
-            const date = Date.parse(message.text);
-            if (!isNaN(date)) {
-              entity[stepAnswer.field] = new Date(date);
-            } else {
-              await replyWithCancelButton(ctx, 'Введите корректную дату.');
-              return false;
-            }
-            break;
-          default:
-            if (handleSpecificAnswer) {
-              const result = await handleSpecificAnswer.call(
-                this,
+        if (message.text !== '-') {
+          switch (stepAnswer.type) {
+            case 'union':
+              const result = await handleAnswerUnion(
                 ctx,
-                stepAnswer,
+                stepAnswer.field,
+                stepAnswer.union,
                 entity,
               );
-              return result;
-            } else {
-              await replyWithCancelButton(ctx, 'Ошибка 1');
-              return false;
-            }
+              if (!result) return false;
+              break;
+            case 'number':
+              const number = parseFloat(message.text);
+              if (!isNaN(number)) {
+                entity[stepAnswer.field] = number;
+              } else {
+                await replyWithCancelButton(
+                  ctx,
+                  'Введите корректное числовое значение.',
+                );
+                return false;
+              }
+              break;
+            case 'string':
+              entity[stepAnswer.field] = message.text;
+              break;
+            case 'boolean':
+              const value = message.text.toLowerCase();
+              let booleanValue: boolean;
+
+              switch (value) {
+                case 'да':
+                case 'yes':
+                case '1':
+                  booleanValue = true;
+                  break;
+                case 'нет':
+                case 'no':
+                case '0':
+                  booleanValue = false;
+                  break;
+
+                default:
+                  await replyWithCancelButton(
+                    ctx,
+                    `Введите "да", "нет", "yes", "no", 1 или 0.`,
+                  );
+                  return false;
+              }
+              entity[stepAnswer.field] = booleanValue;
+              break;
+            case 'date':
+              const date = Date.parse(message.text);
+              if (!isNaN(date)) {
+                entity[stepAnswer.field] = new Date(date);
+              } else {
+                await replyWithCancelButton(ctx, 'Введите корректную дату.');
+                return false;
+              }
+              break;
+            default:
+              if (handleSpecificAnswer) {
+                const result = await handleSpecificAnswer.call(
+                  this,
+                  ctx,
+                  stepAnswer,
+                  entity,
+                );
+                return result;
+              } else {
+                await replyWithCancelButton(ctx, 'Ошибка 1');
+                return false;
+              }
+          }
         }
 
         const isLastStep = stepForAnswerNumber === steps.length - 1;

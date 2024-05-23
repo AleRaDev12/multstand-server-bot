@@ -1,6 +1,7 @@
 import { WizardStepType } from './interfaces';
 import { Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './scenes-wizards';
+import { getRepository } from 'typeorm';
 
 export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
