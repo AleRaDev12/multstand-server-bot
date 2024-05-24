@@ -1,32 +1,34 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Component } from '../component/component.entity';
+import { NullableColumn } from '../../nullable-column.decorator';
+import { BaseEntity } from '../../base.entity';
 
 @Entity()
-export class PartIn {
+export class PartIn extends BaseEntity {
+  public static entityName = 'PartIn';
+  public static nullable = {
+    component: false,
+    dateOrder: false,
+    dateArrival: true,
+    amount: false,
+    count: false,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Component)
   component: Component;
 
-  @Column({
-    type: 'date',
-  })
+  @NullableColumn({ type: 'date' })
   dateOrder: Date;
 
-  @Column({
-    type: 'date',
-    nullable: true,
-  })
+  @NullableColumn({ type: 'date' })
   dateArrival: Date;
 
-  @Column({
-    type: 'decimal',
-  })
+  @NullableColumn({ type: 'decimal' })
   amount: number;
 
-  @Column({
-    type: 'int',
-  })
+  @NullableColumn({ type: 'int' })
   count: number;
 }

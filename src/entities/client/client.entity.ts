@@ -1,28 +1,41 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from '../base.entity';
+import { NullableColumn } from '../nullable-column.decorator';
 
 @Entity()
-export class Client {
+export class Client extends BaseEntity {
+  public static entityName = 'Client';
+  public static nullable = {
+    firstName: false,
+    lastName: true,
+    phoneNumber: false,
+    city: false,
+    email: true,
+    description: true,
+    organization: true,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  phoneNumber: string;
-
-  @Column()
+  @NullableColumn()
   firstName: string;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   lastName: string;
 
-  @Column()
+  @NullableColumn()
+  phoneNumber: string;
+
+  @NullableColumn()
   city: string;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   email: string;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   description: string;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   organization: string;
 }

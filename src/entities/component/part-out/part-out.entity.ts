@@ -1,9 +1,21 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Component } from '../component/component.entity';
 import { StandProd } from '../../stand/stand-prod/stand-prod.entity';
+import { BaseEntity } from '../../base.entity';
+import { NullableColumn } from '../../nullable-column.decorator';
 
 @Entity()
-export class PartOut {
+export class PartOut extends BaseEntity {
+  public static entityName = 'PartOut';
+  public static nullable = {
+    component: false,
+    standProd: false,
+    dateOrder: false,
+    dateArrival: true,
+    amount: false,
+    count: false,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -13,40 +25,15 @@ export class PartOut {
   @ManyToOne(() => StandProd)
   standProd: StandProd;
 
-  @Column({
-    type: 'date',
-    // transformer: {
-    //   to: toKey(StandModel),
-    //   from: fromValue(StandModel),
-    // },
-  })
+  @NullableColumn({ type: 'date' })
   dateOrder: Date;
 
-  @Column({
-    type: 'date',
-    nullable: true,
-    // transformer: {
-    //   to: toKey(StandModel),
-    //   from: fromValue(StandModel),
-    // },
-  })
+  @NullableColumn({ type: 'date' })
   dateArrival: Date;
 
-  @Column({
-    type: 'int',
-    // transformer: {
-    //   to: toKey(StandModel),
-    //   from: fromValue(StandModel),
-    // },
-  })
+  @NullableColumn({ type: 'int' })
   amount: number;
 
-  @Column({
-    type: 'int',
-    // transformer: {
-    //   to: toKey(StandModel),
-    //   from: fromValue(StandModel),
-    // },
-  })
+  @NullableColumn({ type: 'int' })
   count: number;
 }

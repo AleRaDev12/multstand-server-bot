@@ -1,15 +1,21 @@
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from '../base.entity';
 import { Task } from '../tasks/task.entity';
 import { StandProd } from '../stand/stand-prod/stand-prod.entity';
+import { NullableColumn } from '../nullable-column.decorator';
 
 @Entity()
-export class Work {
+export class Work extends BaseEntity {
+  public static entityName = 'Work';
+  public static nullable = {
+    task: false,
+    standProd: false,
+    date: false,
+    createdAt: false,
+    cost: false,
+    count: false,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,23 +25,15 @@ export class Work {
   @ManyToMany(() => StandProd)
   standProd: StandProd;
 
-  @Column({
-    type: 'date',
-  })
+  @NullableColumn({ type: 'date' })
   date: Date;
 
-  @Column({
-    type: 'datetime',
-  })
+  @NullableColumn({ type: 'datetime' })
   createdAt: Date;
 
-  @Column({
-    type: 'int',
-  })
+  @NullableColumn({ type: 'int' })
   cost: number;
 
-  @Column({
-    type: 'int',
-  })
+  @NullableColumn({ type: 'int' })
   count: number;
 }

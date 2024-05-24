@@ -1,20 +1,32 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../order/order.entity';
 import { PartIn } from '../component/part-in/part-in.entity';
 import { Master } from '../master/master.entity';
+import { BaseEntity } from '../base.entity';
+import { NullableColumn } from '../nullable-column.decorator';
 
 @Entity()
-export class Money {
+export class Money extends BaseEntity {
+  public static entityName = 'Money';
+  public static nullable = {
+    transactionDate: false,
+    amount: false,
+    description: true,
+    order: true,
+    partIn: true,
+    master: true,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'date' })
+  @NullableColumn({ type: 'date' })
   transactionDate: Date;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @NullableColumn({ type: 'decimal', precision: 10, scale: 2 })
   amount: number;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   description: string;
 
   @ManyToOne(() => Order, { nullable: true })

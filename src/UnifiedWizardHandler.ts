@@ -2,7 +2,7 @@ import { generateMessage, getValueUnionByIndex } from './shared/helpers';
 import { CustomWizardContext, WizardStepType } from './shared/interfaces';
 import { SCENES } from './shared/scenes-wizards';
 import { Markup } from 'telegraf';
-import { isColumnNullable } from './shared/isColumnNullable';
+import { BaseEntity } from './entities/base.entity';
 
 interface UnifiedWizardHandlerOptions<T> {
   getEntity: (ctx: CustomWizardContext) => T;
@@ -21,7 +21,7 @@ interface UnifiedWizardHandlerOptions<T> {
   ) => Promise<boolean>;
 }
 
-export function UnifiedWizardHandler<T>(
+export function UnifiedWizardHandler<T extends BaseEntity>(
   options: UnifiedWizardHandlerOptions<T>,
 ) {
   const {
@@ -96,11 +96,10 @@ export function UnifiedWizardHandler<T>(
         }
 
         if (message.text === '-') {
-          const isNullable = await isColumnNullable(
-            dataSource,
-            entityClass,
-            stepAnswer.field,
-          );
+          const isNullable = (entity.constructor as typeof BaseEntity).nullable[
+            stepAnswer.field
+          ];
+
           if (!isNullable) {
             await replyWithCancelButton(
               ctx,

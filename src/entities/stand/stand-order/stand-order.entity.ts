@@ -1,5 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from '../../base.entity';
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../../order/order.entity';
+import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
 import {
   Led,
@@ -12,14 +14,31 @@ import {
 } from '../../unions';
 
 @Entity()
-export class StandOrder {
+export class StandOrder extends BaseEntity {
+  public static entityName = 'StandOrder';
+  public static nullable = {
+    order: false,
+    model: false,
+    cost: true,
+    painting: true,
+    smartphoneMount: true,
+    tripod: true,
+    ledType: true,
+    glassesRegular: true,
+    glassesHighTransparency: true,
+    dimmersCount: true,
+    shadingFabric: true,
+    sideWallsCount: true,
+    rotaryMechanismsCount: true,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Order)
   order: Order;
 
-  @Column({
+  @NullableColumn({
     type: 'text',
     transformer: {
       to: toKey(StandModel),
@@ -28,12 +47,11 @@ export class StandOrder {
   })
   model: StandModelType;
 
-  @Column({ type: 'decimal', nullable: true })
+  @NullableColumn({ type: 'decimal' })
   cost: number;
 
-  @Column({
+  @NullableColumn({
     type: 'text',
-    nullable: true,
     transformer: {
       to: toKey(Painting),
       from: fromValue(Painting),
@@ -41,12 +59,11 @@ export class StandOrder {
   })
   painting: PaintingType;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   smartphoneMount: number;
 
-  @Column({
+  @NullableColumn({
     type: 'text',
-    nullable: true,
     transformer: {
       to: toKey(Tripod),
       from: fromValue(Tripod),
@@ -54,9 +71,8 @@ export class StandOrder {
   })
   tripod: TripodType;
 
-  @Column({
+  @NullableColumn({
     type: 'text',
-    nullable: true,
     transformer: {
       to: toKey(Led),
       from: fromValue(Led),
@@ -64,21 +80,21 @@ export class StandOrder {
   })
   ledType: (typeof Led)[keyof typeof Led];
 
-  @Column({ nullable: true })
+  @NullableColumn()
   glassesRegular: number;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   glassesHighTransparency: number;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   dimmersCount: number;
 
-  @Column({ type: 'int', nullable: true })
-  shadingFabric: number; // Ткань для затенения, 0 если нет
+  @NullableColumn({ type: 'int' })
+  shadingFabric: number;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   sideWallsCount: number;
 
-  @Column({ nullable: true })
+  @NullableColumn()
   rotaryMechanismsCount: number;
 }

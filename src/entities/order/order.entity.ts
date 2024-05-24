@@ -1,20 +1,30 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from '../base.entity';
 import { Client } from '../client/client.entity';
+import { NullableColumn } from '../nullable-column.decorator';
 
 @Entity()
-export class Order {
+export class Order extends BaseEntity {
+  public static entityName = 'Order';
+  public static nullable = {
+    client: false,
+    amount: false,
+    contractDate: false,
+    daysToComplete: false,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Client)
   client: Client;
 
-  @Column()
+  @NullableColumn()
   amount: number;
 
-  @Column()
+  @NullableColumn()
   contractDate: Date;
 
-  @Column()
+  @NullableColumn()
   daysToComplete: number;
 }

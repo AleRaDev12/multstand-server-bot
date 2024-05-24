@@ -1,35 +1,33 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity } from '../base.entity';
+import { NullableColumn } from '../nullable-column.decorator';
 
 @Entity()
-export class Task {
+export class Task extends BaseEntity {
+  public static entityName = 'Task';
+  public static nullable = {
+    category: true,
+    name: false,
+    shownName: true,
+    cost: false,
+    duration: false,
+  };
+
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'text',
-    nullable: true,
-  })
+  @NullableColumn({ type: 'text' })
   category: string;
 
-  @Column({
-    type: 'text',
-    nullable: false,
-  })
+  @NullableColumn({ type: 'text' })
   name: string;
 
-  @Column({
-    type: 'text',
-    nullable: true,
-  })
+  @NullableColumn({ type: 'text' })
   shownName: string;
 
-  @Column({
-    type: 'int',
-  })
+  @NullableColumn({ type: 'int' })
   cost: number;
 
-  @Column({
-    type: 'int',
-  })
+  @NullableColumn({ type: 'int' })
   duration: number;
 }
