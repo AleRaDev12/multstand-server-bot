@@ -10,11 +10,12 @@ import { StandOrderModule } from '../entities/stand/stand-order/stand-order.modu
 import { MenuScene } from './menu.scene';
 import { PartOutModule } from '../entities/component/part-out/part-out.module';
 import { ComponentModule } from '../entities/component/component/component.module';
+import { RegisterUserScene } from './register-user.scene';
+import { UnregisteredScene } from './unregistered.scene';
+import { UserModule } from '../entities/user/user.module';
 
 @Module({
   imports: [
-    MenuScene,
-
     ClientsModule,
     OrderModule,
     StandProdModule,
@@ -24,7 +25,8 @@ import { ComponentModule } from '../entities/component/component/component.modul
     TasksModule,
     StandOrderModule,
     ComponentModule,
+    UserModule,
   ],
-  providers: [BotUpdate],
+  providers: [BotUpdate, MenuScene, RegisterUserScene, UnregisteredScene],
 })
 export class BotModule {}

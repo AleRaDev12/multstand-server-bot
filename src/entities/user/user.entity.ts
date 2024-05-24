@@ -3,23 +3,27 @@ import { NullableColumn } from '../nullable-column.decorator';
 import { BaseEntity } from '../base.entity';
 
 @Entity()
-export class Master extends BaseEntity {
-  public static entityName = 'Master';
+export class User extends BaseEntity {
+  public static entityName = 'User';
   public static nullable = {
-    name: false,
-    paymentCoefficient: false,
+    paymentCoefficient: true,
     role: false,
+    username: false,
+    telegramUserId: false,
   };
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @NullableColumn()
-  name: string;
+  @NullableColumn({ unique: true })
+  telegramUserId: number;
 
   @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
   paymentCoefficient: number;
 
   @NullableColumn()
-  role: string;
+  role: string; // 'manager', 'master', 'unregistered'
+
+  @NullableColumn()
+  username: string;
 }

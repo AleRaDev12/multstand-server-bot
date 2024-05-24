@@ -14,6 +14,8 @@ export enum WIZARDS {
 }
 
 export enum SCENES {
+  UNREGISTERED = 'UNREGISTERED',
+  REGISTER = 'REGISTER',
   MENU = 'MENU',
   CLIENT = 'CLIENT',
   ORDER = 'ORDER',

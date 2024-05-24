@@ -1,7 +1,7 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Order } from '../order/order.entity';
 import { PartIn } from '../component/part-in/part-in.entity';
-import { Master } from '../master/master.entity';
+import { User } from '../user/user.entity';
 import { BaseEntity } from '../base.entity';
 import { NullableColumn } from '../nullable-column.decorator';
 
@@ -35,6 +35,6 @@ export class Money extends BaseEntity {
   @ManyToOne(() => PartIn, { nullable: true })
   partIn: PartIn;
 
-  @ManyToOne(() => Master, { nullable: true })
-  master: Master;
+  @ManyToOne(() => User, { nullable: true })
+  master: User;
 }

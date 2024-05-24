@@ -10,7 +10,7 @@ import { PartIn } from '../entities/component/part-in/part-in.entity';
 import { Work } from '../entities/work/work.entity';
 import { Task } from '../entities/tasks/task.entity';
 import { Money } from '../entities/money/money.entity';
-import { Master } from '../entities/master/master.entity';
+import { User } from '../entities/user/user.entity';
 import { Component } from '../entities/component/component/component.entity';
 import { StandOrder } from '../entities/stand/stand-order/stand-order.entity';
 import { PartOut } from '../entities/component/part-out/part-out.entity';
@@ -79,7 +79,7 @@ export type AllEntities = {
   work?: Work;
   task?: Task;
   money?: Money;
-  master?: Master;
+  master?: User;
   component?: Component;
   standOrder?: StandOrder;
 };

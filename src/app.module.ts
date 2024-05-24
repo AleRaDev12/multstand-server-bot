@@ -7,6 +7,9 @@ import { BotModule } from './bot/bot.module';
 import { SeedService } from './seed.service';
 import { Task } from './entities/tasks/task.entity';
 import { Component } from './entities/component/component/component.entity';
+import { RolesGuard } from './bot/roles.guard';
+import { UserModule } from './entities/user/user.module';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -27,7 +30,14 @@ import { Component } from './entities/component/component/component.entity';
     }),
     TypeOrmModule.forFeature([Task, Component]),
     BotModule,
+    UserModule,
   ],
-  providers: [BotModule, SeedService],
+  providers: [
+    SeedService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
+  ],
 })
 export class AppModule {}

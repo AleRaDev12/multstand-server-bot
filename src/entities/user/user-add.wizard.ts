@@ -1,10 +1,10 @@
 import { Ctx, On, Wizard, WizardStep } from 'nestjs-telegraf';
-import { Master } from './master.entity';
+import { User } from './user.entity';
 import { Inject } from '@nestjs/common';
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { WIZARDS } from '../../shared/scenes-wizards';
 import { generateMessage } from '../../shared/helpers';
-import { MasterService } from './master.service';
+import { UserService } from './user.service';
 
 const steps: WizardStepType[] = [
   { message: 'Имя мастера:', field: 'name', type: 'string' },
@@ -38,22 +38,22 @@ function WizardStepHandler(stepIndex: number) {
     //     case 'number':
     //       const number = parseFloat(msg.text);
     //       if (!isNaN(number)) {
-    //         ctx.wizard.state.master[step.field] = number;
+    //         ctx.wizard.state.user[step.field] = number;
     //       } else {
     //         return 'Введите корректное числовое значение.';
     //       }
     //       break;
     //     default:
-    //       ctx.wizard.state.master[step.field] = msg.text;
+    //       ctx.wizard.state.user[step.field] = msg.text;
     //       break;
     //   }
     //
     //   if (stepIndexCorrected === steps.length - 1) {
-    //     const master = await this.mastersService.create(
-    //       ctx.wizard.state.master,
+    //     const user = await this.mastersService.create(
+    //       ctx.wizard.state.user,
     //     );
     //     await ctx.scene.leave();
-    //     return `Мастер ${JSON.stringify(master, null, 2)} добавлен.`;
+    //     return `Мастер ${JSON.stringify(user, null, 2)} добавлен.`;
     //   } else {
     //     ctx.wizard.next();
     //     return generateMessage(steps[stepIndexCorrected + 1]);
@@ -65,15 +65,15 @@ function WizardStepHandler(stepIndex: number) {
 }
 
 @Wizard(WIZARDS.ADD_MASTER)
-export class MasterAddWizard {
+export class UserAddWizard {
   constructor(
-    @Inject(MasterService)
-    private readonly mastersService: MasterService,
+    @Inject(UserService)
+    private readonly mastersService: UserService,
   ) {}
 
   @WizardStep(1)
   async start(@Ctx() ctx: CustomWizardContext): Promise<string> {
-    ctx.wizard.state.master = new Master();
+    ctx.wizard.state.master = new User();
     ctx.wizard.next();
     return generateMessage(steps[0]);
   }

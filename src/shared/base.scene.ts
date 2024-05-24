@@ -4,7 +4,7 @@ import { SCENES } from './scenes-wizards';
 import { handleButtonPress } from './helpers';
 
 export class BaseScene {
-  protected menuButton = Markup.button.callback('Меню', 'menu');
+  protected menuButton = Markup.button.callback('<- Меню', 'menu');
 
   @Action('menu')
   async onMenu(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
