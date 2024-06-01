@@ -101,6 +101,8 @@ function setEntity(ctx: CustomWizardContext): void {
 }
 
 function save(this: StandOrderAddWizard, entity: StandOrder) {
+  steps.length = 0;
+  steps.push(...commonSteps);
   return this.service.create(entity);
 }
 
