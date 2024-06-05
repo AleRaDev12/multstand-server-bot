@@ -14,7 +14,7 @@ const standOrderSelectType: DbEntities = 'standOrderSelect';
 const entityName = 'standProd';
 
 const steps: WizardStepType[] = [
-  { message: 'Станок-заказ:', type: standOrderSelectType },
+  { message: 'Станок-заказ:', type: standOrderSelectType, field: 'standOrder' },
   { message: 'Описание:', type: 'string', field: 'description' },
 ];
 

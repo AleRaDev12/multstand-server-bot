@@ -44,7 +44,7 @@ export type WizardStepType = {
       union: object;
     }
   | {
-      field?: undefined;
+      field?: KeyOfAllEntities;
       type: DbEntities;
       union?: undefined;
     }

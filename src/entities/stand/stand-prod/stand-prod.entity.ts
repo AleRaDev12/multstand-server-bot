@@ -7,14 +7,14 @@ import { NullableColumn } from '../../nullable-column.decorator';
 export class StandProd extends BaseEntity {
   public static entityName = 'StandProd';
   public static nullable = {
-    standOrder: false,
     description: true,
+    standOrder: true,
   };
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => StandOrder)
+  @ManyToOne(() => StandOrder, { nullable: true })
   standOrder: StandOrder;
 
   @NullableColumn({
