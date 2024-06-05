@@ -11,6 +11,9 @@ export class Order extends BaseEntity {
     amount: false,
     contractDate: false,
     daysToComplete: false,
+    description: true,
+    deliveryType: true,
+    deliveryCost: true,
   };
 
   @PrimaryGeneratedColumn()
@@ -27,4 +30,13 @@ export class Order extends BaseEntity {
 
   @NullableColumn()
   daysToComplete: number;
+
+  @NullableColumn()
+  description: string;
+
+  @NullableColumn()
+  deliveryType: string;
+
+  @NullableColumn()
+  deliveryCost: number;
 }

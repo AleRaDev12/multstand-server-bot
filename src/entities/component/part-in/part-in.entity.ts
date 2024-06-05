@@ -12,6 +12,7 @@ export class PartIn extends BaseEntity {
     dateArrival: true,
     amount: false,
     count: false,
+    description: true,
   };
 
   @PrimaryGeneratedColumn()
@@ -31,4 +32,7 @@ export class PartIn extends BaseEntity {
 
   @NullableColumn({ type: 'int' })
   count: number;
+
+  @NullableColumn()
+  description: string;
 }

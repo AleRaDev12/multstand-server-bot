@@ -30,6 +30,7 @@ export class StandOrder extends BaseEntity {
     shadingFabric: true,
     sideWallsCount: true,
     rotaryMechanismsCount: true,
+    deliveryCost: true,
   };
 
   @PrimaryGeneratedColumn()
@@ -97,4 +98,7 @@ export class StandOrder extends BaseEntity {
 
   @NullableColumn()
   rotaryMechanismsCount: number;
+
+  @NullableColumn()
+  deliveryCost: number;
 }
