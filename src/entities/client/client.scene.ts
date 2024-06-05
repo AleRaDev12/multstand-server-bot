@@ -12,7 +12,7 @@ export class ClientScene extends BaseScene {
       'Клиенты:',
       Markup.inlineKeyboard([
         [Markup.button.callback('Список', 'list')],
-        [Markup.button.callback('Лобавить', 'add')],
+        [Markup.button.callback('Добавить', 'add')],
         [Markup.button.callback('Изменить (не работает)', 'update')],
         [this.menuButton],
       ]),

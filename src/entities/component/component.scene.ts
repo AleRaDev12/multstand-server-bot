@@ -11,7 +11,7 @@ export class OrderScene {
       'Заказы:',
       Markup.inlineKeyboard([
         [Markup.button.callback('Список', 'list')],
-        [Markup.button.callback('Лобавить', 'add')],
+        [Markup.button.callback('Добавить', 'add')],
       ]),
     );
   }
