@@ -20,6 +20,7 @@ export class MoneyScene {
       Markup.inlineKeyboard([
         [Markup.button.callback('Посмотреть транзакции', 'view_transactions')],
         [Markup.button.callback('Добавить приход/расход', 'add_transaction')],
+        [Markup.button.callback('Приход по заказу', 'add_order')],
       ]),
     );
   }
@@ -39,6 +40,17 @@ export class MoneyScene {
   async onAddTransaction(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_MONEY));
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('add_order')
+  async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(WIZARDS.ADD_MONEY_ORDER),
+      );
     } catch (e) {
       await ctx.reply(e.message);
     }

@@ -27,7 +27,7 @@ async function print(ctx: CustomWizardContext, entity: Money): Promise<void> {
   await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
 }
 
-export const MoneyWizardHandler = UnifiedWizardHandler<Money>({
+export const MoneyAddWizardHandler = UnifiedWizardHandler<Money>({
   getEntity,
   setEntity,
   save,
