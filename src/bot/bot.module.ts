@@ -13,6 +13,8 @@ import { ComponentModule } from '../entities/component/component/component.modul
 import { RegisterUserScene } from './register-user.scene';
 import { UnregisteredScene } from './unregistered.scene';
 import { UserModule } from '../entities/user/user.module';
+import { MoneyModule } from '../entities/money/money.module';
+import { MoneyScene } from '../entities/money/money.scene';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { UserModule } from '../entities/user/user.module';
     StandOrderModule,
     ComponentModule,
     UserModule,
+    MoneyModule,
   ],
   providers: [BotUpdate, MenuScene, RegisterUserScene, UnregisteredScene],
 })

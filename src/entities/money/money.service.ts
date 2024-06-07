@@ -16,7 +16,15 @@ export class MoneyService {
 
   async findAll(): Promise<Money[]> {
     return this.repository.find({
-      relations: ['order', 'componentPurchase', 'master'],
+      relations: ['order', 'partIn', 'master'],
     });
+  }
+
+  async getBalance(): Promise<number> {
+    const transactions = await this.findAll();
+    return transactions.reduce(
+      (acc, transaction) => acc + transaction.amount,
+      0,
+    );
   }
 }

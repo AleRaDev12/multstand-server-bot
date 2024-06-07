@@ -25,7 +25,7 @@ export class MenuScene {
           Markup.button.callback('Работа', 'add_work'),
           Markup.button.callback('Задача', 'add_task'),
         ],
-        [Markup.button.callback('Деньги', 'add_money')],
+        [Markup.button.callback('Деньги', 'money')],
       ]),
     );
   }
@@ -85,8 +85,8 @@ export class MenuScene {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_COMPONENT));
   }
 
-  @Action('add_money')
+  @Action('money')
   async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_MONEY));
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.MONEY));
   }
 }
