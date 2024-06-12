@@ -1,7 +1,7 @@
 import { WizardStepType } from './interfaces';
 import { Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './scenes-wizards';
-import { getRepository } from 'typeorm';
+import { format } from 'date-fns';
 
 export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
@@ -100,3 +100,23 @@ export async function handleButtonPress(
     await ctx.answerCbQuery();
   }
 }
+
+export const formatLabels = (
+  entity: Record<string, any>,
+  labels: Record<string, string>,
+): string => {
+  return Object.keys(labels)
+    .filter(
+      (key) =>
+        entity[key] !== null &&
+        entity[key] !== undefined &&
+        labels[key] !== undefined,
+    )
+    .map((key) => {
+      const value = entity[key];
+      const formattedValue =
+        value instanceof Date ? format(value, 'yyyy-MM-dd') : value;
+      return `${labels[key]}: ${formattedValue}`;
+    })
+    .join('\n');
+};

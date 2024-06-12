@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 import { NullableColumn } from '../nullable-column.decorator';
+import { formatLabels } from '../../shared/helpers';
 
 @Entity()
 export class Client extends BaseEntity {
@@ -13,6 +14,21 @@ export class Client extends BaseEntity {
     email: true,
     description: true,
     organization: true,
+  };
+
+  public format(): string {
+    return formatLabels(this, this.labels);
+  }
+
+  private labels = {
+    firstName: 'Имя',
+    lastName: 'Фамилия',
+    phoneNumber: 'Телефон',
+    city: 'Город',
+    email: 'Email',
+    organization: 'Организация',
+    description: 'Описание',
+    id: 'id клиента',
   };
 
   @PrimaryGeneratedColumn()

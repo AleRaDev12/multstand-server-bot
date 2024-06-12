@@ -12,10 +12,7 @@ export class MenuScene {
       Markup.inlineKeyboard([
         [Markup.button.callback('Клиенты', 'client')],
         [Markup.button.callback('Заказы', 'order')],
-        [
-          Markup.button.callback('Станок-заказ', 'add_stand_set'),
-          Markup.button.callback('Станок-изделие', 'add_stand'),
-        ],
+        [Markup.button.callback('Станок-изделие', 'add_stand')],
         [
           Markup.button.callback('Комплектующие', 'add_component'),
           Markup.button.callback('заказ/приход', 'add_partsIn'),
@@ -71,13 +68,6 @@ export class MenuScene {
   @Action('add_task')
   async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_TASK));
-  }
-
-  @Action('add_stand_set')
-  async onAddStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () =>
-      ctx.scene.enter(WIZARDS.ADD_STAND_ORDER),
-    );
   }
 
   @Action('add_component')

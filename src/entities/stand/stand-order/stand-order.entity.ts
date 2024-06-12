@@ -33,6 +33,36 @@ export class StandOrder extends BaseEntity {
     deliveryCost: true,
   };
 
+  public format(): string {
+    const formattedValues: string[] = [];
+
+    if (this.model) formattedValues.push(`Модель: ${this.model}`);
+    if (this.cost) formattedValues.push(`Стоимость: ${this.cost}`);
+    if (this.deliveryCost)
+      formattedValues.push(`Стоимость доставки: ${this.deliveryCost}`);
+    if (this.painting) formattedValues.push(`Обработка: ${this.painting}`);
+    if (this.ledType) formattedValues.push(`Тип светодиодов: ${this.ledType}`);
+    if (this.glassesRegular)
+      formattedValues.push(`Стёкла об: ${this.glassesRegular}`);
+    if (this.glassesHighTransparency)
+      formattedValues.push(`Стёкла пп: ${this.glassesHighTransparency}`);
+    if (this.dimmersCount)
+      formattedValues.push(`Регуляторы яркости: ${this.dimmersCount}`);
+    if (this.shadingFabric)
+      formattedValues.push(`Ткань для затенения: ${this.shadingFabric}`);
+    if (this.sideWallsCount)
+      formattedValues.push(`Количество боковых стенок: ${this.sideWallsCount}`);
+    if (this.rotaryMechanismsCount)
+      formattedValues.push(
+        `Количество вращающихся механизмов: ${this.rotaryMechanismsCount}`,
+      );
+    if (this.smartphoneMount)
+      formattedValues.push(`Крепление для смартфона: ${this.smartphoneMount}`);
+    if (this.tripod) formattedValues.push(`Штатив: ${this.tripod}`);
+
+    return formattedValues.join('\n');
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

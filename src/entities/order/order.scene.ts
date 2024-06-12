@@ -11,27 +11,51 @@ export class OrderScene extends BaseScene {
     await ctx.reply(
       'Заказы:',
       Markup.inlineKeyboard([
-        [Markup.button.callback('Список', 'list')],
-        [Markup.button.callback('Добавить', 'add')],
+        [
+          Markup.button.callback('📑 Заказы', 'orders_list'),
+          Markup.button.callback('➕', 'add_order'),
+        ],
+        [
+          Markup.button.callback('📑 Станки-заказы', 'stand_orders_list'),
+          Markup.button.callback('➕', 'add_stand_order'),
+        ],
         [this.menuButton],
       ]),
     );
   }
 
-  @Action('list')
-  async onList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('orders_list')
+  async ordersList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDER_LIST));
     } catch (e) {
       await ctx.reply(e.message);
     }
   }
-  @Action('add')
-  async onAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('add_order')
+  async addOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ORDER_ADD));
     } catch (e) {
       await ctx.reply(e.message);
     }
+  }
+
+  @Action('stand_orders_list')
+  async standOrdersList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(SCENES.STAND_ORDER_LIST),
+      );
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('add_stand_order')
+  async addStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await handleButtonPress(ctx, () =>
+      ctx.scene.enter(WIZARDS.ADD_STAND_ORDER),
+    );
   }
 }

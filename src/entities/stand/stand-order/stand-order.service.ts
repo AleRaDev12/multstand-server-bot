@@ -22,6 +22,11 @@ export class StandOrderService {
     const list = await this.findAll();
     if (list.length === 0) return null;
 
-    return `${list.map((standOrder, i) => `\n${i + 1}. ${standOrder.id} ${standOrder.model} ${standOrder.glassesRegular}ос ${standOrder.glassesHighTransparency}пп ${standOrder.painting}`)}`;
+    return list
+      .map(
+        (standOrder, i) =>
+          `\n${i + 1}. ${standOrder.format()}\n-Заказ:\n${standOrder.order.format()}`,
+      )
+      .join('\n\n');
   }
 }

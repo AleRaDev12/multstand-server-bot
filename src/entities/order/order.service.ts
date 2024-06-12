@@ -22,25 +22,12 @@ export class OrderService {
   async getList(): Promise<string | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
-    return list.map((order, i) => this.formatOrder(order, i + 1)).join('\n\n');
-  }
 
-  private formatOrder(order: Order, index: number): string {
-    const { client, contractDate, daysToComplete } = order;
-    const deliveryDeadline = addDays(contractDate, daysToComplete);
-
-    const daysUntilSend = differenceInDays(deliveryDeadline, new Date());
-    const daysUntilDelivery = '-';
-
-    const clientInfo = [
-      `${index}. ${client.firstName} ${client.lastName ?? ''}`,
-      client.organization ? `Организация: ${client.organization}` : null,
-      `Город: ${client.city}`,
-      `Дата заказа: ${format(contractDate, 'yyyy-MM-dd')}`,
-      `Крайний срок отправки: ${format(deliveryDeadline, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
-      `Крайний срок доставки: ${daysUntilDelivery}, осталось ${daysUntilDelivery} дней`,
-    ].filter(Boolean);
-
-    return clientInfo.join('\n');
+    return list
+      .map(
+        (item, i) =>
+          `${i + 1}.\n${item.format()}\n- Клиент:\n${item.client.format()}`,
+      )
+      .join('\n\n');
   }
 }
