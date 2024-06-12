@@ -1,8 +1,9 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Component } from '../component/component.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { BaseEntity } from '../../base.entity';
 import { formatLabels } from '../../../shared/helpers';
+import { PartOut } from '../part-out/part-out.entity';
 
 @Entity()
 export class PartIn extends BaseEntity {
@@ -41,16 +42,19 @@ export class PartIn extends BaseEntity {
   @ManyToOne(() => Component)
   component: Component;
 
+  @OneToMany(() => PartOut, (partOut) => partOut.partIn)
+  partsOut: PartOut[];
+
   @NullableColumn({ type: 'date' })
   dateOrder: Date;
 
   @NullableColumn({ type: 'date' })
   dateArrival: Date;
 
-  @NullableColumn({ type: 'decimal' })
+  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
   amount: number;
 
-  @NullableColumn({ type: 'int' })
+  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
   count: number;
 
   @NullableColumn()

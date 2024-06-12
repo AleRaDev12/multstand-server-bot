@@ -3,12 +3,15 @@ import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../../shared/scenes-wizards';
 import { PartOutService } from './part-out.service';
 import { PartOutWizardHandler } from './part-out-wizard.handler';
+import { ComponentService } from '../component/component.service';
 
 @Wizard(WIZARDS.ADD_PART_OUT)
 export class PartOutAddWizard {
   constructor(
     @Inject(PartOutService)
-    private readonly service: PartOutService,
+    readonly service: PartOutService,
+    @Inject(ComponentService)
+    readonly componentService: ComponentService,
   ) {}
 
   @WizardStep(1)

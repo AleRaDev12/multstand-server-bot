@@ -4,16 +4,21 @@ import {
   DbEntities,
   WizardStepType,
 } from '../../../shared/interfaces';
-import { UnifiedWizardHandler } from '../../../UnifiedWizardHandler';
+import {
+  replyWithCancelButton,
+  UnifiedWizardHandler,
+} from '../../../UnifiedWizardHandler';
+import { PartOutAddWizard } from './part-out-add.wizard';
+import { Component } from '../component/component.entity';
 
 const componentTypeName: DbEntities = 'componentSelect';
+const partsInTypeName: DbEntities = 'partsInBatchSelect';
 
 const steps: WizardStepType[] = [
   { message: 'Комплектующее:', type: componentTypeName },
-  { message: 'Дата заказа:', field: 'dateOrder', type: 'date' },
-  { message: 'Дата получения:', field: 'dateArrival', type: 'date' },
-  { message: 'Стоимость партии:', field: 'amount', type: 'number' },
-  { message: 'Количество шт:', field: 'count', type: 'number' },
+  { message: 'Партия:', type: partsInTypeName },
+  { message: 'Дата списания:', field: 'date', type: 'date' },
+  { message: 'Количество:', field: 'count', type: 'number' },
 ];
 
 function getEntity(ctx: CustomWizardContext): PartOut {
@@ -24,12 +29,79 @@ function setEntity(ctx: CustomWizardContext): void {
   ctx.wizard.state.partOut = new PartOut();
 }
 
-function save(entity: PartOut) {
-  return this.service.create(entity);
+function save() {
+  return undefined;
 }
 
 async function print(ctx: CustomWizardContext, entity: PartOut): Promise<void> {
   await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
+}
+
+let selectedComponent: Component | null = null;
+
+async function handleSpecificRequest(
+  this: PartOutAddWizard,
+  ctx: CustomWizardContext,
+  stepRequest: WizardStepType,
+): Promise<boolean> {
+  switch (stepRequest.type) {
+    case componentTypeName:
+      const componentsList = await this.componentService.getList();
+      await replyWithCancelButton(
+        ctx,
+        `${stepRequest.message}${componentsList}`,
+      );
+      return true;
+    case partsInTypeName:
+      const partsInList = await this.service.getRemainingListByComponent(
+        selectedComponent.id,
+      );
+
+      await replyWithCancelButton(ctx, `${stepRequest.message}${partsInList}`);
+      return true;
+  }
+}
+
+async function handleSpecificAnswer(
+  this: PartOutAddWizard,
+  ctx: CustomWizardContext,
+  stepAnswer: WizardStepType,
+): Promise<boolean> {
+  // TODO: update types
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const message = ctx.update?.message as { text?: string };
+
+  switch (stepAnswer.type) {
+    case componentTypeName:
+      const selectedNumber = parseInt(message.text);
+
+      const components = await this.componentService.findAll();
+      const component = components[selectedNumber - 1];
+      if (!component) {
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
+        return false;
+      }
+
+      // ctx.wizard.state.partIn.component = component; // *-* check saving
+      selectedComponent = component; // *-* check saving
+      return true;
+    case partsInTypeName:
+      // const partsInList = await this.service.getListByComponent(
+      //   ctx.wizard.state.partIn.component.id,
+      // );
+
+      if (message.text === '--') {
+        // by order
+
+        return false;
+      }
+
+      // const selectedNumber = parseInt(message.text);
+
+      // await this.service.create(entity);
+      return false;
+  }
 }
 
 export const PartOutWizardHandler = UnifiedWizardHandler<PartOut>({
@@ -38,4 +110,6 @@ export const PartOutWizardHandler = UnifiedWizardHandler<PartOut>({
   save,
   print,
   steps,
+  handleSpecificAnswer,
+  handleSpecificRequest,
 });

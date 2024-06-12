@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PartOut } from './part-out.entity';
+import { PartIn } from '../part-in/part-in.entity';
 
 @Injectable()
 export class PartOutService {
   constructor(
     @InjectRepository(PartOut)
     private repository: Repository<PartOut>,
+    @InjectRepository(PartIn)
+    private partInRepository: Repository<PartIn>,
   ) {}
 
   async create(PartOut: PartOut): Promise<PartOut> {
@@ -21,12 +24,77 @@ export class PartOutService {
   async getList(): Promise<string | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
+    return this.formatPartOutList(list);
+  }
 
+  async findByComponent(componentId: number): Promise<PartOut[]> {
+    return this.repository.find({
+      where: { partIn: { component: { id: componentId } } },
+      relations: ['partIn', 'partIn.component'],
+    });
+  }
+
+  async getListByComponent(componentId: number): Promise<string | null> {
+    const list = await this.findByComponent(componentId);
+    if (list.length === 0) return null;
+    return this.formatPartOutList(list);
+  }
+
+  async findRemainingPartIn(): Promise<
+    { partIn: PartIn; remainingCount: number }[]
+  > {
+    const partsIn = await this.partInRepository.find({
+      relations: ['partsOut', 'component'],
+    });
+
+    const result = partsIn
+      .map((partIn) => {
+        const totalPartOutCount = partIn.partsOut.reduce(
+          (sum, partOut) => sum + partOut.count,
+          0,
+        );
+        const remainingCount = partIn.count - totalPartOutCount;
+        return { partIn, remainingCount };
+      })
+      .filter((item) => item.remainingCount > 0);
+
+    return result;
+  }
+
+  async findRemainingPartInByComponent(
+    componentId: number,
+  ): Promise<{ partIn: PartIn; remainingCount: number }[]> {
+    const remainingPartsIn = await this.findRemainingPartIn();
+    return remainingPartsIn.filter(
+      (item) => item.partIn.component.id === componentId,
+    );
+  }
+
+  async getRemainingListByComponent(
+    componentId: number,
+  ): Promise<string | null> {
+    const list = await this.findRemainingPartInByComponent(componentId);
+    if (list.length === 0) return null;
+    return this.formatRemainingPartInList(list);
+  }
+
+  private formatPartOutList = (list: PartOut[]): string => {
     return list
       .map(
         (item, i) =>
           `${i + 1}.\n${item.partIn.component.format()}\n${item.format()}`,
       )
       .join('\n\n');
-  }
+  };
+
+  private formatRemainingPartInList = (
+    list: { partIn: PartIn; remainingCount: number }[],
+  ): string => {
+    return list
+      .map(
+        ({ partIn, remainingCount }, i) =>
+          `${i + 1}.\n${partIn.format()}\nRemaining Count: ${remainingCount}`,
+      )
+      .join('\n\n');
+  };
 }

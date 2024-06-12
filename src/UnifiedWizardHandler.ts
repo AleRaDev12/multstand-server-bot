@@ -7,7 +7,7 @@ import { BaseEntity } from './entities/base.entity';
 interface UnifiedWizardHandlerOptions<T> {
   getEntity: (ctx: CustomWizardContext) => T;
   setEntity: (ctx: CustomWizardContext) => void;
-  save: (thisArg: any, entity: T) => Promise<T>;
+  save: (thisArg: any, entity: T) => Promise<T | undefined>;
   print: (ctx: CustomWizardContext, entity: T) => Promise<void>;
   steps: WizardStepType[];
   handleSpecificAnswer?: (

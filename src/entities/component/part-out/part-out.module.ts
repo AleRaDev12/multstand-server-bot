@@ -3,10 +3,16 @@ import { PartOutService } from './part-out.service';
 import { PartOutAddWizard } from './part-out-add.wizard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { PartIn } from '../part-in/part-in.entity';
+import { ComponentModule } from '../component/component.module';
 import { PartOutListScene } from './part-out-list.scene';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PartOut])],
+  imports: [
+    TypeOrmModule.forFeature([PartOut]),
+    TypeOrmModule.forFeature([PartIn]),
+    ComponentModule,
+  ],
   providers: [PartOutService, PartOutAddWizard, PartOutListScene],
   exports: [PartOutService],
 })
