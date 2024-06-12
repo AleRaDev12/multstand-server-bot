@@ -1,18 +1,18 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { SCENES, WIZARDS } from '../../../shared/scenes-wizards';
-import { BaseScene } from '../../../shared/base.scene';
-import { handleButtonPress } from '../../../shared/helpers';
+import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
+import { BaseScene } from '../../shared/base.scene';
+import { handleButtonPress } from '../../shared/helpers';
 
-@Scene(SCENES.ORDER)
-export class OrderScene extends BaseScene {
+@Scene(SCENES.ORDERS)
+export class OrdersScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(
       'Заказы:',
       Markup.inlineKeyboard([
         [
-          Markup.button.callback('📑 Заказы', 'orders_list'),
+          Markup.button.callback('📑 Заказы', 'order_list'),
           Markup.button.callback('➕', 'add_order'),
         ],
         [
@@ -24,7 +24,7 @@ export class OrderScene extends BaseScene {
     );
   }
 
-  @Action('orders_list')
+  @Action('order_list')
   async ordersList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDER_LIST));

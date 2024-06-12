@@ -1,14 +1,14 @@
-import { StandOrder } from '../stand-order/stand-order.entity';
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../base.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
+import { StandOrder } from '../../orders/stand-order/stand-order.entity';
 
 @Entity()
 export class StandProd extends BaseEntity {
   public static entityName = 'StandProd';
   public static nullable = {
-    description: true,
     standOrder: true,
+    description: true,
   };
 
   @PrimaryGeneratedColumn()

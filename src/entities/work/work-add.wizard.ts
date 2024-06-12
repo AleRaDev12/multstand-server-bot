@@ -4,8 +4,8 @@ import { WIZARDS } from '../../shared/scenes-wizards';
 import { ComponentService } from '../component/component/component.service';
 import { WorkService } from './work.service';
 import { WorkWizardHandler } from './work.wizard-handler';
-import { StandProdService } from '../stand/stand-prod/stand-prod.service';
 import { TaskService } from '../tasks/task.service';
+import { StandProdService } from '../component/stand-prod/stand-prod.service';
 
 @Wizard(WIZARDS.ADD_WORK)
 export class WorkAddWizard {

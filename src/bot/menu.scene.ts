@@ -12,12 +12,8 @@ export class MenuScene {
       Markup.inlineKeyboard([
         [Markup.button.callback('Клиенты', 'client')],
         [Markup.button.callback('Заказы', 'order')],
-        [Markup.button.callback('Станок-изделие', 'add_stand')],
-        [
-          Markup.button.callback('Комплектующие', 'add_component'),
-          Markup.button.callback('заказ/приход', 'add_partsIn'),
-          Markup.button.callback('расход', 'add_partsOut'),
-        ],
+
+        [Markup.button.callback('Компоненты', 'components')],
         [
           Markup.button.callback('Работа', 'add_work'),
           Markup.button.callback('Задача', 'add_task'),
@@ -39,7 +35,7 @@ export class MenuScene {
   @Action('order')
   async onOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDER));
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDERS));
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -70,9 +66,9 @@ export class MenuScene {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_TASK));
   }
 
-  @Action('add_component')
-  async onAddComponent(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_COMPONENT));
+  @Action('components')
+  async components(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
   }
 
   @Action('money')

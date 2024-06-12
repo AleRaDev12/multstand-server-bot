@@ -110,6 +110,7 @@ export const formatLabels = (
       (key) =>
         entity[key] !== null &&
         entity[key] !== undefined &&
+        entity[key] !== '' &&
         labels[key] !== undefined,
     )
     .map((key) => {

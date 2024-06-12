@@ -1,15 +1,15 @@
 import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
-import { Scenes } from 'telegraf';
-import { Inject } from '@nestjs/common';
 import { SCENES } from '../../../shared/scenes-wizards';
-import { StandOrderService } from './stand-order.service';
+import { Inject } from '@nestjs/common';
+import { Scenes } from 'telegraf';
 import { handleButtonPress } from '../../../shared/helpers';
+import { PartOutService } from './part-out.service';
 
-@Scene(SCENES.STAND_ORDER_LIST)
-export class StandOrderListScene {
+@Scene(SCENES.PART_OUT_LIST)
+export class PartOutListScene {
   constructor(
-    @Inject(StandOrderService)
-    readonly service: StandOrderService,
+    @Inject(PartOutService)
+    readonly service: PartOutService,
   ) {}
 
   @SceneEnter()
@@ -17,6 +17,6 @@ export class StandOrderListScene {
     const list = await this.service.getList();
     await ctx.reply(list ?? 'Записей нет');
     await ctx.scene.leave();
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDERS));
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
   }
 }

@@ -1,6 +1,7 @@
 import { BaseEntity } from '../../base.entity';
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
+import { formatLabels } from '../../../shared/helpers';
 
 @Entity()
 export class Component extends BaseEntity {
@@ -12,6 +13,19 @@ export class Component extends BaseEntity {
     link: true,
     comment: true,
   };
+
+  private labels = {
+    name: 'Наименование',
+    type: 'Тип',
+    description: 'Описание',
+    link: 'Ссылка',
+    comment: 'Комментарий',
+    id: 'id компонента',
+  };
+
+  public format(): string {
+    return formatLabels(this, this.labels);
+  }
 
   @PrimaryGeneratedColumn()
   id: number;

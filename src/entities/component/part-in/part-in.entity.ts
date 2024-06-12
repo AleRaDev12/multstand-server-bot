@@ -2,6 +2,7 @@ import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Component } from '../component/component.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { BaseEntity } from '../../base.entity';
+import { formatLabels } from '../../../shared/helpers';
 
 @Entity()
 export class PartIn extends BaseEntity {
@@ -14,6 +15,19 @@ export class PartIn extends BaseEntity {
     count: false,
     description: true,
   };
+
+  private labels = {
+    dateOrder: 'Дата заказа',
+    dateArrival: 'Дата получения',
+    amount: 'Стоимость партии с доставкой',
+    count: 'Количество',
+    description: 'Описание',
+    id: 'id поступления части',
+  };
+
+  public format(): string {
+    return formatLabels(this, this.labels);
+  }
 
   @PrimaryGeneratedColumn()
   id: number;

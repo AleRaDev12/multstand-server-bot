@@ -1,6 +1,6 @@
 import { Component } from './component.entity';
 
-export const seedComponents: Omit<Component, 'id'>[] = [
+export const seedComponents: Omit<Component, 'id' | 'format'>[] = [
   {
     name: 'База TM15',
     type: 'base',

@@ -1,8 +1,8 @@
 import { Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 import { Task } from '../tasks/task.entity';
-import { StandProd } from '../stand/stand-prod/stand-prod.entity';
 import { NullableColumn } from '../nullable-column.decorator';
+import { StandProd } from '../component/stand-prod/stand-prod.entity';
 
 @Entity()
 export class Work extends BaseEntity {

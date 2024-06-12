@@ -15,6 +15,18 @@ export class PartOutService {
   }
 
   async findAll(): Promise<PartOut[]> {
-    return this.repository.find();
+    return this.repository.find({ relations: ['partIn', 'partIn.component'] });
+  }
+
+  async getList(): Promise<string | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+
+    return list
+      .map(
+        (item, i) =>
+          `${i + 1}.\n${item.partIn.component.format()}\n${item.format()}`,
+      )
+      .join('\n\n');
   }
 }

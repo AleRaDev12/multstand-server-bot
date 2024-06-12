@@ -16,10 +16,6 @@ export class Client extends BaseEntity {
     organization: true,
   };
 
-  public format(): string {
-    return formatLabels(this, this.labels);
-  }
-
   private labels = {
     firstName: 'Имя',
     lastName: 'Фамилия',
@@ -31,6 +27,9 @@ export class Client extends BaseEntity {
     id: 'id клиента',
   };
 
+  public format(): string {
+    return formatLabels(this, this.labels);
+  }
   @PrimaryGeneratedColumn()
   id: number;
 

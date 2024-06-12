@@ -3,7 +3,7 @@ import { Markup, Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
 import { handleButtonPress } from '../../shared/helpers';
 
-@Scene(SCENES.ORDER)
+@Scene(SCENES.ORDERS)
 export class OrderScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {

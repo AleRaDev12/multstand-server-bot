@@ -5,15 +5,15 @@ import {
 } from 'telegraf/typings/scenes';
 import { Order } from '../entities/orders/order/order.entity';
 import { Client } from '../entities/client/client.entity';
-import { StandProd } from '../entities/stand/stand-prod/stand-prod.entity';
 import { PartIn } from '../entities/component/part-in/part-in.entity';
 import { Work } from '../entities/work/work.entity';
 import { Task } from '../entities/tasks/task.entity';
 import { Money } from '../entities/money/money.entity';
 import { User } from '../entities/user/user.entity';
 import { Component } from '../entities/component/component/component.entity';
-import { StandOrder } from '../entities/stand/stand-order/stand-order.entity';
 import { PartOut } from '../entities/component/part-out/part-out.entity';
+import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
+import { StandProd } from '../entities/component/stand-prod/stand-prod.entity';
 
 export type KeyOfAllEntities = {
   [K in keyof AllEntities]: AllEntities[K] extends undefined

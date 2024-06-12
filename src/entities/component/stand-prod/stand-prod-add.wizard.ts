@@ -3,7 +3,7 @@ import { StandProdService } from './stand-prod.service';
 import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../../shared/scenes-wizards';
 import { StandProdWizardHandler } from './stand-prod.wizard-handler';
-import { StandOrderService } from '../stand-order/stand-order.service';
+import { StandOrderService } from '../../orders/stand-order/stand-order.service';
 
 @Wizard(WIZARDS.ADD_STAND_PROD)
 export class StandProdAddWizard {
