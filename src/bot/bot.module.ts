@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { BotUpdate } from './bot.update';
 import { ClientsModule } from '../entities/client/clients.module';
-import { OrderModule } from '../entities/order/order.module';
+import { OrderModule } from '../entities/orders/order/order.module';
 import { StandProdModule } from '../entities/stand/stand-prod/stand-prod.module';
 import { PartInModule } from '../entities/component/part-in/part-in.module';
 import { WorkModule } from '../entities/work/work.module';

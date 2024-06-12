@@ -1,6 +1,5 @@
 import { BaseEntity } from '../../base.entity';
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Order } from '../../order/order.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
 import {
@@ -12,6 +11,7 @@ import {
   Tripod,
   TripodType,
 } from '../../unions';
+import { Order } from '../order/order.entity';
 
 @Entity()
 export class StandOrder extends BaseEntity {

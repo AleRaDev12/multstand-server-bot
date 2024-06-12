@@ -3,7 +3,7 @@ import {
   WizardContextWizard,
   WizardSessionData,
 } from 'telegraf/typings/scenes';
-import { Order } from '../entities/order/order.entity';
+import { Order } from '../entities/orders/order/order.entity';
 import { Client } from '../entities/client/client.entity';
 import { StandProd } from '../entities/stand/stand-prod/stand-prod.entity';
 import { PartIn } from '../entities/component/part-in/part-in.entity';

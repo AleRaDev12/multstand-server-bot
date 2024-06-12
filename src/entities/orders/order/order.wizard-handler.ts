@@ -1,8 +1,11 @@
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import {
+  CustomWizardContext,
+  WizardStepType,
+} from '../../../shared/interfaces';
 import {
   replyWithCancelButton,
   UnifiedWizardHandler,
-} from '../../UnifiedWizardHandler';
+} from '../../../UnifiedWizardHandler';
 import { Order } from './order.entity';
 import { OrderAddWizard } from './order-add.wizard';
 

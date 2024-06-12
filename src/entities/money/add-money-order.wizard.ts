@@ -3,7 +3,7 @@ import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/scenes-wizards';
 import { MoneyService } from './money.service';
 import { MoneyOrderWizardHandler } from './add-money-order.wizard-handler';
-import { OrderService } from '../order/order.service';
+import { OrderService } from '../orders/order/order.service';
 
 @Wizard(WIZARDS.ADD_MONEY_ORDER)
 export class MoneyOrderAddWizard {

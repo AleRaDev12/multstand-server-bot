@@ -1,9 +1,9 @@
 import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Scenes } from 'telegraf';
-import { SCENES } from '../../shared/scenes-wizards';
+import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { handleButtonPress } from '../../shared/helpers';
+import { handleButtonPress } from '../../../shared/helpers';
 
 @Scene(SCENES.ORDER_LIST)
 export class OrderListScene {

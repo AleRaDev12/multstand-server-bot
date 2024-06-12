@@ -1,8 +1,8 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
-import { BaseScene } from '../../shared/base.scene';
-import { handleButtonPress } from '../../shared/helpers';
+import { SCENES, WIZARDS } from '../../../shared/scenes-wizards';
+import { BaseScene } from '../../../shared/base.scene';
+import { handleButtonPress } from '../../../shared/helpers';
 
 @Scene(SCENES.ORDER)
 export class OrderScene extends BaseScene {

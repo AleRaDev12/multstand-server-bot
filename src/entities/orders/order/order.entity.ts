@@ -1,9 +1,9 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '../base.entity';
-import { Client } from '../client/client.entity';
-import { NullableColumn } from '../nullable-column.decorator';
+import { BaseEntity } from '../../base.entity';
+import { Client } from '../../client/client.entity';
+import { NullableColumn } from '../../nullable-column.decorator';
 import { addDays, differenceInDays, format } from 'date-fns';
-import { formatLabels } from '../../shared/helpers';
+import { formatLabels } from '../../../shared/helpers';
 
 @Entity()
 export class Order extends BaseEntity {
