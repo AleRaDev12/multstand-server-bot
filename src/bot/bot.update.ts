@@ -7,6 +7,15 @@ import { handleButtonPress } from '../shared/helpers';
 
 @Update()
 export class BotUpdate {
+  constructor(@InjectBot() private bot: Telegraf) {
+    this.setupCommands();
+  }
+
+  setupCommands() {
+    void this.bot.telegram.setMyCommands([
+      { command: '/start', description: 'Запуск' },
+    ]);
+  }
   @Start()
   @UseGuards(RolesGuard)
   async onStart(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
