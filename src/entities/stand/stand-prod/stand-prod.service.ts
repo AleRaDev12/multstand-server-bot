@@ -18,8 +18,9 @@ export class StandProdService {
     return this.repository.find();
   }
 
-  async getList(): Promise<string> {
-    const standsProd = await this.findAll();
-    return `${standsProd.map((standProd, i) => `\n${i + 1}. ${standProd.id} ${standProd.description}`)}`;
+  async getList(): Promise<string | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+    return `${list.map((standProd, i) => `\n${i + 1}. ${standProd.id} ${standProd.description}`)}`;
   }
 }

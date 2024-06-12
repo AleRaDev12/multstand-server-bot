@@ -14,7 +14,8 @@ export class ClientListScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.reply(await this.service.getList());
+    const clientsList = await this.service.getList();
+    await ctx.reply(clientsList ?? 'Записей нет');
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.CLIENT));
   }

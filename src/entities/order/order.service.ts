@@ -19,11 +19,10 @@ export class OrderService {
     return this.repository.find({ relations: ['client'] });
   }
 
-  async getList(): Promise<string> {
-    const orders = await this.findAll();
-    return orders
-      .map((order, i) => this.formatOrder(order, i + 1))
-      .join('\n\n');
+  async getList(): Promise<string | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+    return list.map((order, i) => this.formatOrder(order, i + 1)).join('\n\n');
   }
 
   private formatOrder(order: Order, index: number): string {

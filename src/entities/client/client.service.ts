@@ -22,8 +22,10 @@ export class ClientService {
     return this.repository.find();
   }
 
-  async getList(): Promise<string> {
-    const clients = await this.findAll();
-    return `${clients.map((client, i) => `\n${i + 1}. #${client.id} ${client.firstName} ${client.lastName} ${client.city} ${client.phoneNumber} ${client.email} ${client.organization} ${client.description}\n`)}`;
+  async getList(): Promise<string | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+
+    return `${list.map((client, i) => `\n${i + 1}. #${client.id} ${client.firstName} ${client.lastName} ${client.city} ${client.phoneNumber} ${client.email} ${client.organization} ${client.description}\n`)}`;
   }
 }

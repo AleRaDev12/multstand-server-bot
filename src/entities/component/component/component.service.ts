@@ -18,8 +18,9 @@ export class ComponentService {
     return this.repository.find();
   }
 
-  async getList(): Promise<string> {
-    const components = await this.findAll();
-    return `${components.map((component, i) => `\n${i + 1}. ${component.name} ${component.type}`)}`;
+  async getList(): Promise<string | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+    return `${list.map((component, i) => `\n${i + 1}. ${component.name} ${component.type}`)}`;
   }
 }

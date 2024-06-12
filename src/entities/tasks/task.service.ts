@@ -18,8 +18,10 @@ export class TaskService {
     return this.repository.find();
   }
 
-  async getList(): Promise<string> {
-    const tasks = await this.findAll();
-    return `${tasks.map((task, i) => `\n${i + 1}. ${task.category} ${task.shownName} ${task.duration}m ${task.cost}rub`)}`;
+  async getList(): Promise<string | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+
+    return `${list.map((task, i) => `\n${i + 1}. ${task.category} ${task.shownName} ${task.duration}m ${task.cost}rub`)}`;
   }
 }

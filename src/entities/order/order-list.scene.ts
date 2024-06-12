@@ -14,7 +14,8 @@ export class OrderListScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.reply(await this.service.getList());
+    const ordersList = await this.service.getList();
+    await ctx.reply(ordersList ?? 'Записей нет');
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDER));
   }

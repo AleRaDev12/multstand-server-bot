@@ -18,8 +18,10 @@ export class StandOrderService {
     return this.repository.find({ relations: ['order'] });
   }
 
-  async getList(): Promise<string> {
-    const standsOrder = await this.findAll();
-    return `${standsOrder.map((standOrder, i) => `\n${i + 1}. ${standOrder.id} ${standOrder.model} ${standOrder.glassesRegular}ос ${standOrder.glassesHighTransparency}пп ${standOrder.painting}`)}`;
+  async getList(): Promise<string | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+
+    return `${list.map((standOrder, i) => `\n${i + 1}. ${standOrder.id} ${standOrder.model} ${standOrder.glassesRegular}ос ${standOrder.glassesHighTransparency}пп ${standOrder.painting}`)}`;
   }
 }
