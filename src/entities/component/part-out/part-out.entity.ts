@@ -16,7 +16,7 @@ export class PartOut extends BaseEntity {
 
   private labels = {
     date: 'Дата списания',
-    count: 'Стоимость партии с доставкой',
+    count: 'Количество',
     id: 'id списания части',
   };
 

@@ -15,7 +15,7 @@ export class OrderService {
   }
 
   async findAll(): Promise<Order[]> {
-    return this.repository.find({ relations: ['client'] });
+    return this.repository.find({ relations: ['client', 'standOrders'] });
   }
 
   async getList(): Promise<string | null> {
@@ -23,10 +23,13 @@ export class OrderService {
     if (list.length === 0) return null;
 
     return list
-      .map(
-        (item, i) =>
-          `${i + 1}.\n${item.format()}\n- Клиент:\n${item.client.format()}`,
-      )
+      .map((item, i) => {
+        const standOrdersInfo = item.standOrders
+          .map((item, index) => `${index + 1}. ${item.format()}`)
+          .join('\n');
+
+        return `${i + 1}.\n${item.format()}\n-Станки-заказы:\n${standOrdersInfo}\n- Клиент:\n${item.client.format()}`;
+      })
       .join('\n\n');
   }
 }

@@ -1,9 +1,10 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from '../../base.entity';
 import { Client } from '../../client/client.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { addDays, differenceInDays, format } from 'date-fns';
 import { formatLabels } from '../../../shared/helpers';
+import { StandOrder } from '../stand-order/stand-order.entity';
 
 @Entity()
 export class Order extends BaseEntity {
@@ -34,14 +35,14 @@ export class Order extends BaseEntity {
     const daysUntilSend = differenceInDays(deliveryDeadline, new Date());
     const daysUntilDelivery = '-'; // temp
 
-    const orderInfo = [
+    const additionalInfo = [
       `Крайний срок отправки: ${format(deliveryDeadline, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
       `Крайний срок доставки: ${daysUntilDelivery}, осталось ${daysUntilDelivery} дней`,
     ];
 
     const formattedLabels = formatLabels(this, this.labels);
 
-    return [formattedLabels, ...orderInfo].join('\n');
+    return [formattedLabels, ...additionalInfo].join('\n');
   }
 
   @PrimaryGeneratedColumn()
@@ -49,6 +50,9 @@ export class Order extends BaseEntity {
 
   @ManyToOne(() => Client)
   client: Client;
+
+  @OneToMany(() => StandOrder, (standOrder) => standOrder.order)
+  standOrders: StandOrder[];
 
   @NullableColumn()
   amount: number;

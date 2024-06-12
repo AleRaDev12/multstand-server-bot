@@ -26,7 +26,13 @@ export class PartIn extends BaseEntity {
   };
 
   public format(): string {
-    return formatLabels(this, this.labels);
+    const costPerEntity = this.amount / this.count;
+
+    const additionalInfo = [`Стоимость единицы: ${costPerEntity}`];
+
+    const formattedLabels = formatLabels(this, this.labels);
+
+    return [formattedLabels, ...additionalInfo].join('\n');
   }
 
   @PrimaryGeneratedColumn()
