@@ -11,20 +11,23 @@ export class Order extends BaseEntity {
   public static entityName = 'Order';
   public static nullable = {
     client: false,
-    amount: false,
+    amount: true, // remove this field in the future
     contractDate: false,
     daysToComplete: false,
     description: true,
     deliveryType: true,
     deliveryCost: true,
+    deliveryAddress: true,
+    deliveryTrackNumber: true,
   };
 
   private labels = {
     contractDate: 'Дата договора',
-    amount: 'Стоимость',
     deliveryCost: 'Стоимость доставки',
     daysToComplete: 'Дней на поставку',
     deliveryType: 'Тип доставки',
+    deliveryAddress: 'Адрес доставки',
+    deliveryTrackNumber: 'Трек-номер',
     description: 'Описание',
     id: 'id заказа',
   };
@@ -71,4 +74,10 @@ export class Order extends BaseEntity {
 
   @NullableColumn()
   deliveryCost: number;
+
+  @NullableColumn()
+  deliveryAddress: string;
+
+  @NullableColumn()
+  deliveryTrackNumber: string;
 }

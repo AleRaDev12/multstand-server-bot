@@ -19,7 +19,8 @@ const steps: WizardStepType[] = [
     field: 'daysToComplete',
     type: 'number',
   },
-  { message: 'Стоимость заказа:', field: 'amount', type: 'number' },
+  { message: 'Адрес доставки:', field: 'deliveryAddress', type: 'string' },
+  { message: 'Трек-номер:', field: 'deliveryTrackNumber', type: 'string' },
 ];
 
 function getEntity(ctx: CustomWizardContext): Order {
