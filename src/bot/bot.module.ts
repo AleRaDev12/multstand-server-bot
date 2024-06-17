@@ -16,6 +16,7 @@ import { RegisterUserScene } from './register-user.scene';
 import { UnregisteredScene } from './unregistered.scene';
 import { OrdersScene } from '../entities/orders/orders.scene';
 import { ComponentsScene } from '../entities/component/components.scene';
+import { MasterModule } from '../entities/master/master.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ComponentsScene } from '../entities/component/components.scene';
     ComponentModule,
     UserModule,
     MoneyModule,
+    MasterModule,
   ],
   providers: [
     BotUpdate,

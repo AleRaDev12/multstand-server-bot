@@ -8,11 +8,6 @@ import { UserService } from './user.service';
 
 const steps: WizardStepType[] = [
   { message: 'Имя мастера:', field: 'name', type: 'string' },
-  {
-    message: 'Коэффициент оплаты:',
-    field: 'paymentCoefficient',
-    type: 'number',
-  },
   { message: 'Роль:', field: 'role', type: 'string' },
 ];
 

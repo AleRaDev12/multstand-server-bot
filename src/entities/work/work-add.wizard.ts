@@ -6,12 +6,15 @@ import { WorkService } from './work.service';
 import { WorkWizardHandler } from './work.wizard-handler';
 import { TaskService } from '../tasks/task.service';
 import { StandProdService } from '../component/stand-prod/stand-prod.service';
+import { MasterService } from '../master/master.service';
 
 @Wizard(WIZARDS.ADD_WORK)
 export class WorkAddWizard {
   constructor(
     @Inject(WorkService)
-    private readonly service: WorkService,
+    readonly service: WorkService,
+    @Inject(MasterService)
+    readonly masterService: MasterService,
     @Inject(ComponentService)
     readonly componentService: ComponentService,
     @Inject(TaskService)

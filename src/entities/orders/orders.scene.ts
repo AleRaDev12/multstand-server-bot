@@ -32,6 +32,7 @@ export class OrdersScene extends BaseScene {
       await ctx.reply(e.message);
     }
   }
+
   @Action('add_order')
   async addOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {

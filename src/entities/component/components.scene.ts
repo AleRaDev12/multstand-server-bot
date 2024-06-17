@@ -9,7 +9,7 @@ export class ComponentsScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(
-      'Заказы:',
+      'Компоненты:',
       Markup.inlineKeyboard([
         [
           Markup.button.callback('📑 Комплектующие', 'component_list'),
@@ -42,6 +42,7 @@ export class ComponentsScene extends BaseScene {
       await ctx.reply(e.message);
     }
   }
+
   @Action('component_add')
   async componentAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {

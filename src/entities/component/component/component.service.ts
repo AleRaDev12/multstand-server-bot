@@ -21,6 +21,6 @@ export class ComponentService {
   async getList(): Promise<string | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
-    return `${list.map((component, i) => `\n${i + 1}. ${component.name} ${component.type}`)}`;
+    return `${list.map((item, i) => `\n${i + 1}. ${item.name} ${item.type}`)}`;
   }
 }

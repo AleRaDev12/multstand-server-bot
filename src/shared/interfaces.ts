@@ -29,7 +29,8 @@ export type DbEntities =
   | 'standOrderSelect'
   | 'standProdSelect'
   | 'orderModelSelect'
-  | 'partsInBatchSelect';
+  | 'partsInBatchSelect'
+  | 'masterSelect';
 
 export type WizardStepType = {
   message: string;

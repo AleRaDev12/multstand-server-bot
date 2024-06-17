@@ -1,7 +1,7 @@
-import { Action, Ctx, Start, Update } from 'nestjs-telegraf';
+import { Action, Ctx, InjectBot, Start, Update } from 'nestjs-telegraf';
 import { UseGuards } from '@nestjs/common';
 import { RolesGuard } from './roles.guard';
-import { Markup, Scenes } from 'telegraf';
+import { Markup, Scenes, Telegraf } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
 
@@ -16,8 +16,9 @@ export class BotUpdate {
       { command: '/start', description: 'Запуск' },
     ]);
   }
+
   @Start()
-  @UseGuards(RolesGuard)
+  // @UseGuards(RolesGuard)
   async onStart(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply('Start', Markup.keyboard(['/start']).persistent().resize());
     try {

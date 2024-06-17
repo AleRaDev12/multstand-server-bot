@@ -6,7 +6,7 @@ import { BaseEntity } from '../base.entity';
 export class User extends BaseEntity {
   public static entityName = 'User';
   public static nullable = {
-    paymentCoefficient: true,
+    name: true,
     role: false,
     username: false,
     telegramUserId: false,
@@ -15,11 +15,11 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @NullableColumn()
+  name: string;
+
   @NullableColumn({ unique: true })
   telegramUserId: number;
-
-  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
-  paymentCoefficient: number;
 
   @NullableColumn()
   role: string; // 'manager', 'master', 'unregistered'
