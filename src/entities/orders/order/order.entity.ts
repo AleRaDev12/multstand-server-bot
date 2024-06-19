@@ -1,19 +1,22 @@
 import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '../../base.entity';
+import { BaseEntity, EntityFieldsMap } from '../../base.entity';
 import { Client } from '../../client/client.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
-import { addDays, differenceInDays, format } from 'date-fns';
+import { differenceInDays, format } from 'date-fns';
 import { formatLabels } from '../../../shared/helpers';
 import { StandOrder } from '../stand-order/stand-order.entity';
+import { Money } from '../../money/money.entity';
 
 @Entity()
 export class Order extends BaseEntity {
   public static entityName = 'Order';
-  public static nullable = {
+  public static nullable: EntityFieldsMap<Order, boolean> = {
     client: false,
     amount: true, // remove this field in the future
     contractDate: false,
-    daysToComplete: false,
+    daysToSend: true,
+    sendingDeadlineDate: true,
+    deliveryDeadlineDate: true,
     description: true,
     deliveryType: true,
     deliveryCost: true,
@@ -21,10 +24,11 @@ export class Order extends BaseEntity {
     deliveryTrackNumber: true,
   };
 
-  private labels = {
+  private labels: EntityFieldsMap<Order, string> = {
     contractDate: 'Дата договора',
     deliveryCost: 'Стоимость доставки',
-    daysToComplete: 'Дней на поставку',
+    daysToSend: 'Дней на поставку',
+    deliveryDeadlineDate: 'Крайняя дата доставки',
     deliveryType: 'Тип доставки',
     deliveryAddress: 'Адрес доставки',
     deliveryTrackNumber: 'Трек-номер',
@@ -33,18 +37,34 @@ export class Order extends BaseEntity {
   };
 
   public format(): string {
-    const { contractDate, daysToComplete } = this;
-    const deliveryDeadline = addDays(contractDate, daysToComplete);
-    const daysUntilSend = differenceInDays(deliveryDeadline, new Date());
-    const daysUntilDelivery = '-'; // temp
+    const { daysToSend, deliveryDeadlineDate, sendingDeadlineDate } = this;
 
-    const additionalInfo = [
-      `Крайний срок отправки: ${format(deliveryDeadline, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
-      `Крайний срок доставки: ${daysUntilDelivery}, осталось ${daysUntilDelivery} дней`,
-    ];
+    if (sendingDeadlineDate !== null && deliveryDeadlineDate !== null) {
+      return "Error: Can't have both sendingDeadlineDate and deliveryDeadlineDate";
+    }
+
+    const additionalInfo = [];
+
+    if (sendingDeadlineDate !== null) {
+      const daysUntilSend = differenceInDays(sendingDeadlineDate, new Date());
+      additionalInfo.push(
+        `Крайний срок отправки: ${format(sendingDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
+      );
+    } else if (deliveryDeadlineDate !== null) {
+      const daysUntilDelivery = differenceInDays(
+        deliveryDeadlineDate,
+        new Date(),
+      );
+      additionalInfo.push(
+        `Крайний срок доставки: ${format(deliveryDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilDelivery} дней`,
+      );
+    } else {
+      additionalInfo.push(
+        `Количество дней до отправки ${daysToSend}, оплат не поступало`,
+      );
+    }
 
     const formattedLabels = formatLabels(this, this.labels);
-
     return [formattedLabels, ...additionalInfo].join('\n');
   }
 
@@ -57,14 +77,25 @@ export class Order extends BaseEntity {
   @OneToMany(() => StandOrder, (standOrder) => standOrder.order)
   standOrders: StandOrder[];
 
+  @OneToMany(() => Money, (money) => money.order)
+  money: Money[];
+
   @NullableColumn()
   amount: number;
 
-  @NullableColumn()
+  @NullableColumn({ type: 'date' })
   contractDate: Date;
 
   @NullableColumn()
-  daysToComplete: number;
+  daysToSend: number;
+
+  // Deadline for order shipment
+  @NullableColumn({ type: 'date' })
+  sendingDeadlineDate: Date;
+
+  // Deadline for order delivery
+  @NullableColumn({ type: 'date' })
+  deliveryDeadlineDate: Date;
 
   @NullableColumn()
   description: string;

@@ -16,7 +16,7 @@ const steps: WizardStepType[] = [
   { message: 'Дата договора:', field: 'contractDate', type: 'date' },
   {
     message: 'Количество дней на выполнение заказа:',
-    field: 'daysToComplete',
+    field: 'daysToSend',
     type: 'number',
   },
   { message: 'Адрес доставки:', field: 'deliveryAddress', type: 'string' },
