@@ -1,115 +1,112 @@
+import { AccountService } from './account.service';
+import { WIZARDS } from '../../../shared/scenes-wizards';
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { WIZARDS } from '../../shared/scenes-wizards';
-import { MoneyService } from './money.service';
-import { MoneyOrderWizardHandler } from './add-money-order.wizard-handler';
-import { OrderService } from '../orders/order/order.service';
+import { AccountAddWizardHandler } from './account-add.wizard-handler';
 
-@Wizard(WIZARDS.ADD_MONEY_ORDER)
-export class MoneyOrderAddWizard {
+@Wizard(WIZARDS.ADD_ACCOUNT)
+export class AccountAddWizard {
   constructor(
-    @Inject(MoneyService)
-    readonly service: MoneyService,
-    @Inject(OrderService)
-    readonly orderService: OrderService,
+    @Inject(AccountService)
+    readonly service: AccountService,
   ) {}
 
   @WizardStep(1)
-  @MoneyOrderWizardHandler(1)
+  @AccountAddWizardHandler(1)
   async start() {}
 
   @On('text')
   @WizardStep(2)
-  @MoneyOrderWizardHandler(2)
+  @AccountAddWizardHandler(2)
   async step2() {}
 
   @On('text')
   @WizardStep(3)
-  @MoneyOrderWizardHandler(3)
+  @AccountAddWizardHandler(3)
   async step3() {}
 
   @On('text')
   @WizardStep(4)
-  @MoneyOrderWizardHandler(4)
+  @AccountAddWizardHandler(4)
   async step4() {}
 
   @On('text')
   @WizardStep(5)
-  @MoneyOrderWizardHandler(5)
+  @AccountAddWizardHandler(5)
   async step5() {}
 
   @On('text')
   @WizardStep(6)
-  @MoneyOrderWizardHandler(6)
+  @AccountAddWizardHandler(6)
   async step6() {}
 
   @On('text')
   @WizardStep(7)
-  @MoneyOrderWizardHandler(7)
+  @AccountAddWizardHandler(7)
   async step7() {}
 
   @On('text')
   @WizardStep(8)
-  @MoneyOrderWizardHandler(8)
+  @AccountAddWizardHandler(8)
   async step8() {}
 
   @On('text')
   @WizardStep(9)
-  @MoneyOrderWizardHandler(9)
+  @AccountAddWizardHandler(9)
   async step9() {}
 
   @On('text')
   @WizardStep(10)
-  @MoneyOrderWizardHandler(10)
+  @AccountAddWizardHandler(10)
   async step10() {}
 
   @On('text')
   @WizardStep(11)
-  @MoneyOrderWizardHandler(11)
+  @AccountAddWizardHandler(11)
   async step11() {}
 
   @On('text')
   @WizardStep(12)
-  @MoneyOrderWizardHandler(12)
+  @AccountAddWizardHandler(12)
   async step12() {}
 
   @On('text')
   @WizardStep(13)
-  @MoneyOrderWizardHandler(13)
+  @AccountAddWizardHandler(13)
   async step13() {}
 
   @On('text')
   @WizardStep(14)
-  @MoneyOrderWizardHandler(14)
+  @AccountAddWizardHandler(14)
   async step14() {}
 
   @On('text')
   @WizardStep(15)
-  @MoneyOrderWizardHandler(15)
+  @AccountAddWizardHandler(15)
   async step15() {}
 
   @On('text')
   @WizardStep(16)
-  @MoneyOrderWizardHandler(16)
+  @AccountAddWizardHandler(16)
   async step16() {}
 
   @On('text')
   @WizardStep(17)
-  @MoneyOrderWizardHandler(17)
+  @AccountAddWizardHandler(17)
   async step17() {}
 
   @On('text')
   @WizardStep(18)
-  @MoneyOrderWizardHandler(18)
+  @AccountAddWizardHandler(18)
   async step18() {}
 
   @On('text')
   @WizardStep(19)
-  @MoneyOrderWizardHandler(19)
+  @AccountAddWizardHandler(19)
   async step19() {}
 
   @On('text')
   @WizardStep(20)
-  @MoneyOrderWizardHandler(20)
+  @AccountAddWizardHandler(20)
   async step20() {}
 }

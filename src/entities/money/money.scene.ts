@@ -1,32 +1,43 @@
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
-import { Inject } from '@nestjs/common';
-import { MoneyService } from './money.service';
 import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
+import { BaseScene } from '../../shared/base.scene';
 import { handleButtonPress } from '../../shared/helpers';
+import { Inject } from '@nestjs/common';
+import { AccountService } from './account/account.service';
 
 @Scene(SCENES.MONEY)
-export class MoneyScene {
+export class MoneyScene extends BaseScene {
   constructor(
-    @Inject(MoneyService)
-    private readonly moneyService: MoneyService,
-  ) {}
+    @Inject(AccountService)
+    private readonly accountService: AccountService,
+  ) {
+    super();
+  }
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    const balance = await this.moneyService.getBalance();
+    const balance = await this.accountService.getAccountBalancesList();
+
     await ctx.reply(
-      `Текущий баланс: ${balance}`,
+      `Текущий баланс:\n${balance}`,
       Markup.inlineKeyboard([
-        [Markup.button.callback('Посмотреть транзакции', 'view_transactions')],
-        [Markup.button.callback('Добавить приход/расход', 'add_transaction')],
-        [Markup.button.callback('Приход по заказу', 'add_order')],
+        [
+          Markup.button.callback('📑 Транзакции', 'transactions_list'),
+          Markup.button.callback('➕', 'transaction_add'),
+          Markup.button.callback('➕ к заказу', 'transaction_order_add'),
+        ],
+        [
+          Markup.button.callback('📑 Счета', 'accounts_list'),
+          Markup.button.callback('➕', 'account_add'),
+        ],
+        [this.menuButton],
       ]),
     );
   }
 
-  @Action('view_transactions')
-  async onViewTransactions(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('transactions_list')
+  async transactionsList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () =>
         ctx.scene.enter(SCENES.TRANSACTION_LIST),
@@ -36,23 +47,39 @@ export class MoneyScene {
     }
   }
 
-  @Action('add_transaction')
-  async onAddTransaction(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('transaction_add')
+  async addTransaction(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_MONEY));
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(WIZARDS.ADD_TRANSACTION),
+      );
     } catch (e) {
       await ctx.reply(e.message);
     }
   }
 
-  @Action('add_order')
-  async onAddOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('transaction_order_add')
+  async addTransactionOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () =>
-        ctx.scene.enter(WIZARDS.ADD_MONEY_ORDER),
+        ctx.scene.enter(WIZARDS.ADD_TRANSACTION_ORDER),
       );
     } catch (e) {
       await ctx.reply(e.message);
     }
+  }
+
+  @Action('accounts_list')
+  async standOrdersList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ACCOUNT_LIST));
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('account_add')
+  async addStandOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_ACCOUNT));
   }
 }

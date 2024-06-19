@@ -9,7 +9,7 @@ import { TasksModule } from '../entities/tasks/tasks.module';
 import { StandOrderModule } from '../entities/orders/stand-order/stand-order.module';
 import { ComponentModule } from '../entities/component/component/component.module';
 import { UserModule } from '../entities/user/user.module';
-import { MoneyModule } from '../entities/money/money.module';
+import { TransactionModule } from '../entities/money/transaction/transaction.module';
 import { BotUpdate } from './bot.update';
 import { MenuScene } from './menu.scene';
 import { RegisterUserScene } from './register-user.scene';
@@ -17,6 +17,8 @@ import { UnregisteredScene } from './unregistered.scene';
 import { OrdersScene } from '../entities/orders/orders.scene';
 import { ComponentsScene } from '../entities/component/components.scene';
 import { MasterModule } from '../entities/master/master.module';
+import { AccountModule } from '../entities/money/account/account.module';
+import { MoneyScene } from '../entities/money/money.scene';
 
 @Module({
   imports: [
@@ -30,8 +32,9 @@ import { MasterModule } from '../entities/master/master.module';
     StandOrderModule,
     ComponentModule,
     UserModule,
-    MoneyModule,
+    TransactionModule,
     MasterModule,
+    AccountModule,
   ],
   providers: [
     BotUpdate,
@@ -40,6 +43,7 @@ import { MasterModule } from '../entities/master/master.module';
     UnregisteredScene,
     ComponentsScene,
     OrdersScene,
+    MoneyScene,
   ],
 })
 export class BotModule {}

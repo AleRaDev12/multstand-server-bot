@@ -1,0 +1,134 @@
+import {
+  CustomWizardContext,
+  DbEntities,
+  WizardStepType,
+} from '../../../shared/interfaces';
+import { Transaction } from './transaction.entity';
+import {
+  replyWithCancelButton,
+  UnifiedWizardHandler,
+} from '../../../UnifiedWizardHandler';
+import { TransactionOrderAddWizard } from './add-transaction-order.wizard';
+
+const entityName = 'transactionOrder';
+const orderSelectType: DbEntities = 'orderSelect';
+const accountSelectType: DbEntities = 'accountSelect';
+
+const steps: WizardStepType[] = [
+  { message: 'Выберите заказ:', type: orderSelectType },
+  {
+    message: 'Дата транзакции (ГГГГ-ММ-ДД):',
+    field: 'transactionDate',
+    type: 'date',
+  },
+  {
+    message: 'Сумма:',
+    field: 'amount',
+    type: 'number',
+  },
+  { message: 'Выберите счет:', type: accountSelectType },
+  { message: 'Описание:', field: 'description', type: 'string' },
+];
+
+function getEntity(ctx: CustomWizardContext): Transaction {
+  return ctx.wizard.state[entityName];
+}
+
+function setEntity(ctx: CustomWizardContext): void {
+  ctx.wizard.state[entityName] = new Transaction();
+}
+
+async function save(this: TransactionOrderAddWizard, entity: Transaction) {
+  return this.service.create(entity);
+}
+
+async function print(
+  ctx: CustomWizardContext,
+  entity: Transaction,
+): Promise<void> {
+  await ctx.reply(
+    `Транзакция на сумму ${entity.amount} для заказа ${entity.order.id} по счёту ${entity.account.name} добавлена.`,
+  );
+}
+
+async function handleSpecificRequest(
+  this: TransactionOrderAddWizard,
+  ctx: CustomWizardContext,
+  stepRequest: WizardStepType,
+): Promise<boolean> {
+  switch (stepRequest.type) {
+    case orderSelectType: {
+      const ordersList = await this.orderService.getList();
+      await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
+      return true;
+    }
+    case accountSelectType: {
+      const accountsList = (await this.accountService.findAll())
+        .map((account, index) => `${index + 1}. ${account.name}`)
+        .join('\n');
+      await replyWithCancelButton(
+        ctx,
+        `${stepRequest.message}\n${accountsList}`,
+      );
+      return true;
+    }
+    default:
+      return false;
+  }
+}
+
+async function handleSpecificAnswer(
+  this: TransactionOrderAddWizard,
+  ctx: CustomWizardContext,
+  stepAnswer: WizardStepType,
+  entity: Transaction,
+): Promise<boolean> {
+  switch (stepAnswer.type) {
+    case orderSelectType: {
+      // TODO: update types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const message = ctx.update?.message as { text?: string };
+      const selectedNumber = parseInt(message.text);
+
+      const orders = await this.orderService.findAll();
+      const order = orders[selectedNumber - 1];
+      if (!order) {
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
+        return false;
+      }
+
+      entity.order = order;
+      return true;
+    }
+    case accountSelectType: {
+      // TODO: update types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const message = ctx.update?.message as { text?: string };
+      const selectedNumber = parseInt(message.text);
+
+      const accounts = await this.accountService.findAll();
+      const account = accounts[selectedNumber - 1];
+      if (!account) {
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
+        return false;
+      }
+
+      entity.account = account;
+      return true;
+    }
+    default:
+      return true;
+  }
+}
+
+export const TransactionOrderWizardHandler = UnifiedWizardHandler<Transaction>({
+  getEntity,
+  setEntity,
+  save,
+  print,
+  steps,
+  handleSpecificAnswer,
+  handleSpecificRequest,
+});

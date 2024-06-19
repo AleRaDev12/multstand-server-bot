@@ -9,7 +9,7 @@ import {
 } from '../../../UnifiedWizardHandler';
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
-import { Money } from '../../money/money.entity';
+import { Transaction } from '../../money/transaction/transaction.entity';
 
 const componentTypeName: DbEntities = 'componentSelect';
 
@@ -32,14 +32,14 @@ function setEntity(ctx: CustomWizardContext): void {
 async function save(this: PartInAddWizard, entity: PartIn) {
   const partIn = await this.service.create(entity);
 
-  const money = new Money();
+  const transaction = new Transaction();
 
-  money.transactionDate = new Date();
-  money.amount = entity.amount;
-  money.description = `Покупка комплектующего: ${entity.component.name} в количестве ${entity.count} на сумму ${entity.amount}`;
-  money.partIn = partIn;
+  transaction.transactionDate = new Date();
+  transaction.amount = entity.amount;
+  transaction.description = `Покупка комплектующего: ${entity.component.name} в количестве ${entity.count} на сумму ${entity.amount}`;
+  transaction.partIn = partIn;
 
-  await this.moneyService.create(money);
+  await this.moneyService.create(transaction);
   return partIn;
 }
 

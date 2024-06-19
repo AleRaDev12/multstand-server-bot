@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Money } from './money.entity';
-import { addDays } from 'date-fns';
-import { OrderService } from '../orders/order/order.service';
+import { OrderService } from '../../orders/order/order.service';
+import { Transaction } from './transaction.entity';
+import { AccountService } from '../account/account.service';
 
 @Injectable()
-export class MoneyService {
+export class TransactionService {
   constructor(
-    @InjectRepository(Money)
-    private readonly repository: Repository<Money>,
+    @InjectRepository(Transaction)
+    private readonly repository: Repository<Transaction>,
     private readonly orderService: OrderService,
+    private readonly accountService: AccountService,
   ) {}
 
-  async create(money: Money): Promise<Money> {
+  async create(money: Transaction): Promise<Transaction> {
     const newMoney = await this.repository.save(money);
 
     if (money.order) {
@@ -26,7 +27,7 @@ export class MoneyService {
     return newMoney;
   }
 
-  async findAll(): Promise<Money[]> {
+  async findAll(): Promise<Transaction[]> {
     return this.repository.find({
       relations: ['order', 'partIn', 'master'],
     });

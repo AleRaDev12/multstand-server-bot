@@ -8,12 +8,12 @@ import { Client } from '../entities/client/client.entity';
 import { PartIn } from '../entities/component/part-in/part-in.entity';
 import { Work } from '../entities/work/work.entity';
 import { Task } from '../entities/tasks/task.entity';
-import { Money } from '../entities/money/money.entity';
 import { User } from '../entities/user/user.entity';
 import { Component } from '../entities/component/component/component.entity';
 import { PartOut } from '../entities/component/part-out/part-out.entity';
 import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
 import { StandProd } from '../entities/component/stand-prod/stand-prod.entity';
+import { Transaction } from '../entities/money/transaction/transaction.entity';
 
 export type KeyOfAllEntities = {
   [K in keyof AllEntities]: AllEntities[K] extends undefined
@@ -30,7 +30,8 @@ export type DbEntities =
   | 'standProdSelect'
   | 'orderModelSelect'
   | 'partsInBatchSelect'
-  | 'masterSelect';
+  | 'masterSelect'
+  | 'accountSelect';
 
 export type WizardStepType = {
   message: string;
@@ -80,7 +81,7 @@ export type AllEntities = {
   partOut?: PartOut;
   work?: Work;
   task?: Task;
-  money?: Money;
+  transaction?: Transaction;
   master?: User;
   component?: Component;
   standOrder?: StandOrder;

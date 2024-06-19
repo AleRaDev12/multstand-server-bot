@@ -5,7 +5,7 @@ import { NullableColumn } from '../../nullable-column.decorator';
 import { differenceInDays, format } from 'date-fns';
 import { formatLabels } from '../../../shared/helpers';
 import { StandOrder } from '../stand-order/stand-order.entity';
-import { Money } from '../../money/money.entity';
+import { Transaction } from '../../money/transaction/transaction.entity';
 
 @Entity()
 export class Order extends BaseEntity {
@@ -77,8 +77,8 @@ export class Order extends BaseEntity {
   @OneToMany(() => StandOrder, (standOrder) => standOrder.order)
   standOrders: StandOrder[];
 
-  @OneToMany(() => Money, (money) => money.order)
-  money: Money[];
+  @OneToMany(() => Transaction, (transaction) => transaction.order)
+  money: Transaction[];
 
   @NullableColumn()
   amount: number;
