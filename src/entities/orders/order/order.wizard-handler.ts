@@ -19,6 +19,11 @@ const steps: WizardStepType[] = [
     field: 'daysToSend',
     type: 'number',
   },
+  {
+    message: 'Крайняя дата поставки:',
+    field: 'deliveryDeadlineDate',
+    type: 'date',
+  },
   { message: 'Адрес доставки:', field: 'deliveryAddress', type: 'string' },
   { message: 'Трек-номер:', field: 'deliveryTrackNumber', type: 'string' },
 ];
