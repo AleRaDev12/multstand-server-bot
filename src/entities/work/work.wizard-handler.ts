@@ -18,7 +18,10 @@ const entityName = 'work';
 const steps: WizardStepType[] = [
   { message: 'Мастер:', type: masterSelectType },
   { message: 'Задача:', type: taskSelectType },
-  { message: 'Станок-изделие:', type: standProdSelectType },
+  {
+    message: 'Станок-изделие. Можно выбрать несколько (номера через запятую):',
+    type: standProdSelectType,
+  },
   { message: 'Количество:', field: 'count', type: 'number' },
   { message: 'Дата выполнения:', field: 'date', type: 'date' },
 ];
