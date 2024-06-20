@@ -69,7 +69,7 @@ async function handleSpecificRequest(
 ): Promise<boolean> {
   switch (stepRequest.type) {
     case standOrderSelectType: {
-      const standsProdList = await this.standOrderService.getList();
+      const standsProdList = await this.standOrderService.getListArray();
       await replyWithCancelButton(
         ctx,
         `${stepRequest.message}${standsProdList}`,

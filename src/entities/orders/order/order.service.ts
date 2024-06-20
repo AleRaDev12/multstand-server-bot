@@ -23,19 +23,26 @@ export class OrderService {
     return this.repository.find({ relations: ['client', 'standOrders'] });
   }
 
-  async getList(): Promise<string | null> {
+  async getListArray(): Promise<string[] | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
 
-    return list
-      .map((item, i) => {
-        const standOrdersInfo = item.standOrders
-          .map((item, index) => `${index + 1}. ${item.format()}`)
-          .join('\n');
+    return list.map((item, i) => {
+      const standOrdersInfo = item.standOrders
+        .map((item, index) => `${index + 1}. ${item.format()}`)
+        .join('\n');
 
-        return `${i + 1}.\n${item.format()}\n-Станки-заказы:\n${standOrdersInfo}\n- Клиент:\n${item.client.format()}`;
-      })
-      .join('\n\n');
+      return `${i + 1}.\n${item.format()}\n-Станки-заказы:\n${standOrdersInfo}\n- Клиент:\n${item.client.format()}`;
+    });
+  }
+
+  async getShortenedListArray(): Promise<string[] | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+
+    return list.map((item, i) => {
+      return `${i + 1}. ${item.formatShorten()}\n${item.client.formatShorten()}\n`;
+    });
   }
 
   async findOneWithRelations(id: number): Promise<Order | undefined> {

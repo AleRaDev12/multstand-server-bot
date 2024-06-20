@@ -25,15 +25,20 @@ export class Order extends BaseEntity {
   };
 
   private labels: EntityFieldsMap<Order, string> = {
-    contractDate: 'Дата договора',
+    contractDate: 'Договор',
     deliveryCost: 'Стоимость доставки',
     daysToSend: 'Дней на поставку',
-    deliveryDeadlineDate: 'Крайняя дата доставки',
     deliveryType: 'Тип доставки',
     deliveryAddress: 'Адрес доставки',
     deliveryTrackNumber: 'Трек-номер',
     description: 'Описание',
     id: 'id заказа',
+  };
+
+  private labelsShorten: EntityFieldsMap<Order, string> = {
+    contractDate: 'Договор',
+    deliveryCost: 'Стоимость доставки',
+    description: 'Описание',
   };
 
   public format(): string {
@@ -65,6 +70,36 @@ export class Order extends BaseEntity {
     }
 
     const formattedLabels = formatLabels(this, this.labels);
+    return [formattedLabels, ...additionalInfo].join('\n');
+  }
+
+  public formatShorten(): string {
+    const { daysToSend, deliveryDeadlineDate, sendingDeadlineDate } = this;
+
+    if (sendingDeadlineDate !== null && deliveryDeadlineDate !== null) {
+      return "Error: Can't have both sendingDeadlineDate and deliveryDeadlineDate";
+    }
+
+    const additionalInfo = [];
+
+    if (sendingDeadlineDate !== null) {
+      const daysUntilSend = differenceInDays(sendingDeadlineDate, new Date());
+      additionalInfo.push(
+        `Крайний срок отправки: ${format(sendingDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
+      );
+    } else if (deliveryDeadlineDate !== null) {
+      const daysUntilDelivery = differenceInDays(
+        deliveryDeadlineDate,
+        new Date(),
+      );
+      additionalInfo.push(
+        `Крайний срок доставки: ${format(deliveryDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilDelivery} дней`,
+      );
+    } else {
+      additionalInfo.push(`Дней до отправки ${daysToSend}, пока не оплачено`);
+    }
+
+    const formattedLabels = formatLabels(this, this.labelsShorten);
     return [formattedLabels, ...additionalInfo].join('\n');
   }
 

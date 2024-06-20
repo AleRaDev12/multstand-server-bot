@@ -26,7 +26,7 @@ const steps: WizardStepType[] = [
     field: 'amount',
     type: 'number',
   },
-  { message: 'Выберите счет:', type: accountSelectType },
+  { message: 'Счёт:', type: accountSelectType },
   { message: 'Описание:', field: 'description', type: 'string' },
 ];
 
@@ -58,7 +58,9 @@ async function handleSpecificRequest(
 ): Promise<boolean> {
   switch (stepRequest.type) {
     case orderSelectType: {
-      const ordersList = await this.orderService.getList();
+      const ordersList = (
+        await this.orderService.getShortenedListArray()
+      )?.join('\n');
       await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
       return true;
     }

@@ -14,8 +14,15 @@ export class StandOrderListScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    const list = await this.service.getList();
-    await ctx.reply(list ?? 'Записей нет');
+    const list = await this.service.getListArray();
+    if (!list) {
+      await ctx.reply('Записей нет');
+    }
+
+    for (const standOrder of list) {
+      console.log('*-* standOrder', standOrder);
+      await ctx.reply(standOrder);
+    }
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDERS));
   }

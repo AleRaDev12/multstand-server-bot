@@ -18,15 +18,13 @@ export class StandOrderService {
     return this.repository.find({ relations: ['order'] });
   }
 
-  async getList(): Promise<string | null> {
+  async getListArray(): Promise<string[] | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
 
-    return list
-      .map(
-        (standOrder, i) =>
-          `\n${i + 1}. ${standOrder.format()}\n-Заказ:\n${standOrder.order.format()}`,
-      )
-      .join('\n\n');
+    return list.map(
+      (standOrder, i) =>
+        `\n${i + 1}. ${standOrder.formatShorten()}\n-Заказ:\n${standOrder.order.formatShorten()}`,
+    );
   }
 }

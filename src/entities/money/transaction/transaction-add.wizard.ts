@@ -3,12 +3,15 @@ import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../../shared/scenes-wizards';
 import { TransactionService } from './transaction.service';
 import { TransactionAddWizardHandler } from './transaction-add.wizard-handler';
+import { AccountService } from '../account/account.service';
 
 @Wizard(WIZARDS.ADD_TRANSACTION)
 export class TransactionAddWizard {
   constructor(
     @Inject(TransactionService)
     readonly service: TransactionService,
+    @Inject(AccountService)
+    readonly accountService: AccountService,
   ) {}
 
   @WizardStep(1)

@@ -115,6 +115,39 @@ async function print(
   );
 }
 
+async function handleSpecificRequest(
+  this: StandOrderAddWizard,
+  ctx: CustomWizardContext,
+  stepRequest: WizardStepType,
+): Promise<boolean> {
+  switch (stepRequest.type) {
+    case orderSelectType: {
+      const ordersList = await this.orderService.getListArray();
+      if (!ordersList) {
+        await ctx.reply('Записей нет');
+        return true;
+      }
+
+      for (const order of ordersList) {
+        await ctx.reply(order);
+      }
+
+      await replyWithCancelButton(ctx, '-');
+      return true;
+    }
+
+    case orderModelSelectType: {
+      await replyWithCancelButton(
+        ctx,
+        `${stepRequest.message}\n${printUnion(StandModel)}`,
+      );
+      return true;
+    }
+  }
+
+  if (stepRequest.type !== orderSelectType) return false;
+}
+
 async function handleSpecificAnswer(
   this: StandOrderAddWizard,
   ctx: CustomWizardContext,
@@ -158,30 +191,6 @@ async function handleSpecificAnswer(
       return true;
     }
   }
-}
-
-async function handleSpecificRequest(
-  this: StandOrderAddWizard,
-  ctx: CustomWizardContext,
-  stepRequest: WizardStepType,
-): Promise<boolean> {
-  switch (stepRequest.type) {
-    case orderSelectType: {
-      const ordersList = await this.orderService.getList();
-      await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
-      return true;
-    }
-
-    case orderModelSelectType: {
-      await replyWithCancelButton(
-        ctx,
-        `${stepRequest.message}\n${printUnion(StandModel)}`,
-      );
-      return true;
-    }
-  }
-
-  if (stepRequest.type !== orderSelectType) return false;
 }
 
 export const StandOrderWizardHandler = UnifiedWizardHandler<StandOrder>({

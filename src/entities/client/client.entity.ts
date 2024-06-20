@@ -27,9 +27,23 @@ export class Client extends BaseEntity {
     id: 'id клиента',
   };
 
+  private labelsShorten = {
+    firstName: 'Имя',
+    lastName: 'Фамилия',
+    phoneNumber: 'Телефон',
+    city: 'Город',
+    organization: 'Организация',
+    description: 'Описание',
+  };
+
   public format(): string {
     return formatLabels(this, this.labels);
   }
+
+  public formatShorten(): string {
+    return formatLabels(this, this.labelsShorten);
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

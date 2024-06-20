@@ -1,7 +1,7 @@
 import { BaseEntity } from '../../base.entity';
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
-import { fromValue, toKey } from '../../../shared/helpers';
+import { formatLabels, fromValue, toKey } from '../../../shared/helpers';
 import {
   Led,
   Painting,
@@ -33,34 +33,35 @@ export class StandOrder extends BaseEntity {
     deliveryCost: true,
   };
 
+  private label = {
+    model: 'Модель',
+    cost: 'Стоимость',
+    painting: 'Обработка',
+    smartphoneMount: 'Монтаж смартфона',
+    tripod: 'Тройник',
+    ledType: 'Тип светодиодов',
+    glassesRegular: 'Стёкла об',
+    glassesHighTransparency: 'Стёкла пп',
+    dimmersCount: 'Регуляторы яркости',
+    shadingFabric: 'Ткань для затенения',
+    sideWallsCount: 'Сторонние стены',
+    rotaryMechanismsCount: 'Поворотные механизмы',
+    deliveryCost: 'Стоимость доставки',
+    id: 'id заказа',
+  };
+
+  private labelShorten = {
+    model: 'Модель',
+    cost: 'Стоимость',
+    deliveryCost: 'Стоимость доставки',
+  };
+
   public format(): string {
-    const formattedValues: string[] = [];
+    return formatLabels(this, this.label);
+  }
 
-    if (this.model) formattedValues.push(`Модель: ${this.model}`);
-    if (this.cost) formattedValues.push(`Стоимость: ${this.cost}`);
-    if (this.deliveryCost)
-      formattedValues.push(`Стоимость доставки: ${this.deliveryCost}`);
-    if (this.painting) formattedValues.push(`Обработка: ${this.painting}`);
-    if (this.ledType) formattedValues.push(`Тип светодиодов: ${this.ledType}`);
-    if (this.glassesRegular)
-      formattedValues.push(`Стёкла об: ${this.glassesRegular}`);
-    if (this.glassesHighTransparency)
-      formattedValues.push(`Стёкла пп: ${this.glassesHighTransparency}`);
-    if (this.dimmersCount)
-      formattedValues.push(`Регуляторы яркости: ${this.dimmersCount}`);
-    if (this.shadingFabric)
-      formattedValues.push(`Ткань для затенения: ${this.shadingFabric}`);
-    if (this.sideWallsCount)
-      formattedValues.push(`Количество боковых стенок: ${this.sideWallsCount}`);
-    if (this.rotaryMechanismsCount)
-      formattedValues.push(
-        `Количество вращающихся механизмов: ${this.rotaryMechanismsCount}`,
-      );
-    if (this.smartphoneMount)
-      formattedValues.push(`Крепление для смартфона: ${this.smartphoneMount}`);
-    if (this.tripod) formattedValues.push(`Штатив: ${this.tripod}`);
-
-    return formattedValues.join('\n');
+  public formatShorten(): string {
+    return formatLabels(this, this.labelShorten);
   }
 
   @PrimaryGeneratedColumn()
