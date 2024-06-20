@@ -26,6 +26,7 @@ export class MoneyScene extends BaseScene {
           Markup.button.callback('📑 Транзакции', 'transactions_list'),
           Markup.button.callback('➕', 'transaction_add'),
           Markup.button.callback('➕ к заказу', 'transaction_order_add'),
+          Markup.button.callback('💸', 'money_transfer'),
         ],
         [
           Markup.button.callback('📑 Счета', 'accounts_list'),
@@ -52,6 +53,17 @@ export class MoneyScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () =>
         ctx.scene.enter(WIZARDS.ADD_TRANSACTION),
+      );
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('money_transfer')
+  async moneyTransfer(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(WIZARDS.ACCOUNT_TRANSFER),
       );
     } catch (e) {
       await ctx.reply(e.message);

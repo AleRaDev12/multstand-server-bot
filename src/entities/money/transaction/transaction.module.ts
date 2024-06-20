@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TransactionService } from './transaction.service';
 import { TransactionAddWizard } from './transaction-add.wizard';
@@ -12,7 +12,7 @@ import { AccountModule } from '../account/account.module';
   imports: [
     TypeOrmModule.forFeature([Transaction]),
     OrderModule,
-    AccountModule,
+    forwardRef(() => AccountModule),
   ],
   providers: [
     TransactionService,

@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderService } from '../../orders/order/order.service';
 import { Transaction } from './transaction.entity';
-import { AccountService } from '../account/account.service';
 
 @Injectable()
 export class TransactionService {
@@ -11,7 +10,6 @@ export class TransactionService {
     @InjectRepository(Transaction)
     private readonly repository: Repository<Transaction>,
     private readonly orderService: OrderService,
-    private readonly accountService: AccountService,
   ) {}
 
   async create(money: Transaction): Promise<Transaction> {

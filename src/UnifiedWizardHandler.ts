@@ -7,7 +7,7 @@ import { BaseEntity } from './entities/base.entity';
 interface UnifiedWizardHandlerOptions<T> {
   getEntity: (ctx: CustomWizardContext) => T;
   setEntity: (ctx: CustomWizardContext) => void;
-  save: (thisArg: any, entity: T) => Promise<T | undefined>;
+  save: (thisArg: any, entity: T) => Promise<T | undefined | void>;
   print: (ctx: CustomWizardContext, entity: T) => Promise<void>;
   steps: WizardStepType[];
   handleSpecificAnswer?: (
@@ -95,7 +95,7 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
           return false;
         }
 
-        if (message.text === '-') {
+        if (message.text === '-' && entity instanceof BaseEntity) {
           const isNullable = (entity.constructor as typeof BaseEntity).nullable[
             stepAnswer.field
           ];
