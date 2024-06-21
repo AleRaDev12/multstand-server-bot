@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { SCENES } from '../shared/scenes-wizards';
 import { UserService } from '../entities/user/user.service';
+import { CustomContext } from '../shared/interfaces';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -15,44 +16,33 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = context.switchToHttp().getRequest();
+    const ctx = context.switchToHttp().getRequest() as CustomContext;
 
-    // Если нет контекста от Telegram, пропускаем Guard
     if (!ctx.from) {
       console.log('*-* !ctx.from', !ctx.from);
-      return true;
+      return false;
     }
 
     const telegramUserId = ctx.from.id;
     const user = await this.userService.findOneById(telegramUserId);
 
-    // Проверка, если пользователь уже в сцене регистрации, пропускаем guard
-    if (
-      ctx.scene &&
-      ctx.scene.current &&
-      (ctx.scene.current.id === SCENES.UNREGISTERED ||
-        ctx.scene.current.id === SCENES.REGISTER)
-    ) {
+    if (!user) {
+      await ctx.scene.enter(SCENES.REGISTRATION);
+      ctx.notRegistered = true;
       return true;
     }
 
-    if (!user || user.role === 'unregistered') {
+    if (user.role === 'unregistered') {
       await ctx.reply(
-        'Вы не зарегистрированы. Отправьте заявку на регистрацию.',
+        'Ваша заявка на регистрацию находится на рассмотрении. Ожидайте.',
       );
-      await ctx.scene.enter(SCENES.UNREGISTERED);
-      return false;
-    }
-
-    if (user.role === 'manager') {
-      await ctx.reply('Вы менеджер.');
-      await ctx.scene.enter(SCENES.MENU);
+      ctx.notRegistered = true;
       return true;
     }
 
-    if (user.role === 'master') {
-      await ctx.reply('Добро пожаловать, мастер.');
-      await ctx.reply('Приветствие');
+    if (user.role === 'manager' || user.role === 'master') {
+      const user = await this.userService.findOneById(telegramUserId);
+      await ctx.reply(`Добро пожаловать, ${user.name} (роль: ${user.role}).`);
       return true;
     }
 

@@ -11,13 +11,9 @@ export class UserService {
   ) {}
 
   async createRequest(userId: number, username: string): Promise<User> {
-    console.log('*-* userId', userId);
-    console.log('*-* username', username);
-
     let user = await this.repository.findOne({
       where: { telegramUserId: userId },
     });
-    console.log('*-* user', user);
     if (!user) {
       user = this.repository.create({
         telegramUserId: userId,
@@ -43,5 +39,10 @@ export class UserService {
 
   async findOneById(telegramUserId: number): Promise<User> {
     return this.repository.findOne({ where: { telegramUserId } });
+  }
+
+  async getRoleByUserId(telegramUserId: number): Promise<string> {
+    const user = await this.repository.findOne({ where: { telegramUserId } });
+    return user.role;
   }
 }

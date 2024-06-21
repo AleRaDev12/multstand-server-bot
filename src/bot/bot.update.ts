@@ -4,6 +4,7 @@ import { RolesGuard } from './roles.guard';
 import { Markup, Scenes, Telegraf } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
+import { CustomContext } from '../shared/interfaces';
 
 @Update()
 export class BotUpdate {
@@ -18,9 +19,13 @@ export class BotUpdate {
   }
 
   @Start()
-  // @UseGuards(RolesGuard)
-  async onStart(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.reply('Start', Markup.keyboard(['/start']).persistent().resize());
+  @UseGuards(RolesGuard)
+  async onStart(@Ctx() ctx: CustomContext): Promise<void> {
+    if (ctx.notRegistered) {
+      await ctx.reply('Нт доступа');
+      return;
+    }
+
     try {
       await ctx.scene.enter(SCENES.MENU);
     } catch (e) {

@@ -14,6 +14,7 @@ import { PartOut } from '../entities/component/part-out/part-out.entity';
 import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
 import { StandProd } from '../entities/component/stand-prod/stand-prod.entity';
 import { Transaction } from '../entities/money/transaction/transaction.entity';
+import { Scenes } from 'telegraf';
 
 export type KeyOfAllEntities = {
   [K in keyof AllEntities]: AllEntities[K] extends undefined
@@ -106,3 +107,7 @@ export interface CustomWizardContext<
 export type MessageType = {
   text: string;
 };
+
+export interface CustomContext extends Scenes.SceneContext {
+  notRegistered?: boolean;
+}

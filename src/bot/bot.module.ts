@@ -13,7 +13,7 @@ import { TransactionModule } from '../entities/money/transaction/transaction.mod
 import { BotUpdate } from './bot.update';
 import { MenuScene } from './menu.scene';
 import { RegisterUserScene } from './register-user.scene';
-import { UnregisteredScene } from './unregistered.scene';
+import { RegistrationScene } from './registrationScene';
 import { OrdersScene } from '../entities/orders/orders.scene';
 import { ComponentsScene } from '../entities/component/components.scene';
 import { MasterModule } from '../entities/master/master.module';
@@ -40,7 +40,7 @@ import { MoneyScene } from '../entities/money/money.scene';
     BotUpdate,
     MenuScene,
     RegisterUserScene,
-    UnregisteredScene,
+    RegistrationScene,
     ComponentsScene,
     OrdersScene,
     MoneyScene,

@@ -2,25 +2,45 @@ import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Markup, Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
+import { Inject } from '@nestjs/common';
+import { UserService } from '../entities/user/user.service';
+
+const MENU_MANAGER = Markup.inlineKeyboard([
+  [Markup.button.callback('Клиенты', 'client')],
+  [Markup.button.callback('Заказы', 'order')],
+
+  [Markup.button.callback('Компоненты', 'components')],
+  [
+    Markup.button.callback('Работа', 'add_work'),
+    Markup.button.callback('Задача', 'add_task'),
+  ],
+  [Markup.button.callback('Деньги', 'money')],
+]);
+
+const MENU_MASTER = Markup.inlineKeyboard([
+  [Markup.button.callback('Работа', 'add_work')],
+]);
 
 @Scene(SCENES.MENU)
 export class MenuScene {
+  constructor(
+    @Inject(UserService)
+    readonly userService: UserService,
+  ) {}
+
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.reply(
-      'Выберите действие:',
-      Markup.inlineKeyboard([
-        [Markup.button.callback('Клиенты', 'client')],
-        [Markup.button.callback('Заказы', 'order')],
+    const telegramUserId = ctx.from.id;
+    const role = await this.userService.getRoleByUserId(telegramUserId);
 
-        [Markup.button.callback('Компоненты', 'components')],
-        [
-          Markup.button.callback('Работа', 'add_work'),
-          Markup.button.callback('Задача', 'add_task'),
-        ],
-        [Markup.button.callback('Деньги', 'money')],
-      ]),
-    );
+    const menu =
+      role === 'manager'
+        ? MENU_MANAGER
+        : role === 'master'
+          ? MENU_MASTER
+          : null;
+
+    await ctx.reply('Выберите действие:', menu);
   }
 
   @Action('client')
