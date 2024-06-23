@@ -50,16 +50,12 @@ async function handleSpecificRequest(
   switch (stepRequest.type) {
     case taskSelectType: {
       const telegramUserId = ctx.from.id;
-      const user = await this.userService.findOneById(telegramUserId);
-      if (user.role === 'manager') {
+      const master =
+        await this.masterService.getMasterByTelegramId(telegramUserId);
+
+      if (master.user.role === 'manager') {
         steps.splice(1, 0, { message: 'Мастер:', type: masterSelectType });
       } else {
-        const telegramUserId = ctx.from.id;
-        console.log('*-* telegramUserId', telegramUserId);
-        const master =
-          await this.masterService.getMasterByTelegramId(telegramUserId);
-        console.log('*-* master', master);
-
         if (!master) {
           await replyWithCancelButton(
             ctx,
@@ -117,8 +113,17 @@ async function handleSpecificAnswer(
         return false;
       }
 
+      const telegramUserId = ctx.from.id;
+      const master =
+        await this.masterService.getMasterByTelegramId(telegramUserId);
+      if (!master) {
+        await replyWithCancelButton(ctx, 'Мастер не найден. Ошибка.');
+        return false;
+      }
+      const cost = task.cost * (master.paymentCoefficient || 1);
+
       ctx.wizard.state[entityName].task = task;
-      ctx.wizard.state[entityName].cost = task.cost;
+      ctx.wizard.state[entityName].cost = cost;
       return true;
     }
 

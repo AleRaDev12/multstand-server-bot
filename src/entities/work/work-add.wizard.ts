@@ -22,8 +22,6 @@ export class WorkAddWizard {
     readonly taskService: TaskService,
     @Inject(StandProdService)
     readonly standProdService: StandProdService,
-    @Inject(UserService)
-    readonly userService: UserService,
   ) {}
 
   @WizardStep(1)
