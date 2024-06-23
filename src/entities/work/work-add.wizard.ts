@@ -7,6 +7,7 @@ import { WorkWizardHandler } from './work.wizard-handler';
 import { TaskService } from '../tasks/task.service';
 import { StandProdService } from '../component/stand-prod/stand-prod.service';
 import { MasterService } from '../master/master.service';
+import { UserService } from '../user/user.service';
 
 @Wizard(WIZARDS.ADD_WORK)
 export class WorkAddWizard {
@@ -21,6 +22,8 @@ export class WorkAddWizard {
     readonly taskService: TaskService,
     @Inject(StandProdService)
     readonly standProdService: StandProdService,
+    @Inject(UserService)
+    readonly userService: UserService,
   ) {}
 
   @WizardStep(1)

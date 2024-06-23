@@ -16,8 +16,8 @@ const standProdSelectType: DbEntities = 'standProdSelect';
 const entityName = 'work';
 
 const steps: WizardStepType[] = [
-  { message: 'Мастер:', type: masterSelectType },
   { message: 'Задача:', type: taskSelectType },
+
   {
     message: 'Станок-изделие. Можно выбрать несколько (номера через запятую):',
     type: standProdSelectType,
@@ -48,15 +48,37 @@ async function handleSpecificRequest(
   stepRequest: WizardStepType,
 ): Promise<boolean> {
   switch (stepRequest.type) {
-    case masterSelectType: {
-      const masterList = await this.masterService.getList();
-      await replyWithCancelButton(ctx, `${stepRequest.message}${masterList}`);
+    case taskSelectType: {
+      const telegramUserId = ctx.from.id;
+      const user = await this.userService.findOneById(telegramUserId);
+      if (user.role === 'manager') {
+        steps.splice(1, 0, { message: 'Мастер:', type: masterSelectType });
+      } else {
+        const telegramUserId = ctx.from.id;
+        console.log('*-* telegramUserId', telegramUserId);
+        const master =
+          await this.masterService.getMasterByTelegramId(telegramUserId);
+        console.log('*-* master', master);
+
+        if (!master) {
+          await replyWithCancelButton(
+            ctx,
+            'Попытка автоматического выбора мастера. Ошибка.',
+          );
+          return false;
+        }
+
+        ctx.wizard.state[entityName].master = master;
+      }
+
+      const tasksList = await this.taskService.getList();
+      await replyWithCancelButton(ctx, `${stepRequest.message}${tasksList}`);
       return true;
     }
 
-    case taskSelectType: {
-      const tasksList = await this.taskService.getList();
-      await replyWithCancelButton(ctx, `${stepRequest.message}${tasksList}`);
+    case masterSelectType: {
+      const masterList = await this.masterService.getList();
+      await replyWithCancelButton(ctx, `${stepRequest.message}${masterList}`);
       return true;
     }
 
@@ -80,25 +102,6 @@ async function handleSpecificAnswer(
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
   switch (stepAnswer.type) {
-    case masterSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
-
-      const selectedNumber = parseInt(message.text);
-
-      const masters = await this.masterService.findAll();
-      const master = masters[selectedNumber - 1];
-      if (!master) {
-        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
-        return false;
-      }
-
-      ctx.wizard.state[entityName].master = master;
-      return true;
-    }
-
     case taskSelectType: {
       // TODO: update types
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -116,6 +119,25 @@ async function handleSpecificAnswer(
 
       ctx.wizard.state[entityName].task = task;
       ctx.wizard.state[entityName].cost = task.cost;
+      return true;
+    }
+
+    case masterSelectType: {
+      // TODO: update types
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const message = ctx.update?.message as { text?: string };
+
+      const selectedNumber = parseInt(message.text);
+
+      const masters = await this.masterService.findAll();
+      const master = masters[selectedNumber - 1];
+      if (!master) {
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
+        return false;
+      }
+
+      ctx.wizard.state[entityName].master = master;
       return true;
     }
 
