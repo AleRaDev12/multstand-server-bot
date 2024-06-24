@@ -120,10 +120,11 @@ async function handleSpecificAnswer(
         await replyWithCancelButton(ctx, 'Мастер не найден. Ошибка.');
         return false;
       }
-      const cost = task.cost * (master.paymentCoefficient || 1);
 
       ctx.wizard.state[entityName].task = task;
-      ctx.wizard.state[entityName].cost = cost;
+      ctx.wizard.state[entityName].cost = task.cost;
+      ctx.wizard.state[entityName].paymentCoefficient =
+        master.paymentCoefficient;
       return true;
     }
 

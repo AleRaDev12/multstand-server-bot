@@ -1,7 +1,7 @@
 import { Action, Ctx, InjectBot, Start, Update } from 'nestjs-telegraf';
 import { UseGuards } from '@nestjs/common';
 import { RolesGuard } from './roles.guard';
-import { Markup, Scenes, Telegraf } from 'telegraf';
+import { Scenes, Telegraf } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
 import { CustomContext } from '../shared/interfaces';

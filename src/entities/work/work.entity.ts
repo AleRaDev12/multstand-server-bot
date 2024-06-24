@@ -22,6 +22,7 @@ export class Work extends BaseEntity {
     createdAt: false,
     cost: false,
     count: false,
+    paymentCoefficient: false,
   };
 
   @PrimaryGeneratedColumn()
@@ -48,4 +49,7 @@ export class Work extends BaseEntity {
 
   @NullableColumn({ type: 'int' })
   count: number;
+
+  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
+  paymentCoefficient: number;
 }
