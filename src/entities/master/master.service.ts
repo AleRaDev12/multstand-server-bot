@@ -17,7 +17,7 @@ export class MasterService {
   async getList(): Promise<string | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
-    return `${list.map((item, i) => `\n${i + 1}. ${item.user.name} ${item.user.username} ${item.paymentCoefficient}`)}`;
+    return `${list.map((item, i) => `\n${i + 1}. ${item.user.name}  ${item.paymentCoefficient}`)}`;
   }
 
   async getMasterByTelegramId(telegramId: number): Promise<Master | null> {

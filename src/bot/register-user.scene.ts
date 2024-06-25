@@ -13,9 +13,8 @@ export class RegisterUserScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext) {
-    const userId = ctx.from.id;
-    const username = ctx.from.username;
-    await this.userService.createRequest(userId, username);
+    const telegramUserId = ctx.from.id;
+    await this.userService.createRequest(telegramUserId);
     await ctx.reply(
       'Заявка на регистрацию отправлена. Ожидайте подтверждения.',
     );

@@ -17,7 +17,7 @@ export class RegistrationScene {
     await ctx.reply(
       'Вы не зарегистрированы. Отправляется заявка на регистрацию.',
     );
-    await this.userService.createRequest(userId, ctx.from.username);
+    await this.userService.createRequest(userId);
     await ctx.reply('Заявка отправлена. Ожидайте подтверждения.');
     await ctx.scene.leave();
   }

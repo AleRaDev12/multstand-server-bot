@@ -10,14 +10,13 @@ export class UserService {
     private repository: Repository<User>,
   ) {}
 
-  async createRequest(userId: number, username: string): Promise<User> {
+  async createRequest(userId: number): Promise<User> {
     let user = await this.repository.findOne({
       where: { telegramUserId: userId },
     });
     if (!user) {
       user = this.repository.create({
         telegramUserId: userId,
-        username,
         role: 'unregistered',
       });
       return this.repository.save(user);

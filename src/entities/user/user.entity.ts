@@ -8,7 +8,6 @@ export class User extends BaseEntity {
   public static nullable = {
     name: true,
     role: false,
-    username: false,
     telegramUserId: false,
   };
 
@@ -23,7 +22,4 @@ export class User extends BaseEntity {
 
   @NullableColumn()
   role: string; // 'manager', 'master', 'unregistered'
-
-  @NullableColumn()
-  username: string;
 }
