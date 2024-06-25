@@ -34,12 +34,12 @@ function setEntity(ctx: CustomWizardContext): void {
   ctx.wizard.state[entityName] = new Work();
 }
 
-function save(entity: Work) {
+function save(this: WorkAddWizard, entity: Work) {
   return this.service.create({ ...entity, createdAt: new Date() });
 }
 
 async function print(ctx: CustomWizardContext, entity: Work): Promise<void> {
-  await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
+  await ctx.reply(`Добавлено`);
 }
 
 async function handleSpecificRequest(

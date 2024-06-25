@@ -27,7 +27,7 @@ async function save(this: AccountAddWizard, entity: Account) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Account): Promise<void> {
-  await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
+  await ctx.reply(`Добавлено`);
 }
 
 export const AccountAddWizardHandler = UnifiedWizardHandler<Account>({

@@ -34,7 +34,7 @@ function save() {
 }
 
 async function print(ctx: CustomWizardContext, entity: PartOut): Promise<void> {
-  await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
+  await ctx.reply(`Добавлено`);
 }
 
 let selectedComponent: Component | null = null;

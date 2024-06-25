@@ -41,7 +41,7 @@ function save(entity: Order) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Order): Promise<void> {
-  await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
+  await ctx.reply(`Добавлено`);
 }
 
 async function handleSpecificAnswer(

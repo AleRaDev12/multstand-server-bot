@@ -27,9 +27,7 @@ const save = function (this: StandProdAddWizard, entity: StandProd) {
   return this.service.create(entity);
 };
 const print = async (ctx: CustomWizardContext, entity: StandProd) => {
-  await ctx.reply(
-    `Набор характеристик станка ${JSON.stringify(entity, null, 2)} добавлен`,
-  );
+  await ctx.reply(`Набор характеристик станка Добавлено`);
 };
 
 async function handleSpecificAnswer(

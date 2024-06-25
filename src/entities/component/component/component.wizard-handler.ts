@@ -29,7 +29,7 @@ async function print(
   ctx: CustomWizardContext,
   entity: Component,
 ): Promise<void> {
-  await ctx.reply(`${JSON.stringify(entity, null, 2)} добавлен`);
+  await ctx.reply(`${entity.name} добавлен`);
 }
 
 export const ComponentWizardHandler = UnifiedWizardHandler<Component>({

@@ -110,9 +110,7 @@ async function print(
   ctx: CustomWizardContext,
   entity: StandOrder,
 ): Promise<void> {
-  await ctx.reply(
-    `Набор характеристик станка ${JSON.stringify(entity, null, 2)} добавлен`,
-  );
+  await ctx.reply(`Набор характеристик станка Добавлено`);
 }
 
 async function handleSpecificRequest(
