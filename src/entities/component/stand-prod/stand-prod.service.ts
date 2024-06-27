@@ -23,4 +23,10 @@ export class StandProdService {
     if (list.length === 0) return null;
     return `${list.map((standProd, i) => `\n${i + 1}. ${standProd.id} ${standProd.description}`)}`;
   }
+
+  async getFormattedList(): Promise<string[] | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+    return list.map((standProd, i) => `${i + 1}. ${standProd.format()}`);
+  }
 }

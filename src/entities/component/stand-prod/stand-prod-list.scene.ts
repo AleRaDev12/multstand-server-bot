@@ -14,8 +14,15 @@ export class StandProdListScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    const list = await this.service.getList();
-    await ctx.reply(list ?? 'Записей нет');
+    const list = await this.service.getFormattedList();
+
+    if (!list) {
+      await ctx.reply('Записей нет');
+    } else {
+      for (const item of list) {
+        await ctx.reply(item);
+      }
+    }
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
   }

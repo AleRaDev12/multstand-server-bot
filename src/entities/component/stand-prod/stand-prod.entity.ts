@@ -3,6 +3,7 @@ import { BaseEntity } from '../../base.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { StandOrder } from '../../orders/stand-order/stand-order.entity';
 import { Work } from '../../work/work.entity';
+import { formatLabels } from '../../../shared/helpers';
 
 @Entity()
 export class StandProd extends BaseEntity {
@@ -11,6 +12,13 @@ export class StandProd extends BaseEntity {
     standOrder: true,
     description: true,
   };
+
+  private labels = { description: 'Описание' };
+
+  public format(): string {
+    const formattedLabels = formatLabels(this, this.labels);
+    return formattedLabels;
+  }
 
   @PrimaryGeneratedColumn()
   id: number;
