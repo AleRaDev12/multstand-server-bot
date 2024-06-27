@@ -18,7 +18,7 @@ export class StandOrderService {
     return this.repository.find({ relations: ['order'] });
   }
 
-  async getListArray(): Promise<string[] | null> {
+  async getFormattedList(): Promise<string[] | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
 

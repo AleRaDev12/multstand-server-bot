@@ -14,7 +14,7 @@ export class OrderListScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    const ordersList = await this.service.getListArray();
+    const ordersList = await this.service.getFormattedList();
     if (!ordersList) {
       await ctx.reply('Записей нет');
     } else {

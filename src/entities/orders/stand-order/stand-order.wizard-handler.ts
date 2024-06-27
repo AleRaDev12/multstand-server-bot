@@ -120,7 +120,7 @@ async function handleSpecificRequest(
 ): Promise<boolean> {
   switch (stepRequest.type) {
     case orderSelectType: {
-      const ordersList = await this.orderService.getListArray();
+      const ordersList = await this.orderService.getFormattedList();
       if (!ordersList) {
         await ctx.reply('Записей нет');
         return true;

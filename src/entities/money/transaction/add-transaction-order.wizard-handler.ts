@@ -60,7 +60,7 @@ async function handleSpecificRequest(
   switch (stepRequest.type) {
     case orderSelectType: {
       const ordersList = (
-        await this.orderService.getShortenedListArray()
+        await this.orderService.getShortenedFormattedList()
       )?.join('\n');
       await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
       return true;

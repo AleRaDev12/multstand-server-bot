@@ -23,7 +23,7 @@ export class OrderService {
     return this.repository.find({ relations: ['client', 'standOrders'] });
   }
 
-  async getListArray(): Promise<string[] | null> {
+  async getFormattedList(): Promise<string[] | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
 
@@ -36,7 +36,7 @@ export class OrderService {
     });
   }
 
-  async getShortenedListArray(): Promise<string[] | null> {
+  async getShortenedFormattedList(): Promise<string[] | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
 

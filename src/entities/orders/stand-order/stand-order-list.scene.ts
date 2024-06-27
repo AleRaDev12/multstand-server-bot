@@ -14,7 +14,7 @@ export class StandOrderListScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    const list = await this.service.getListArray();
+    const list = await this.service.getFormattedList();
     if (!list) {
       await ctx.reply('Записей нет');
     }
