@@ -20,7 +20,6 @@ export class SeedService implements OnModuleInit {
   }
 
   private async seedTasks() {
-    // Добавление задач в базу данных, если они еще не добавлены
     for (const task of seedTasks) {
       const dbTask = await this.taskRepository.findOneBy({
         name: task.name,

@@ -5,7 +5,7 @@ import { StandProdModule } from '../entities/component/stand-prod/stand-prod.mod
 import { PartInModule } from '../entities/component/part-in/part-in.module';
 import { PartOutModule } from '../entities/component/part-out/part-out.module';
 import { WorkModule } from '../entities/work/work.module';
-import { TasksModule } from '../entities/tasks/tasks.module';
+import { TaskModule } from '../entities/tasks/task.module';
 import { StandOrderModule } from '../entities/orders/stand-order/stand-order.module';
 import { ComponentModule } from '../entities/component/component/component.module';
 import { UserModule } from '../entities/user/user.module';
@@ -28,7 +28,7 @@ import { MoneyScene } from '../entities/money/money.scene';
     PartInModule,
     PartOutModule,
     WorkModule,
-    TasksModule,
+    TaskModule,
     StandOrderModule,
     ComponentModule,
     UserModule,
