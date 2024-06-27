@@ -27,7 +27,7 @@ export class PartIn extends BaseEntity {
   };
 
   public format(): string {
-    const costPerEntity = this.amount / this.count;
+    const costPerEntity = (this.amount / this.count).toFixed(2);
 
     const additionalInfo = [`Стоимость единицы: ${costPerEntity}`];
 

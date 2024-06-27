@@ -28,4 +28,11 @@ export class PartInService {
       )
       .join('\n\n');
   }
+
+  async getFormattedList(): Promise<string[] | null> {
+    const list = await this.findAll();
+    if (list.length === 0) return null;
+
+    return list.map((item, i) => `${i + 1}. ${item.format()}`);
+  }
 }

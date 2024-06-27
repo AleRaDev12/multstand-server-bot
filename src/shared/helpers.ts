@@ -115,8 +115,16 @@ export const formatLabels = (
     )
     .map((key) => {
       const value = entity[key];
-      const formattedValue =
-        value instanceof Date ? format(value, 'yyyy-MM-dd') : value;
+      let formattedValue: string | number | Date;
+
+      if (value instanceof Date) {
+        formattedValue = format(value, 'yyyy-MM-dd');
+      } else if (typeof value === 'number' && !Number.isInteger(value)) {
+        formattedValue = value.toFixed(2);
+      } else {
+        formattedValue = value;
+      }
+
       return `${labels[key]}: ${formattedValue}`;
     })
     .join('\n');
