@@ -4,7 +4,11 @@ import {
   UnifiedWizardHandler,
 } from '../../UnifiedWizardHandler';
 import { Task } from './task.entity';
-import { generateMessage, getValueUnionByIndex } from '../../shared/helpers';
+import {
+  generateMessage,
+  getMessage,
+  getValueUnionByIndex,
+} from '../../shared/helpers';
 import { TaskAddWizard } from './task-add-wizard';
 
 const steps: WizardStepType[] = [
@@ -44,10 +48,7 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
-  // TODO: update types
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const message = ctx.update?.message as { text?: string };
+  const message = getMessage(ctx);
 
   switch (stepAnswer.type) {
     case 'union':

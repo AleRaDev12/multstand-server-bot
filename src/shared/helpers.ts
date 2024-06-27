@@ -1,4 +1,4 @@
-import { WizardStepType } from './interfaces';
+import { CustomWizardContext, WizardStepType } from './interfaces';
 import { Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './scenes-wizards';
 import { format } from 'date-fns';
@@ -120,4 +120,11 @@ export const formatLabels = (
       return `${labels[key]}: ${formattedValue}`;
     })
     .join('\n');
+};
+
+export const getMessage = (ctx: CustomWizardContext) => {
+  // TODO: update types
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  return ctx.update?.message as { text?: string };
 };

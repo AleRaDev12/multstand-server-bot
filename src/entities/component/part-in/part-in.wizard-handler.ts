@@ -10,6 +10,7 @@ import {
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
 import { Transaction } from '../../money/transaction/transaction.entity';
+import { getMessage } from '../../../shared/helpers';
 
 const componentTypeName: DbEntities = 'componentSelect';
 
@@ -54,10 +55,7 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   if (stepAnswer.type !== componentTypeName) return true;
 
-  // TODO: update types
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const message = ctx.update?.message as { text?: string };
+  const message = getMessage(ctx);
 
   const selectedNumber = parseInt(message.text);
 

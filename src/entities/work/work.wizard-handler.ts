@@ -9,6 +9,7 @@ import {
 } from '../../UnifiedWizardHandler';
 import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
+import { getMessage } from '../../shared/helpers';
 
 const masterSelectType: DbEntities = 'masterSelect';
 const taskSelectType: DbEntities = 'taskSelect';
@@ -99,10 +100,7 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case taskSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
+      const message = getMessage(ctx);
 
       const selectedNumber = parseInt(message.text);
 
@@ -129,10 +127,7 @@ async function handleSpecificAnswer(
     }
 
     case masterSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
+      const message = getMessage(ctx);
 
       const selectedNumber = parseInt(message.text);
 
@@ -148,10 +143,7 @@ async function handleSpecificAnswer(
     }
 
     case standProdSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
+      const message = getMessage(ctx);
 
       const selectedNumbers = message.text
         .split(',')

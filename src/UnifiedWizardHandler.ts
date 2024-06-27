@@ -1,4 +1,8 @@
-import { generateMessage, getValueUnionByIndex } from './shared/helpers';
+import {
+  generateMessage,
+  getMessage,
+  getValueUnionByIndex,
+} from './shared/helpers';
 import { CustomWizardContext, WizardStepType } from './shared/interfaces';
 import { SCENES } from './shared/scenes-wizards';
 import { Markup } from 'telegraf';
@@ -82,10 +86,7 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
         entity: T,
         stepForAnswerNumber: number,
       ): Promise<boolean> {
-        // TODO: update types
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const message = ctx.update?.message as { text?: string };
+        const message = getMessage(ctx);
 
         if (!message?.text) {
           await replyWithCancelButton(
@@ -253,10 +254,7 @@ export async function handleAnswerUnion<T>(
   union: object,
   entity: T,
 ) {
-  // TODO: update types
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const message = ctx.update?.message as { text?: string };
+  const message = getMessage(ctx);
 
   const optionNumber = +message.text;
   const unionKeys = Object.keys(union);

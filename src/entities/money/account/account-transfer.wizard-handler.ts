@@ -9,6 +9,7 @@ import {
   WizardStepType,
 } from '../../../shared/interfaces';
 import { AccountTransferWizard } from './account-transfer.wizard';
+import { getMessage } from '../../../shared/helpers';
 
 const stateEntityName = 'accountTransfer';
 type TransferMoney = {
@@ -73,10 +74,7 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case accountSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
+      const message = getMessage(ctx);
       const selectedNumber = parseInt(message.text);
 
       const accounts = await this.service.findAll();

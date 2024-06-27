@@ -12,7 +12,7 @@ import {
   UnifiedWizardHandler,
 } from '../../../UnifiedWizardHandler';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
-import { printUnion } from '../../../shared/helpers';
+import { getMessage, printUnion } from '../../../shared/helpers';
 
 const orderSelectType: DbEntities = 'orderSelect';
 const orderModelSelectType: DbEntities = 'orderModelSelect';
@@ -154,10 +154,7 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case orderSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
+      const message = getMessage(ctx);
 
       const selectedNumber = parseInt(message.text);
 

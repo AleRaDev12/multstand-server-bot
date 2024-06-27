@@ -10,6 +10,7 @@ import {
 } from '../../../UnifiedWizardHandler';
 import { PartOutAddWizard } from './part-out-add.wizard';
 import { Component } from '../component/component.entity';
+import { getMessage } from '../../../shared/helpers';
 
 const componentTypeName: DbEntities = 'componentSelect';
 const partsInTypeName: DbEntities = 'partsInBatchSelect';
@@ -67,10 +68,7 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
-  // TODO: update types
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const message = ctx.update?.message as { text?: string };
+  const message = getMessage(ctx);
 
   switch (stepAnswer.type) {
     case componentTypeName:

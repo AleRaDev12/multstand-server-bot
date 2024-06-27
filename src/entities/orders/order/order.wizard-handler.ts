@@ -8,6 +8,7 @@ import {
 } from '../../../UnifiedWizardHandler';
 import { Order } from './order.entity';
 import { OrderAddWizard } from './order-add.wizard';
+import { getMessage } from '../../../shared/helpers';
 
 const selectTypeName = 'clientSelect';
 
@@ -50,11 +51,7 @@ async function handleSpecificAnswer(
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
   if (stepAnswer.type !== selectTypeName) return true;
-
-  // TODO: update types
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const message = ctx.update?.message as { text?: string };
+  const message = getMessage(ctx);
 
   const selectedNumber = parseInt(message.text);
 

@@ -9,6 +9,7 @@ import {
   UnifiedWizardHandler,
 } from '../../../UnifiedWizardHandler';
 import { TransactionOrderAddWizard } from './add-transaction-order.wizard';
+import { getMessage } from '../../../shared/helpers';
 
 const entityName = 'transactionOrder';
 const orderSelectType: DbEntities = 'orderSelect';
@@ -87,10 +88,7 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case orderSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
+      const message = getMessage(ctx);
       const selectedNumber = parseInt(message.text);
 
       const orders = await this.orderService.findAll();
@@ -104,10 +102,7 @@ async function handleSpecificAnswer(
       return true;
     }
     case accountSelectType: {
-      // TODO: update types
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const message = ctx.update?.message as { text?: string };
+      const message = getMessage(ctx);
       const selectedNumber = parseInt(message.text);
 
       const accounts = await this.accountService.findAll();
