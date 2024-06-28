@@ -22,7 +22,7 @@ export class BotUpdate {
   @UseGuards(RolesGuard)
   async onStart(@Ctx() ctx: CustomContext): Promise<void> {
     if (ctx.notRegistered) {
-      await ctx.reply('Нт доступа');
+      await ctx.reply('Нет доступа');
       return;
     }
 

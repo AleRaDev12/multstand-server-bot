@@ -16,9 +16,8 @@ const taskSelectType: DbEntities = 'taskSelect';
 const standProdSelectType: DbEntities = 'standProdSelect';
 const entityName = 'work';
 
-const steps: WizardStepType[] = [
+const commonSteps: WizardStepType[] = [
   { message: 'Задача:', type: taskSelectType },
-
   {
     message: 'Станок-изделие. Можно выбрать несколько (номера через запятую):',
     type: standProdSelectType,
@@ -26,6 +25,8 @@ const steps: WizardStepType[] = [
   { message: 'Количество:', field: 'count', type: 'number' },
   { message: 'Дата выполнения:', field: 'date', type: 'date' },
 ];
+
+const steps: WizardStepType[] = [...commonSteps];
 
 function getEntity(ctx: CustomWizardContext): Work {
   return ctx.wizard.state[entityName];
@@ -36,6 +37,8 @@ function setEntity(ctx: CustomWizardContext): void {
 }
 
 function save(this: WorkAddWizard, entity: Work) {
+  steps.length = 0;
+  steps.push(...commonSteps);
   return this.service.create({ ...entity, createdAt: new Date() });
 }
 
