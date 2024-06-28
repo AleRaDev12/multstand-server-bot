@@ -15,7 +15,7 @@ export class AddStatusToOrder1719580087014 implements MigrationInterface {
     );
 
     await queryRunner.query(`
-      UPDATE order
+      UPDATE "order"
       SET status = 'Preliminary'
       WHERE status IS NULL
     `);
