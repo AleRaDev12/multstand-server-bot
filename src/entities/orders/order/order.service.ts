@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { addDays } from 'date-fns';
 import { Order } from './order.entity';
-import { OrderStatus } from './order-status';
+import { OrderTypes } from './order-types';
 
 @Injectable()
 export class OrderService {
@@ -13,7 +13,7 @@ export class OrderService {
   ) {}
 
   async create(order: Order): Promise<Order> {
-    if (!order.status) order.status = OrderStatus.Preliminary;
+    if (!order.status) order.status = OrderTypes.Preliminary;
     return this.repository.save(order);
   }
 

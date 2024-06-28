@@ -5,7 +5,7 @@ import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
 import { StandOrder } from '../stand-order/stand-order.entity';
 import { Transaction } from '../../money/transaction/transaction.entity';
-import { OrderStatus, OrderStatusType } from './order-status';
+import { OrderTypes, OrderStatusType } from './order-types';
 import { formatOrder, formatOrderShorten } from './order-formatting';
 
 @Entity()
@@ -27,8 +27,8 @@ export class Order extends BaseEntity {
   @NullableColumn({
     type: 'text',
     transformer: {
-      to: toKey(OrderStatus),
-      from: fromValue(OrderStatus),
+      to: toKey(OrderTypes),
+      from: fromValue(OrderTypes),
     },
   })
   status: OrderStatusType;

@@ -1,4 +1,4 @@
-export const OrderStatus = {
+export const OrderTypes = {
   Preliminary: 'Предварительный',
   PartiallyPaid: 'Оплачен частично',
   FullyPaid: 'Оплачен полностью',
@@ -8,4 +8,4 @@ export const OrderStatus = {
   Cancelled: 'Отменён',
 };
 
-export type OrderStatusType = (typeof OrderStatus)[keyof typeof OrderStatus];
+export type OrderStatusType = (typeof OrderTypes)[keyof typeof OrderTypes];

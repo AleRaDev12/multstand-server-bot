@@ -1,11 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  StandOrder,
-  StandOrderStatus,
-  StandOrderStatusKeyType,
-} from './stand-order.entity';
+import { StandOrder } from './stand-order.entity';
+import { StandOrderStatus, StandOrderStatusKeyType } from './stand-order-types';
 
 @Injectable()
 export class StandOrderService {
@@ -34,12 +31,10 @@ export class StandOrderService {
   }
 
   formatSingle(standOrder: StandOrder): string {
-    console.log('*-* standOrder', standOrder);
     return `${standOrder.formatShorten()}\n-Заказ:\n${standOrder.order.formatShorten()}`;
   }
 
   formatList(standOrders: StandOrder[]): string[] {
-    console.log('*-* standOrders', standOrders);
     if (standOrders.length === 0) return null;
 
     return standOrders.map(
