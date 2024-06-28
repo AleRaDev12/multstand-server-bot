@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order, OrderStatus } from './order.entity';
 import { addDays } from 'date-fns';
+import { Order } from './order.entity';
+import { OrderStatus } from './order-status';
 
 @Injectable()
 export class OrderService {

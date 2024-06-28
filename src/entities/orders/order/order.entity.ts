@@ -2,121 +2,15 @@ import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity, EntityFieldsMap } from '../../base.entity';
 import { Client } from '../../client/client.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
-import { differenceInDays, format } from 'date-fns';
-import { formatLabels, fromValue, toKey } from '../../../shared/helpers';
+import { fromValue, toKey } from '../../../shared/helpers';
 import { StandOrder } from '../stand-order/stand-order.entity';
 import { Transaction } from '../../money/transaction/transaction.entity';
-
-export const OrderStatus = {
-  Preliminary: 'Предварительный',
-  PartiallyPaid: 'Оплачен частично',
-  FullyPaid: 'Оплачен полностью',
-  Delivered: 'Доставлен',
-  ReceivedReview: 'Получен отзыв',
-  BeingFixed: 'Исправляется',
-  Cancelled: 'Отменён',
-};
-
-export type OrderStatusType = (typeof OrderStatus)[keyof typeof OrderStatus];
+import { OrderStatus, OrderStatusType } from './order-status';
+import { formatOrder, formatOrderShorten } from './order-formatting';
 
 @Entity()
 export class Order extends BaseEntity {
   public static entityName = 'Order';
-  public static nullable: EntityFieldsMap<Order, boolean> = {
-    client: false,
-    amount: true, // remove this field in the future
-    contractDate: false,
-    daysToSend: true,
-    sendingDeadlineDate: true,
-    deliveryDeadlineDate: true,
-    description: true,
-    deliveryType: true,
-    deliveryCost: true,
-    deliveryAddress: true,
-    deliveryTrackNumber: true,
-    status: false,
-  };
-
-  private labels: EntityFieldsMap<Order, string> = {
-    contractDate: 'Договор',
-    status: 'Статус заказа',
-    deliveryCost: 'Стоимость доставки',
-    daysToSend: 'Дней на поставку',
-    deliveryType: 'Тип доставки',
-    deliveryAddress: 'Адрес доставки',
-    deliveryTrackNumber: 'Трек-номер',
-    description: 'Описание',
-    id: 'id заказа',
-  };
-
-  private labelsShorten: EntityFieldsMap<Order, string> = {
-    contractDate: 'Договор',
-    status: 'Статус заказа',
-    deliveryCost: 'Стоимость доставки',
-    description: 'Описание',
-  };
-
-  public format(): string {
-    const { daysToSend, deliveryDeadlineDate, sendingDeadlineDate } = this;
-
-    if (sendingDeadlineDate !== null && deliveryDeadlineDate !== null) {
-      return "Error: Can't have both sendingDeadlineDate and deliveryDeadlineDate";
-    }
-
-    const additionalInfo = [];
-
-    if (sendingDeadlineDate !== null) {
-      const daysUntilSend = differenceInDays(sendingDeadlineDate, new Date());
-      additionalInfo.push(
-        `Крайний срок отправки: ${format(sendingDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
-      );
-    } else if (deliveryDeadlineDate !== null) {
-      const daysUntilDelivery = differenceInDays(
-        deliveryDeadlineDate,
-        new Date(),
-      );
-      additionalInfo.push(
-        `Крайний срок доставки: ${format(deliveryDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilDelivery} дней`,
-      );
-    } else {
-      additionalInfo.push(
-        `Количество дней до отправки ${daysToSend}, оплат не поступало`,
-      );
-    }
-
-    const formattedLabels = formatLabels(this, this.labels);
-    return [formattedLabels, ...additionalInfo].join('\n');
-  }
-
-  public formatShorten(): string {
-    const { daysToSend, deliveryDeadlineDate, sendingDeadlineDate } = this;
-
-    if (sendingDeadlineDate !== null && deliveryDeadlineDate !== null) {
-      return "Error: Can't have both sendingDeadlineDate and deliveryDeadlineDate";
-    }
-
-    const additionalInfo = [];
-
-    if (sendingDeadlineDate !== null) {
-      const daysUntilSend = differenceInDays(sendingDeadlineDate, new Date());
-      additionalInfo.push(
-        `Крайний срок отправки: ${format(sendingDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
-      );
-    } else if (deliveryDeadlineDate !== null) {
-      const daysUntilDelivery = differenceInDays(
-        deliveryDeadlineDate,
-        new Date(),
-      );
-      additionalInfo.push(
-        `Крайний срок доставки: ${format(deliveryDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilDelivery} дней`,
-      );
-    } else {
-      additionalInfo.push(`Дней до отправки ${daysToSend}, пока не оплачено`);
-    }
-
-    const formattedLabels = formatLabels(this, this.labelsShorten);
-    return [formattedLabels, ...additionalInfo].join('\n');
-  }
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -170,4 +64,27 @@ export class Order extends BaseEntity {
 
   @NullableColumn()
   deliveryTrackNumber: string;
+
+  public static nullable: EntityFieldsMap<Order, boolean> = {
+    client: false,
+    amount: true, // remove this field in the future
+    contractDate: false,
+    daysToSend: true,
+    sendingDeadlineDate: true,
+    deliveryDeadlineDate: true,
+    description: true,
+    deliveryType: true,
+    deliveryCost: true,
+    deliveryAddress: true,
+    deliveryTrackNumber: true,
+    status: false,
+  };
+
+  public format(): string {
+    return formatOrder(this);
+  }
+
+  public formatShorten(): string {
+    return formatOrderShorten(this);
+  }
 }
