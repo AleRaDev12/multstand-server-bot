@@ -5,7 +5,7 @@ import {
   WizardStepType,
   WizardStepTypeN,
 } from '../../../shared/interfaces';
-import { StandOrder, StandOrderStatus } from './stand-order.entity';
+import { StandOrder } from './stand-order.entity';
 import {
   handleAnswerUnion,
   replyWithCancelButton,
@@ -13,6 +13,7 @@ import {
 } from '../../../UnifiedWizardHandler';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
 import { getMessage, printUnion } from '../../../shared/helpers';
+import { StandOrderStatus } from './stand-order-types';
 
 const orderSelectType: DbEntities = 'orderSelect';
 const orderModelSelectType: DbEntities = 'orderModelSelect';
