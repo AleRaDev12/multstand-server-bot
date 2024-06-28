@@ -2,6 +2,7 @@ import { CustomWizardContext, WizardStepType } from './interfaces';
 import { Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './scenes-wizards';
 import { format } from 'date-fns';
+import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
 
 export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
@@ -55,14 +56,12 @@ export function fromEnumValue<T extends Record<string, any>>(enumType: T) {
   };
 }
 
-// Функция для преобразования значения enum в ключ
 export function toKey<T>(obj: T) {
   return (value: T[keyof T]): string | undefined => {
     return Object.keys(obj).find((key) => obj[key as keyof T] === value);
   };
 }
 
-// Функция для преобразования ключа в значение enum
 export function fromValue<T>(obj: T) {
   return (key: string): T[keyof T] | undefined => {
     return obj[key as keyof T];

@@ -5,7 +5,7 @@ import {
   WizardStepType,
   WizardStepTypeN,
 } from '../../../shared/interfaces';
-import { StandOrder } from './stand-order.entity';
+import { StandOrder, StandOrderStatus } from './stand-order.entity';
 import {
   handleAnswerUnion,
   replyWithCancelButton,
@@ -20,6 +20,12 @@ const entityName = 'standOrder';
 
 const commonSteps: WizardStepTypeN<StandOrder>[] = [
   { message: 'Выберите заказ:', type: orderSelectType },
+  {
+    message: 'Статус:',
+    field: 'status',
+    type: 'union',
+    union: StandOrderStatus,
+  },
   {
     message: 'Модель:',
     type: orderModelSelectType,
@@ -44,13 +50,13 @@ const commonSteps: WizardStepTypeN<StandOrder>[] = [
     message: 'Штатив для объёмной анимации:',
     field: 'tripod',
     type: 'union',
-    union: { ...Tripod },
+    union: Tripod,
   },
   {
     message: 'Тип светодиодной ленты:',
     field: 'ledType',
     type: 'union',
-    union: { ...Led },
+    union: Led,
   },
 ];
 
@@ -101,6 +107,7 @@ function setEntity(ctx: CustomWizardContext): void {
 }
 
 function save(this: StandOrderAddWizard, entity: StandOrder) {
+  console.log('*-* entity', entity);
   steps.length = 0;
   steps.push(...commonSteps);
   return this.service.create(entity);
@@ -110,7 +117,7 @@ async function print(
   ctx: CustomWizardContext,
   entity: StandOrder,
 ): Promise<void> {
-  await ctx.reply(`Набор характеристик станка Добавлено`);
+  await ctx.reply(`Набор характеристик станка добавлен`);
 }
 
 async function handleSpecificRequest(
@@ -188,7 +195,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const StandOrderWizardHandler = UnifiedWizardHandler<StandOrder>({
+export const StandOrderAddWizardHandler = UnifiedWizardHandler<StandOrder>({
   getEntity,
   setEntity,
   save,

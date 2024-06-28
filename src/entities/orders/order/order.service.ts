@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order } from './order.entity';
+import { Order, OrderStatus } from './order.entity';
 import { addDays } from 'date-fns';
 
 @Injectable()
@@ -12,6 +12,7 @@ export class OrderService {
   ) {}
 
   async create(order: Order): Promise<Order> {
+    if (!order.status) order.status = OrderStatus.Preliminary;
     return this.repository.save(order);
   }
 

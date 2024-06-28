@@ -3,9 +3,21 @@ import { BaseEntity, EntityFieldsMap } from '../../base.entity';
 import { Client } from '../../client/client.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { differenceInDays, format } from 'date-fns';
-import { formatLabels } from '../../../shared/helpers';
+import { formatLabels, fromValue, toKey } from '../../../shared/helpers';
 import { StandOrder } from '../stand-order/stand-order.entity';
 import { Transaction } from '../../money/transaction/transaction.entity';
+
+export const OrderStatus = {
+  Preliminary: 'Предварительный',
+  PartiallyPaid: 'Оплачен частично',
+  FullyPaid: 'Оплачен полностью',
+  Delivered: 'Доставлен',
+  ReceivedReview: 'Получен отзыв',
+  BeingFixed: 'Исправляется',
+  Cancelled: 'Отменён',
+};
+
+export type OrderStatusType = (typeof OrderStatus)[keyof typeof OrderStatus];
 
 @Entity()
 export class Order extends BaseEntity {
@@ -22,10 +34,12 @@ export class Order extends BaseEntity {
     deliveryCost: true,
     deliveryAddress: true,
     deliveryTrackNumber: true,
+    status: false,
   };
 
   private labels: EntityFieldsMap<Order, string> = {
     contractDate: 'Договор',
+    status: 'Статус заказа',
     deliveryCost: 'Стоимость доставки',
     daysToSend: 'Дней на поставку',
     deliveryType: 'Тип доставки',
@@ -37,6 +51,7 @@ export class Order extends BaseEntity {
 
   private labelsShorten: EntityFieldsMap<Order, string> = {
     contractDate: 'Договор',
+    status: 'Статус заказа',
     deliveryCost: 'Стоимость доставки',
     description: 'Описание',
   };
@@ -114,6 +129,15 @@ export class Order extends BaseEntity {
 
   @OneToMany(() => Transaction, (transaction) => transaction.order)
   money: Transaction[];
+
+  @NullableColumn({
+    type: 'text',
+    transformer: {
+      to: toKey(OrderStatus),
+      from: fromValue(OrderStatus),
+    },
+  })
+  status: OrderStatusType;
 
   @NullableColumn()
   amount: number;

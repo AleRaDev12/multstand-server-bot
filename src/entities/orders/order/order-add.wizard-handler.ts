@@ -37,7 +37,7 @@ function setEntity(ctx: CustomWizardContext): void {
   ctx.wizard.state.order = new Order();
 }
 
-function save(entity: Order) {
+function save(this: OrderAddWizard, entity: Order) {
   return this.service.create(entity);
 }
 
@@ -78,7 +78,7 @@ async function handleSpecificRequest(
   return true;
 }
 
-export const OrderWizardHandler = UnifiedWizardHandler<Order>({
+export const OrderAddWizardHandler = UnifiedWizardHandler<Order>({
   getEntity,
   setEntity,
   save,

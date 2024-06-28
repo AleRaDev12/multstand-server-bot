@@ -17,6 +17,7 @@ export class OrdersScene extends BaseScene {
         ],
         [
           Markup.button.callback('📑 Станки-заказы', 'stand_orders_list'),
+          Markup.button.callback('Активные', 'stand_orders_active_list'),
           Markup.button.callback('➕', 'add_stand_order'),
         ],
         [this.menuButton],
@@ -47,6 +48,17 @@ export class OrdersScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () =>
         ctx.scene.enter(SCENES.STAND_ORDER_LIST),
+      );
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('stand_orders_active_list')
+  async standOrdersActiveList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(SCENES.STAND_ORDER_ACTIVE_LIST),
       );
     } catch (e) {
       await ctx.reply(e.message);

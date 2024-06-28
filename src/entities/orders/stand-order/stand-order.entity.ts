@@ -13,6 +13,19 @@ import {
 } from '../../unions';
 import { Order } from '../order/order.entity';
 
+export const StandOrderStatus = {
+  Preliminary: 'Не оплачен',
+  InProgress: 'В работе',
+  ReadyToShip: 'Готов к отправке',
+  Shipped: 'Отправлен',
+  Delivered: 'Доставлен',
+  Received: 'Получен',
+};
+
+export type StandOrderStatusType =
+  (typeof StandOrderStatus)[keyof typeof StandOrderStatus];
+export type StandOrderStatusKeyType = keyof typeof StandOrderStatus;
+
 @Entity()
 export class StandOrder extends BaseEntity {
   public static entityName = 'StandOrder';
@@ -31,14 +44,17 @@ export class StandOrder extends BaseEntity {
     sideWallsCount: true,
     rotaryMechanismsCount: true,
     deliveryCost: true,
+    status: false,
   };
 
   private label = {
     model: 'Модель',
+    status: 'Статус заказа',
     cost: 'Стоимость',
+    deliveryCost: 'Стоимость доставки',
     painting: 'Обработка',
     smartphoneMount: 'Монтаж смартфона',
-    tripod: 'Тройник',
+    tripod: 'Штатив',
     ledType: 'Тип светодиодов',
     glassesRegular: 'Стёкла об',
     glassesHighTransparency: 'Стёкла пп',
@@ -46,12 +62,12 @@ export class StandOrder extends BaseEntity {
     shadingFabric: 'Ткань для затенения',
     sideWallsCount: 'Сторонние стены',
     rotaryMechanismsCount: 'Поворотные механизмы',
-    deliveryCost: 'Стоимость доставки',
     id: 'id заказа',
   };
 
   private labelShorten = {
     model: 'Модель',
+    status: 'Статус',
     cost: 'Стоимость',
     deliveryCost: 'Стоимость доставки',
   };
@@ -69,6 +85,15 @@ export class StandOrder extends BaseEntity {
 
   @ManyToOne(() => Order)
   order: Order;
+
+  @NullableColumn({
+    type: 'text',
+    transformer: {
+      to: toKey(StandOrderStatus),
+      from: fromValue(StandOrderStatus),
+    },
+  })
+  status: StandOrderStatusType;
 
   @NullableColumn({
     type: 'text',
