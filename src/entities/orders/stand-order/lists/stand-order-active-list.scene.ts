@@ -1,14 +1,14 @@
-import { StandOrderService } from '../../stand-order.service';
+import { StandOrderService } from '../stand-order.service';
 import { Scene, SceneEnter } from 'nestjs-telegraf';
-import { assertNever, handleButtonPress } from '../../../../../shared/helpers';
-import { SCENES } from '../../../../../shared/scenes-wizards';
+import { assertNever, handleButtonPress } from '../../../../shared/helpers';
+import { SCENES } from '../../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import {
   CtxWithUserId,
   SceneContextWithUserId,
-} from '../../../../../bot/decorators/ctx-with-user-id.decorator';
-import { SceneRoles } from '../../../../../bot/decorators/scene-roles.decorator';
-import { UserService } from '../../../../user/user.service';
+} from '../../../../bot/decorators/ctx-with-user-id.decorator';
+import { SceneRoles } from '../../../../bot/decorators/scene-roles.decorator';
+import { UserService } from '../../../user/user.service';
 
 @Scene(SCENES.STAND_ORDER_ACTIVE_LIST)
 @SceneRoles('manager', 'master')
