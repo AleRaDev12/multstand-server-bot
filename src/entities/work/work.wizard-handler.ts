@@ -83,11 +83,25 @@ async function handleSpecificRequest(
     }
 
     case standProdSelectType: {
-      const standsProdList = await this.standProdService.getList();
-      await replyWithCancelButton(
-        ctx,
-        `${stepRequest.message}${standsProdList}`,
+      const standsProdList = await this.standProdService.findAll();
+
+      const userId = ctx.from.id;
+      const formattedList = await this.standProdService.formatList(
+        standsProdList,
+        userId,
       );
+
+      if (formattedList.length === 0) {
+        await replyWithCancelButton(ctx, 'Записей нет');
+        return true;
+      }
+
+      await ctx.reply(stepRequest.message);
+      for (const item of formattedList) {
+        await ctx.reply(item);
+      }
+
+      await replyWithCancelButton(ctx, `-`);
       return true;
     }
 

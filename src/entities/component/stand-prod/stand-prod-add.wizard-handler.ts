@@ -4,12 +4,12 @@ import {
   WizardStepType,
 } from '../../../shared/interfaces';
 import { StandProd } from './stand-prod.entity';
+import { StandProdAddWizard } from './stand-prod-add.wizard';
+import { getMessage } from '../../../shared/helpers';
 import {
   replyWithCancelButton,
   UnifiedWizardHandler,
 } from '../../../UnifiedWizardHandler';
-import { StandProdAddWizard } from './stand-prod-add.wizard';
-import { getMessage } from '../../../shared/helpers';
 
 const standOrderSelectType: DbEntities = 'standOrderSelect';
 const entityName = 'standProd';
@@ -19,17 +19,21 @@ const steps: WizardStepType[] = [
   { message: 'Описание:', type: 'string', field: 'description' },
 ];
 
-const getEntity = (ctx: CustomWizardContext): StandProd =>
-  ctx.wizard.state.standProd;
-const setEntity = (ctx: CustomWizardContext): void => {
+function getEntity(ctx: CustomWizardContext): StandProd {
+  return ctx.wizard.state.standProd;
+}
+
+function setEntity(ctx: CustomWizardContext): void {
   ctx.wizard.state.standProd = new StandProd();
-};
-const save = function (this: StandProdAddWizard, entity: StandProd) {
+}
+
+function save(this: StandProdAddWizard, entity: StandProd) {
   return this.service.create(entity);
-};
-const print = async (ctx: CustomWizardContext, entity: StandProd) => {
-  await ctx.reply(`Набор характеристик станка Добавлено`);
-};
+}
+
+async function print(ctx: CustomWizardContext, entity: StandProd) {
+  await ctx.reply(`Набор характеристик станка добавлен`);
+}
 
 async function handleSpecificAnswer(
   this: StandProdAddWizard,
@@ -84,7 +88,7 @@ async function handleSpecificRequest(
   }
 }
 
-export const StandProdWizardHandler = UnifiedWizardHandler<StandProd>({
+export const StandProdAddWizardHandler = UnifiedWizardHandler<StandProd>({
   getEntity,
   setEntity,
   save,

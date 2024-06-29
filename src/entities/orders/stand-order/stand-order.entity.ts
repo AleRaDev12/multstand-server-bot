@@ -1,5 +1,5 @@
 import { BaseEntity, LabelsType } from '../../base.entity';
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
 import {
@@ -15,7 +15,7 @@ import { Order } from '../order/order.entity';
 import { StandOrderStatus, StandOrderStatusType } from './stand-order-types';
 import { formatStandOrder } from './stand-order-formatting';
 import { UserRole } from '../../../shared/interfaces';
-import { formatOrder } from '../order/order-formatting';
+import { StandProd } from '../../component/stand-prod/stand-prod.entity';
 
 @Entity()
 export class StandOrder extends BaseEntity {
@@ -26,6 +26,9 @@ export class StandOrder extends BaseEntity {
 
   @ManyToOne(() => Order)
   order: Order;
+
+  @OneToMany(() => StandProd, (standProd) => standProd.standOrder)
+  standProd: StandProd;
 
   @NullableColumn({
     type: 'text',
