@@ -6,9 +6,10 @@ import { StandOrderAddWizard } from './stand-order-add.wizard';
 import { StandOrderListScene } from './lists/manager/stand-order-list.scene';
 import { OrderModule } from '../order/order.module';
 import { StandOrderActiveListScene } from './lists/manager/stand-order-active-list.scene';
+import { UserModule } from '../../user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([StandOrder]), OrderModule],
+  imports: [TypeOrmModule.forFeature([StandOrder]), OrderModule, UserModule],
   providers: [
     StandOrderService,
     StandOrderAddWizard,

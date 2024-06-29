@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { UserRole } from '../../shared/interfaces';
+import { userRequest } from 'telegraf/typings/button';
 
 @Injectable()
 export class UserService {
@@ -40,8 +42,16 @@ export class UserService {
     return this.repository.findOne({ where: { telegramUserId } });
   }
 
-  async getRoleByUserId(telegramUserId: number): Promise<string> {
+  async getRoleByUserId(telegramUserId: number): Promise<UserRole> {
     const user = await this.repository.findOne({ where: { telegramUserId } });
-    return user.role;
+    if (
+      user &&
+      (user.role === 'master' ||
+        user.role === 'manager' ||
+        user.role === 'unregistered')
+    ) {
+      return user.role;
+    }
+    return 'unknown';
   }
 }

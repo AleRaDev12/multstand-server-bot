@@ -111,3 +111,5 @@ export type MessageType = {
 export interface CustomContext extends Scenes.SceneContext {
   notRegistered?: boolean;
 }
+
+export type UserRole = 'manager' | 'master' | 'unregistered' | 'unknown';

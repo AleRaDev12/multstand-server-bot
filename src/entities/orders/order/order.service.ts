@@ -31,10 +31,10 @@ export class OrderService {
 
     return list.map((item, i) => {
       const standOrdersInfo = item.standOrders
-        .map((item, index) => `${index + 1}. ${item.format()}`)
+        .map((item, index) => `${index + 1}. ${item.format('manager')}`)
         .join('\n');
 
-      return `${i + 1}.\n${item.format()}\n-Станки-заказы:\n${standOrdersInfo}\n- Клиент:\n${item.client.format()}`;
+      return `${i + 1}.\n${item.format('manager', 'full')}\n-Станки-заказы:\n${standOrdersInfo}\n- Клиент:\n${item.client.format()}`;
     });
   }
 
@@ -43,7 +43,7 @@ export class OrderService {
     if (list.length === 0) return null;
 
     return list.map((item, i) => {
-      return `${i + 1}. ${item.formatShorten()}\n${item.client.formatShorten()}\n`;
+      return `${i + 1}. ${item.format('manager', 'short')}\n${item.client.formatShorten()}\n`;
     });
   }
 

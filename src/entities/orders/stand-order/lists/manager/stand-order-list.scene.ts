@@ -19,7 +19,8 @@ export class StandOrderListScene {
       await ctx.reply('Записей нет');
     }
 
-    const formattedList = this.service.formatList(list);
+    const userId = ctx.from.id;
+    const formattedList = await this.service.formatList(list, userId);
 
     for (const standOrder of formattedList) {
       await ctx.reply(standOrder);

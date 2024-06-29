@@ -1,25 +1,40 @@
 import { differenceInDays, format } from 'date-fns';
 import { formatLabels } from '../../../shared/helpers';
 import { Order } from './order.entity';
-import { EntityFieldsMap } from '../../base.entity';
+import { EntityLabels, LabelsType } from '../../base.entity';
+import { UserRole } from '../../../shared/interfaces';
 
-const labels: EntityFieldsMap<Order, string> = {
-  contractDate: 'Договор',
-  status: 'Статус заказа',
-  deliveryCost: 'Стоимость доставки',
-  daysToSend: 'Дней на поставку',
-  deliveryType: 'Тип доставки',
-  deliveryAddress: 'Адрес доставки',
-  deliveryTrackNumber: 'Трек-номер',
-  description: 'Описание',
-  id: 'id заказа',
-};
-
-const labelsShorten: EntityFieldsMap<Order, string> = {
-  contractDate: 'Договор',
-  status: 'Статус заказа',
-  deliveryCost: 'Стоимость доставки',
-  description: 'Описание',
+const labels: EntityLabels<Order, string> = {
+  manager: {
+    short: {
+      contractDate: 'Договор',
+      status: 'Статус заказа',
+      deliveryCost: 'Стоимость доставки',
+      daysToSend: 'Дней на поставку',
+      deliveryType: 'Тип доставки',
+      deliveryAddress: 'Адрес доставки',
+      deliveryTrackNumber: 'Трек-номер',
+      description: 'Описание',
+      id: 'id заказа',
+    },
+    full: {
+      contractDate: 'Договор',
+      status: 'Статус заказа',
+      deliveryCost: 'Стоимость доставки',
+      daysToSend: 'Дней на поставку',
+      deliveryType: 'Тип доставки',
+      deliveryAddress: 'Адрес доставки',
+      deliveryTrackNumber: 'Трек-номер',
+    },
+  },
+  master: {
+    short: {
+      status: 'Статус заказа',
+    },
+    full: {
+      status: 'Статус заказа',
+    },
+  },
 };
 
 function checkDeadlineConflict(order: Order): string | null {
@@ -57,20 +72,15 @@ function generateDeadlineInfo(order: Order): string[] {
   return additionalInfo;
 }
 
-export function formatOrder(order: Order): string {
+export function formatOrder(
+  order: Order,
+  userRole: UserRole,
+  labelType: LabelsType,
+): string {
   const error = checkDeadlineConflict(order);
   if (error) return error;
 
   const additionalInfo = generateDeadlineInfo(order);
-  const formattedLabels = formatLabels(order, labels);
-  return [formattedLabels, ...additionalInfo].join('\n');
-}
-
-export function formatOrderShorten(order: Order): string {
-  const error = checkDeadlineConflict(order);
-  if (error) return error;
-
-  const additionalInfo = generateDeadlineInfo(order);
-  const formattedLabels = formatLabels(order, labelsShorten);
+  const formattedLabels = formatLabels(order, labels[userRole][labelType]);
   return [formattedLabels, ...additionalInfo].join('\n');
 }

@@ -1,12 +1,13 @@
 import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity, EntityFieldsMap } from '../../base.entity';
+import { BaseEntity, EntityFieldsMap, LabelsType } from '../../base.entity';
 import { Client } from '../../client/client.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
 import { StandOrder } from '../stand-order/stand-order.entity';
 import { Transaction } from '../../money/transaction/transaction.entity';
-import { OrderTypes, OrderStatusType } from './order-types';
-import { formatOrder, formatOrderShorten } from './order-formatting';
+import { OrderStatusType, OrderTypes } from './order-types';
+import { formatOrder } from './order-formatting';
+import { UserRole } from '../../../shared/interfaces';
 
 @Entity()
 export class Order extends BaseEntity {
@@ -80,11 +81,7 @@ export class Order extends BaseEntity {
     status: false,
   };
 
-  public format(): string {
-    return formatOrder(this);
-  }
-
-  public formatShorten(): string {
-    return formatOrderShorten(this);
+  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+    return formatOrder(this, userRole, labelType);
   }
 }

@@ -19,6 +19,7 @@ const MENU_MANAGER = Markup.inlineKeyboard([
 
 const MENU_MASTER = Markup.inlineKeyboard([
   [Markup.button.callback('Работа', 'add_work')],
+  [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
 ]);
 
 @Scene(SCENES.MENU)
@@ -94,5 +95,16 @@ export class MenuScene {
   @Action('money')
   async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.MONEY));
+  }
+
+  @Action('stand_orders_active_list')
+  async standOrdersActiveList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(SCENES.STAND_ORDER_ACTIVE_LIST),
+      );
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
   }
 }
