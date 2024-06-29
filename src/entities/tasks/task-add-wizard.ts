@@ -3,8 +3,10 @@ import { TaskService } from './task.service';
 import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/scenes-wizards';
 import { TaskWizardHandler } from './task-add.wizard-handler';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ADD_TASK)
+@SceneRoles('manager')
 export class TaskAddWizard {
   constructor(
     @Inject(TaskService)

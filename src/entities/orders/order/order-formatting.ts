@@ -3,6 +3,7 @@ import { formatLabels } from '../../../shared/helpers';
 import { Order } from './order.entity';
 import { EntityLabels, LabelsType } from '../../base.entity';
 import { UserRole } from '../../../shared/interfaces';
+import { filter } from 'rxjs';
 
 const labels: EntityLabels<Order, string> = {
   manager: {
@@ -28,12 +29,8 @@ const labels: EntityLabels<Order, string> = {
     },
   },
   master: {
-    short: {
-      status: 'Статус заказа',
-    },
-    full: {
-      status: 'Статус заказа',
-    },
+    short: {},
+    full: {},
   },
 };
 
@@ -53,7 +50,7 @@ function generateDeadlineInfo(order: Order): string[] {
   if (sendingDeadlineDate !== null) {
     const daysUntilSend = differenceInDays(sendingDeadlineDate, currentDate);
     additionalInfo.push(
-      `Крайний срок отправки: ${format(sendingDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilSend} дней`,
+      `До отправки: ${daysUntilSend} дней (${format(sendingDeadlineDate, 'yyyy-MM-dd')})`,
     );
   } else if (deliveryDeadlineDate !== null) {
     const daysUntilDelivery = differenceInDays(
@@ -61,12 +58,10 @@ function generateDeadlineInfo(order: Order): string[] {
       currentDate,
     );
     additionalInfo.push(
-      `Крайний срок доставки: ${format(deliveryDeadlineDate, 'yyyy-MM-dd')}, осталось ${daysUntilDelivery} дней`,
+      `До доставки: ${daysUntilDelivery} дней (${format(deliveryDeadlineDate, 'yyyy-MM-dd')})`,
     );
   } else {
-    additionalInfo.push(
-      `Количество дней до отправки ${daysToSend}, оплат не поступало`,
-    );
+    additionalInfo.push(`До отправки ${daysToSend} дней, оплат не поступало`);
   }
 
   return additionalInfo;
@@ -82,5 +77,5 @@ export function formatOrder(
 
   const additionalInfo = generateDeadlineInfo(order);
   const formattedLabels = formatLabels(order, labels[userRole][labelType]);
-  return [formattedLabels, ...additionalInfo].join('\n');
+  return [formattedLabels, ...additionalInfo].filter(Boolean).join('\n');
 }

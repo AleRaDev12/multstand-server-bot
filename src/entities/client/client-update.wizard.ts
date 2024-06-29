@@ -8,6 +8,7 @@ import {
   UnifiedWizardHandler,
 } from '../../UnifiedWizardHandler';
 import { WIZARDS } from '../../shared/scenes-wizards';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 const entityName = 'client';
 
@@ -48,6 +49,7 @@ export const ClientUpdateWizardHandler = UnifiedWizardHandler<Client>({
 });
 
 @Wizard(WIZARDS.CLIENT_UPDATE)
+@SceneRoles('manager')
 export class ClientUpdateWizard {
   constructor(
     @Inject(ClientService)

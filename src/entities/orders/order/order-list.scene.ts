@@ -4,8 +4,10 @@ import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { handleButtonPress } from '../../../shared/helpers';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.ORDER_LIST)
+@SceneRoles('manager')
 export class OrderListScene {
   constructor(
     @Inject(OrderService)

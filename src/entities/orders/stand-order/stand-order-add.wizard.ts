@@ -4,8 +4,10 @@ import { Inject } from '@nestjs/common';
 import { StandOrderService } from './stand-order.service';
 import { StandOrderAddWizardHandler } from './stand-order-add.wizard-handler';
 import { OrderService } from '../order/order.service';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ADD_STAND_ORDER)
+@SceneRoles('manager')
 export class StandOrderAddWizard {
   constructor(
     @Inject(StandOrderService)

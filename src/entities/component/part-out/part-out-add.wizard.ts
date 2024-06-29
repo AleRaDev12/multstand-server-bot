@@ -4,8 +4,10 @@ import { WIZARDS } from '../../../shared/scenes-wizards';
 import { PartOutService } from './part-out.service';
 import { PartOutWizardHandler } from './part-out-wizard.handler';
 import { ComponentService } from '../component/component.service';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ADD_PART_OUT)
+@SceneRoles('manager')
 export class PartOutAddWizard {
   constructor(
     @Inject(PartOutService)

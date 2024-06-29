@@ -4,8 +4,10 @@ import { Inject } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { CustomWizardContext } from '../../../shared/interfaces';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.TRANSACTION_LIST)
+@SceneRoles('manager')
 export class TransactionListScene {
   constructor(
     @Inject(TransactionService)

@@ -4,12 +4,12 @@ import {
   Inject,
   Injectable,
 } from '@nestjs/common';
-import { SCENES } from '../shared/scenes-wizards';
-import { UserService } from '../entities/user/user.service';
-import { CustomContext } from '../shared/interfaces';
+import { SCENES } from '../../shared/scenes-wizards';
+import { UserService } from '../../entities/user/user.service';
+import { CustomContext } from '../../shared/interfaces';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class RegistrationGuard implements CanActivate {
   constructor(
     @Inject(UserService)
     private readonly userService: UserService,
@@ -24,7 +24,7 @@ export class RolesGuard implements CanActivate {
     }
 
     const telegramUserId = ctx.from.id;
-    const user = await this.userService.findOneById(telegramUserId);
+    const user = await this.userService.findByTelegramId(telegramUserId);
 
     if (!user) {
       await ctx.scene.enter(SCENES.REGISTRATION);
@@ -41,7 +41,7 @@ export class RolesGuard implements CanActivate {
     }
 
     if (user.role === 'manager' || user.role === 'master') {
-      const user = await this.userService.findOneById(telegramUserId);
+      const user = await this.userService.findByTelegramId(telegramUserId);
       await ctx.reply(`Добро пожаловать, ${user.name} (роль: ${user.role}).`);
       return true;
     }

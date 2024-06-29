@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StandOrder } from './stand-order.entity';
 import { StandOrderStatus, StandOrderStatusKeyType } from './stand-order-types';
-import { formatLabels } from '../../../shared/helpers';
 import { UserService } from '../../user/user.service';
 import { UserRole } from '../../../shared/interfaces';
 
@@ -56,7 +55,7 @@ export class StandOrderService {
     let index = 1;
     for (const standOrder of standOrders) {
       const formattedOrder = this.formatSingleWithRole(standOrder, userRole);
-      formattedOrders.push(`\n№${index}.\n${formattedOrder}`);
+      formattedOrders.push(`\n№${index}\n${formattedOrder}`);
       index++;
     }
 
@@ -67,6 +66,6 @@ export class StandOrderService {
     standOrder: StandOrder,
     userRole: UserRole,
   ): string {
-    return `${standOrder.format(userRole)}\n-Заказ:\n${standOrder.order.format(userRole)}`;
+    return `${standOrder.format(userRole)}\n🛒 Заказ:\n${standOrder.order.format(userRole)}`;
   }
 }

@@ -3,8 +3,10 @@ import { Markup, Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
 import { BaseScene } from '../../shared/base.scene';
 import { handleButtonPress } from '../../shared/helpers';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.ORDERS)
+@SceneRoles('manager')
 export class OrdersScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {

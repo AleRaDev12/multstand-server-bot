@@ -3,8 +3,10 @@ import { WIZARDS } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { AccountTransferWizardHandler } from './account-transfer.wizard-handler';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ACCOUNT_TRANSFER)
+@SceneRoles('manager')
 export class AccountTransferWizard {
   constructor(
     @Inject(AccountService)

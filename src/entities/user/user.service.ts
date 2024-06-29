@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { UserRole } from '../../shared/interfaces';
-import { userRequest } from 'telegraf/typings/button';
 
 @Injectable()
 export class UserService {
@@ -38,7 +37,7 @@ export class UserService {
     return this.repository.find({ where: { role: 'unregistered' } });
   }
 
-  async findOneById(telegramUserId: number): Promise<User> {
+  async findByTelegramId(telegramUserId: number): Promise<User> {
     return this.repository.findOne({ where: { telegramUserId } });
   }
 

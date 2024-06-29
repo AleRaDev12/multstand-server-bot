@@ -5,8 +5,10 @@ import { TransactionService } from './transaction.service';
 import { OrderService } from '../../orders/order/order.service';
 import { AccountService } from '../account/account.service';
 import { TransactionOrderWizardHandler } from './add-transaction-order.wizard-handler';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ADD_TRANSACTION_ORDER)
+@SceneRoles('manager')
 export class TransactionOrderAddWizard {
   constructor(
     @Inject(TransactionService)

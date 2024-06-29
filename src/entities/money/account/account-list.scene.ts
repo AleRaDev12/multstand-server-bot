@@ -4,8 +4,10 @@ import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { Markup } from 'telegraf';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.ACCOUNT_LIST)
+@SceneRoles('manager')
 export class AccountListScene {
   constructor(
     @Inject(AccountService)

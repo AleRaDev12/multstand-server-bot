@@ -4,8 +4,10 @@ import { WIZARDS } from '../../../shared/scenes-wizards';
 import { TransactionService } from './transaction.service';
 import { TransactionAddWizardHandler } from './transaction-add.wizard-handler';
 import { AccountService } from '../account/account.service';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ADD_TRANSACTION)
+@SceneRoles('manager')
 export class TransactionAddWizard {
   constructor(
     @Inject(TransactionService)

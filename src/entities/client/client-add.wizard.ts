@@ -3,8 +3,10 @@ import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/scenes-wizards';
 import { ClientService } from './client.service';
 import { ClientWizardHandler } from './client.wizard-handler';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.CLIENT_ADD)
+@SceneRoles('manager')
 export class ClientAddWizard {
   constructor(
     @Inject(ClientService)

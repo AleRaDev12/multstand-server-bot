@@ -135,3 +135,7 @@ export const getMessage = (ctx: CustomWizardContext) => {
   // @ts-expect-error
   return ctx.update?.message as { text?: string };
 };
+
+export function assertNever(x: never): never {
+  throw new Error(`Unexpected object: ${x}`);
+}

@@ -5,8 +5,10 @@ import { PartInService } from './part-in.service';
 import { PartInWizardHandler } from './part-in.wizard-handler';
 import { ComponentService } from '../component/component.service';
 import { TransactionService } from '../../money/transaction/transaction.service';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ADD_PART_IN)
+@SceneRoles('manager')
 export class PartInAddWizard {
   constructor(
     @Inject(PartInService)

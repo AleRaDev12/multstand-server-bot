@@ -4,8 +4,10 @@ import { SCENES } from '../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { handleButtonPress } from '../../shared/helpers';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.CLIENT_LIST)
+@SceneRoles('manager')
 export class ClientListScene {
   constructor(
     @Inject(ClientService)

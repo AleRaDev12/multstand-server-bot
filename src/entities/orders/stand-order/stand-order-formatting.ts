@@ -31,7 +31,7 @@ const labels: EntityLabels<StandOrder, string> = {
   },
   master: {
     short: {
-      id: 'Станок-заказ (номер)',
+      id: 'Станок-заказ №',
       model: 'Модель',
       painting: 'Обработка',
       glassesRegular: 'Стёкла об',
@@ -45,7 +45,7 @@ const labels: EntityLabels<StandOrder, string> = {
       rotaryMechanismsCount: 'Поворотные механизмы',
     },
     full: {
-      id: 'Станок-заказ (номер)',
+      id: 'Станок-заказ №',
       model: 'Модель',
       painting: 'Обработка',
       glassesRegular: 'Стёкла об',

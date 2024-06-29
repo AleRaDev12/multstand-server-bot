@@ -4,8 +4,10 @@ import { Inject } from '@nestjs/common';
 import { Scenes } from 'telegraf';
 import { handleButtonPress } from '../../../shared/helpers';
 import { PartInService } from './part-in.service';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.PART_IN_LIST)
+@SceneRoles('manager')
 export class PartInListScene {
   constructor(
     @Inject(PartInService)

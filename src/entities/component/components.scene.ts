@@ -3,8 +3,10 @@ import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
 import { BaseScene } from '../../shared/base.scene';
 import { Markup, Scenes } from 'telegraf';
 import { handleButtonPress } from '../../shared/helpers';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.COMPONENTS)
+@SceneRoles('manager')
 export class ComponentsScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {

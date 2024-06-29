@@ -5,8 +5,10 @@ import { BaseScene } from '../../shared/base.scene';
 import { handleButtonPress } from '../../shared/helpers';
 import { Inject } from '@nestjs/common';
 import { AccountService } from './account/account.service';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 @Scene(SCENES.MONEY)
+@SceneRoles('manager')
 export class MoneyScene extends BaseScene {
   constructor(
     @Inject(AccountService)

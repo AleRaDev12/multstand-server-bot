@@ -4,25 +4,10 @@ import { SCENES, WIZARDS } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
-
-const MENU_MANAGER = Markup.inlineKeyboard([
-  [Markup.button.callback('Клиенты', 'client')],
-  [Markup.button.callback('Заказы', 'order')],
-
-  [Markup.button.callback('Компоненты', 'components')],
-  [
-    Markup.button.callback('Работа', 'add_work'),
-    Markup.button.callback('Задача', 'add_task'),
-  ],
-  [Markup.button.callback('Деньги', 'money')],
-]);
-
-const MENU_MASTER = Markup.inlineKeyboard([
-  [Markup.button.callback('Работа', 'add_work')],
-  [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
-]);
+import { SceneRoles } from './decorators/scene-roles.decorator';
 
 @Scene(SCENES.MENU)
+@SceneRoles('manager', 'master')
 export class MenuScene {
   constructor(
     @Inject(UserService)
@@ -108,3 +93,20 @@ export class MenuScene {
     }
   }
 }
+
+const MENU_MANAGER = Markup.inlineKeyboard([
+  [Markup.button.callback('Клиенты', 'client')],
+  [Markup.button.callback('Заказы', 'order')],
+
+  [Markup.button.callback('Компоненты', 'components')],
+  [
+    Markup.button.callback('Работа', 'add_work'),
+    Markup.button.callback('Задача', 'add_task'),
+  ],
+  [Markup.button.callback('Деньги', 'money')],
+]);
+
+const MENU_MASTER = Markup.inlineKeyboard([
+  [Markup.button.callback('Работа', 'add_work')],
+  [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
+]);

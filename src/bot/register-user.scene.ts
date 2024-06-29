@@ -3,8 +3,10 @@ import { Scenes } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
+import { SceneRoles } from './decorators/scene-roles.decorator';
 
 @Scene(SCENES.REGISTER)
+@SceneRoles('manager')
 export class RegisterUserScene {
   constructor(
     @Inject(UserService)

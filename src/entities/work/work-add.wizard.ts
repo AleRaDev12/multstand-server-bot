@@ -7,9 +7,10 @@ import { WorkWizardHandler } from './work.wizard-handler';
 import { TaskService } from '../tasks/task.service';
 import { StandProdService } from '../component/stand-prod/stand-prod.service';
 import { MasterService } from '../master/master.service';
-import { UserService } from '../user/user.service';
+import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
 @Wizard(WIZARDS.ADD_WORK)
+@SceneRoles('manager', 'master')
 export class WorkAddWizard {
   constructor(
     @Inject(WorkService)
