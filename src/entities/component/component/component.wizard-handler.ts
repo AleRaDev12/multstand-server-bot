@@ -37,5 +37,5 @@ export const ComponentWizardHandler = UnifiedWizardHandler<Component>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
 });

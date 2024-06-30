@@ -1,10 +1,4 @@
-import {
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { StandOrder } from '../../orders/stand-order/stand-order.entity';
 import { Work } from '../../work/work.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
@@ -23,8 +17,7 @@ export class StandProd extends BaseEntity {
   standOrder: StandOrder;
 
   @ManyToMany(() => Work, (work) => work.standProd)
-  @JoinTable({ name: 'work_stand_prod' })
-  works: Work[];
+  work: Work[];
 
   @NullableColumn({
     type: 'text',

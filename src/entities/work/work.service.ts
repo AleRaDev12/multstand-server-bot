@@ -10,11 +10,15 @@ export class WorkService {
     private repository: Repository<Work>,
   ) {}
 
-  // Todo: prevent to execute by not manager users
   async create(work: Work): Promise<Work> {
-    const partsInReached = { ...work, dateOfReport: new Date() };
+    const newWork = {
+      ...work,
+      createdAt: new Date(),
+    };
 
-    return this.repository.save(partsInReached);
+    console.log('Creating new work entry:', newWork);
+
+    return this.repository.save(newWork);
   }
 
   async findAll(): Promise<Work[]> {

@@ -95,5 +95,5 @@ export const StandProdAddWizardHandler = UnifiedWizardHandler<StandProd>({
   print,
   handleSpecificAnswer,
   handleSpecificRequest,
-  steps,
+  initialSteps: steps,
 });

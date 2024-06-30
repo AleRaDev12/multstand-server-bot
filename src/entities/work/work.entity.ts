@@ -34,7 +34,7 @@ export class Work extends BaseEntity {
   @ManyToOne(() => Task)
   task: Task;
 
-  @ManyToMany(() => StandProd)
+  @ManyToMany(() => StandProd, (standProd) => standProd.work)
   @JoinTable({ name: 'work_stand_prod' })
   standProd: StandProd[];
 

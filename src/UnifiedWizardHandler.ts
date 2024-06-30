@@ -13,7 +13,7 @@ interface UnifiedWizardHandlerOptions<T> {
   setEntity: (ctx: CustomWizardContext) => void;
   save: (thisArg: any, entity: T) => Promise<T | undefined | void>;
   print: (ctx: CustomWizardContext, entity: T) => Promise<void>;
-  steps: WizardStepType[];
+  initialSteps: WizardStepType[];
   handleSpecificAnswer?: (
     ctx: CustomWizardContext,
     stepAnswer: WizardStepType,
@@ -33,7 +33,7 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
     setEntity,
     save,
     print,
-    steps,
+    initialSteps,
     handleSpecificAnswer,
     handleSpecificRequest,
   } = options;
@@ -52,7 +52,10 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
 
         if (stepIndex === 1) {
           setEntity(ctx);
+          ctx.wizard.state.steps = [...initialSteps];
         }
+
+        const steps = ctx.wizard.state.steps;
 
         const stepForAnswerNumber = stepIndex - 2;
         const stepForRequestNumber = stepIndex - 1;
@@ -186,6 +189,7 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
           }
         }
 
+        const steps = ctx.wizard.state.steps;
         const isLastStep = stepForAnswerNumber === steps.length - 1;
         if (isLastStep) {
           const creatingEntity = await save.call(this, entity);
@@ -203,6 +207,8 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
         stepRequest: WizardStepType,
         stepIndex: number,
       ): Promise<boolean> {
+        const steps = ctx.wizard.state.steps;
+
         switch (stepRequest.type) {
           case 'union':
           case 'number':

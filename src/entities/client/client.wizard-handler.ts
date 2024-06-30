@@ -38,5 +38,5 @@ export const ClientWizardHandler = UnifiedWizardHandler<Client>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
 });

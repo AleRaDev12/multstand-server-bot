@@ -20,7 +20,7 @@ export class StandProdService {
 
   async findAll(): Promise<StandProd[]> {
     return this.repository.find({
-      relations: ['standOrder', 'works', 'standOrder.order'],
+      relations: ['standOrder', 'work', 'standOrder.order'],
     });
   }
 
@@ -29,7 +29,7 @@ export class StandProdService {
       where: {
         standOrder: null,
       },
-      relations: ['standOrder', 'works', 'standOrder.order'],
+      relations: ['standOrder', 'work', 'standOrder.order'],
     });
   }
 

@@ -87,7 +87,7 @@ export const PartInWizardHandler = UnifiedWizardHandler<PartIn>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
   handleSpecificAnswer,
   handleSpecificRequest,
 });

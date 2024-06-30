@@ -97,8 +97,6 @@ const threeDSteps: WizardStepType[] = [
   },
 ];
 
-const steps: WizardStepType[] = [...commonSteps];
-
 function getEntity(ctx: CustomWizardContext): StandOrder {
   return ctx.wizard.state[entityName];
 }
@@ -108,9 +106,6 @@ function setEntity(ctx: CustomWizardContext): void {
 }
 
 function save(this: StandOrderAddWizard, entity: StandOrder) {
-  console.log('*-* entity', entity);
-  steps.length = 0;
-  steps.push(...commonSteps);
   return this.service.create(entity);
 }
 
@@ -184,11 +179,11 @@ async function handleSpecificAnswer(
       switch (entity.model) {
         case StandModel.mTM15:
         case StandModel.mTL15:
-          steps.push(...tmtlSteps);
+          ctx.wizard.state.steps.push(...tmtlSteps);
           break;
         case StandModel.m3DM5:
         case StandModel.m3DL5:
-          steps.push(...threeDSteps);
+          ctx.wizard.state.steps.push(...threeDSteps);
           break;
       }
       return true;
@@ -201,7 +196,7 @@ export const StandOrderAddWizardHandler = UnifiedWizardHandler<StandOrder>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: commonSteps,
   handleSpecificAnswer,
   handleSpecificRequest,
 });

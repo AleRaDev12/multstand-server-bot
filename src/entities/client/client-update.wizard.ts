@@ -45,7 +45,7 @@ export const ClientUpdateWizardHandler = UnifiedWizardHandler<Client>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
 });
 
 @Wizard(WIZARDS.CLIENT_UPDATE)

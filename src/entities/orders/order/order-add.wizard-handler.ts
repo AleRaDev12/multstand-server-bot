@@ -83,7 +83,7 @@ export const OrderAddWizardHandler = UnifiedWizardHandler<Order>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
   handleSpecificAnswer,
   handleSpecificRequest,
 });

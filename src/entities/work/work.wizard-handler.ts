@@ -26,7 +26,7 @@ const commonSteps: WizardStepType[] = [
   { message: 'Дата выполнения:', field: 'date', type: 'date' },
 ];
 
-const steps: WizardStepType[] = [...commonSteps];
+const initialSteps: WizardStepType[] = [...commonSteps];
 
 function getEntity(ctx: CustomWizardContext): Work {
   return ctx.wizard.state[entityName];
@@ -37,9 +37,7 @@ function setEntity(ctx: CustomWizardContext): void {
 }
 
 function save(this: WorkAddWizard, entity: Work) {
-  steps.length = 0;
-  steps.push(...commonSteps);
-  return this.service.create({ ...entity, createdAt: new Date() });
+  return this.service.create(entity);
 }
 
 async function print(ctx: CustomWizardContext, entity: Work): Promise<void> {
@@ -58,7 +56,10 @@ async function handleSpecificRequest(
         await this.masterService.getMasterByTelegramId(telegramUserId);
 
       if (master.user.role === 'manager') {
-        steps.splice(1, 0, { message: 'Мастер:', type: masterSelectType });
+        ctx.wizard.state.steps.splice(1, 0, {
+          message: 'Мастер:',
+          type: masterSelectType,
+        });
       } else {
         if (!master) {
           await replyWithCancelButton(
@@ -194,7 +195,7 @@ export const WorkWizardHandler = UnifiedWizardHandler<Work>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: initialSteps,
   handleSpecificAnswer,
   handleSpecificRequest,
 });

@@ -125,7 +125,7 @@ export const TransactionOrderWizardHandler = UnifiedWizardHandler<Transaction>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
   handleSpecificAnswer,
   handleSpecificRequest,
 });

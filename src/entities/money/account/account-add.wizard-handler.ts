@@ -35,5 +35,5 @@ export const AccountAddWizardHandler = UnifiedWizardHandler<Account>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
 });

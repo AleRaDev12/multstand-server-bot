@@ -100,7 +100,7 @@ export const TaskWizardHandler = UnifiedWizardHandler<Task>({
   setEntity,
   save,
   print,
-  steps,
+  initialSteps: steps,
   handleSpecificAnswer,
   handleSpecificRequest,
 });
