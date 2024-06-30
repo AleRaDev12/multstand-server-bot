@@ -15,6 +15,7 @@ import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
 import { StandProd } from '../entities/component/stand-prod/stand-prod.entity';
 import { Transaction } from '../entities/money/transaction/transaction.entity';
 import { Scenes } from 'telegraf';
+import { Account } from '../entities/money/account/account.entity';
 
 export type KeyOfAllEntities = {
   [K in keyof AllEntities]: AllEntities[K] extends undefined
@@ -22,7 +23,7 @@ export type KeyOfAllEntities = {
     : keyof AllEntities[K];
 }[keyof AllEntities];
 
-export type DbEntities =
+export type AdditionalWizardSelections =
   | 'taskSelect'
   | 'orderSelect'
   | 'clientSelect'
@@ -49,7 +50,7 @@ export type WizardStepType = {
     }
   | {
       field?: KeyOfAllEntities;
-      type: DbEntities;
+      type: AdditionalWizardSelections;
       union?: undefined;
     }
 );
@@ -69,7 +70,7 @@ export type WizardStepTypeN<T> = {
     }
   | {
       field?: undefined;
-      type: DbEntities;
+      type: AdditionalWizardSelections;
       union?: undefined;
     }
 );
@@ -86,6 +87,7 @@ export type AllEntities = {
   master?: User;
   component?: Component;
   standOrder?: StandOrder;
+  account?: Account;
 };
 
 interface CustomWizardSessionData extends WizardSessionData, AllEntities {

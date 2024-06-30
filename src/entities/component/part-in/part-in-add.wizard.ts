@@ -6,6 +6,7 @@ import { PartInWizardHandler } from './part-in.wizard-handler';
 import { ComponentService } from '../component/component.service';
 import { TransactionService } from '../../money/transaction/transaction.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
+import { AccountService } from '../../money/account/account.service';
 
 @Wizard(WIZARDS.ADD_PART_IN)
 @SceneRoles('manager')
@@ -16,7 +17,9 @@ export class PartInAddWizard {
     @Inject(ComponentService)
     readonly componentService: ComponentService,
     @Inject(TransactionService)
-    readonly moneyService: TransactionService,
+    readonly transactionService: TransactionService,
+    @Inject(AccountService)
+    readonly accountService: AccountService,
   ) {}
 
   @WizardStep(1)

@@ -1,6 +1,6 @@
 import {
   CustomWizardContext,
-  DbEntities,
+  AdditionalWizardSelections,
   WizardStepType,
 } from '../../../shared/interfaces';
 import { StandProd } from './stand-prod.entity';
@@ -11,7 +11,7 @@ import {
   UnifiedWizardHandler,
 } from '../../../UnifiedWizardHandler';
 
-const standOrderSelectType: DbEntities = 'standOrderSelect';
+const standOrderSelectType: AdditionalWizardSelections = 'standOrderSelect';
 const entityName = 'standProd';
 
 const steps: WizardStepType[] = [

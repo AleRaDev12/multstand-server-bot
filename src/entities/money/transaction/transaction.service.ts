@@ -12,17 +12,19 @@ export class TransactionService {
     private readonly orderService: OrderService,
   ) {}
 
-  async create(money: Transaction): Promise<Transaction> {
-    const newMoney = await this.repository.save(money);
+  async create(transaction: Transaction): Promise<Transaction> {
+    const newTransaction = await this.repository.save(transaction);
 
-    if (money.order) {
+    console.log('*-* newTransaction', newTransaction);
+
+    if (transaction.order) {
       await this.orderService.updateSendingDeadLineByPaymentDate(
-        money.order.id,
-        money.transactionDate,
+        transaction.order.id,
+        transaction.transactionDate,
       );
     }
 
-    return newMoney;
+    return newTransaction;
   }
 
   async findAll(): Promise<Transaction[]> {

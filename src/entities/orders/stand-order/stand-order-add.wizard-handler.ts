@@ -1,7 +1,7 @@
 import { Led, Painting, StandModel, Tripod } from '../../unions';
 import {
   CustomWizardContext,
-  DbEntities,
+  AdditionalWizardSelections,
   WizardStepType,
   WizardStepTypeN,
 } from '../../../shared/interfaces';
@@ -15,8 +15,8 @@ import { StandOrderAddWizard } from './stand-order-add.wizard';
 import { getMessage, printUnion } from '../../../shared/helpers';
 import { StandOrderStatus } from './stand-order-types';
 
-const orderSelectType: DbEntities = 'orderSelect';
-const orderModelSelectType: DbEntities = 'orderModelSelect';
+const orderSelectType: AdditionalWizardSelections = 'orderSelect';
+const orderModelSelectType: AdditionalWizardSelections = 'orderModelSelect';
 const entityName = 'standOrder';
 
 const commonSteps: WizardStepTypeN<StandOrder>[] = [

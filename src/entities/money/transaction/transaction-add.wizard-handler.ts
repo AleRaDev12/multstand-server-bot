@@ -1,6 +1,6 @@
 import {
   CustomWizardContext,
-  DbEntities,
+  AdditionalWizardSelections,
   WizardStepType,
 } from '../../../shared/interfaces';
 import {
@@ -12,7 +12,7 @@ import { Transaction } from './transaction.entity';
 import { getMessage } from '../../../shared/helpers';
 
 const entityName = 'transaction';
-const accountSelectType: DbEntities = 'accountSelect';
+const accountSelectType: AdditionalWizardSelections = 'accountSelect';
 
 const steps: WizardStepType[] = [
   { message: 'Дата транзакции:', field: 'transactionDate', type: 'date' },

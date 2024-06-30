@@ -5,7 +5,7 @@ import {
 import { Account } from './account.entity';
 import {
   CustomWizardContext,
-  DbEntities,
+  AdditionalWizardSelections,
   WizardStepType,
 } from '../../../shared/interfaces';
 import { AccountTransferWizard } from './account-transfer.wizard';
@@ -21,7 +21,7 @@ type TransferMoney = {
 };
 
 // Define entity type for account selection
-const accountSelectType: DbEntities = 'accountSelect';
+const accountSelectType: AdditionalWizardSelections = 'accountSelect';
 
 const steps: WizardStepType[] = [
   {

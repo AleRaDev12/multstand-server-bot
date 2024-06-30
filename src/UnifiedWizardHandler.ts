@@ -11,7 +11,11 @@ import { BaseEntity } from './entities/base.entity';
 interface UnifiedWizardHandlerOptions<T> {
   getEntity: (ctx: CustomWizardContext) => T;
   setEntity: (ctx: CustomWizardContext) => void;
-  save: (thisArg: any, entity: T) => Promise<T | undefined | void>;
+  save: (
+    this: any,
+    entity: T,
+    ctx?: CustomWizardContext,
+  ) => Promise<T | undefined | void>;
   print: (ctx: CustomWizardContext, entity: T) => Promise<void>;
   initialSteps: WizardStepType[];
   handleSpecificAnswer?: (
@@ -181,7 +185,7 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
                   stepAnswer,
                   entity,
                 );
-                return result;
+                console.log('*-* result', result);
               } else {
                 await replyWithCancelButton(ctx, 'Ошибка 1');
                 return false;
@@ -191,8 +195,9 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
 
         const steps = ctx.wizard.state.steps;
         const isLastStep = stepForAnswerNumber === steps.length - 1;
+        console.log('*-* isLastStep', isLastStep, stepForAnswerNumber);
         if (isLastStep) {
-          const creatingEntity = await save.call(this, entity);
+          const creatingEntity = await save.call(this, entity, ctx);
           await print(ctx, creatingEntity);
 
           await ctx.scene.leave();

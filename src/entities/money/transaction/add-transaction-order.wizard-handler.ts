@@ -1,6 +1,6 @@
 import {
   CustomWizardContext,
-  DbEntities,
+  AdditionalWizardSelections,
   WizardStepType,
 } from '../../../shared/interfaces';
 import { Transaction } from './transaction.entity';
@@ -12,8 +12,8 @@ import { TransactionOrderAddWizard } from './add-transaction-order.wizard';
 import { getMessage } from '../../../shared/helpers';
 
 const entityName = 'transactionOrder';
-const orderSelectType: DbEntities = 'orderSelect';
-const accountSelectType: DbEntities = 'accountSelect';
+const orderSelectType: AdditionalWizardSelections = 'orderSelect';
+const accountSelectType: AdditionalWizardSelections = 'accountSelect';
 
 const steps: WizardStepType[] = [
   { message: 'Выберите заказ:', type: orderSelectType },

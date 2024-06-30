@@ -19,7 +19,7 @@ export class AccountListScene {
     const accounts = await this.accountService.findAll();
     const accountList = accounts
       .map((account, index) => {
-        return `${index + 1}. ${account.format()}`;
+        return `${index + 1}. ${account.format('manager')}`;
       })
       .join('\n\n');
 

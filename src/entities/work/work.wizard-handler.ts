@@ -1,6 +1,6 @@
 import {
   CustomWizardContext,
-  DbEntities,
+  AdditionalWizardSelections,
   WizardStepType,
 } from '../../shared/interfaces';
 import {
@@ -11,9 +11,9 @@ import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
 import { getMessage } from '../../shared/helpers';
 
-const masterSelectType: DbEntities = 'masterSelect';
-const taskSelectType: DbEntities = 'taskSelect';
-const standProdSelectType: DbEntities = 'standProdSelect';
+const masterSelectType: AdditionalWizardSelections = 'masterSelect';
+const taskSelectType: AdditionalWizardSelections = 'taskSelect';
+const standProdSelectType: AdditionalWizardSelections = 'standProdSelect';
 const entityName = 'work';
 
 const commonSteps: WizardStepType[] = [

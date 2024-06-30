@@ -1,7 +1,7 @@
 import { PartOut } from './part-out.entity';
 import {
   CustomWizardContext,
-  DbEntities,
+  AdditionalWizardSelections,
   WizardStepType,
 } from '../../../shared/interfaces';
 import {
@@ -9,11 +9,10 @@ import {
   UnifiedWizardHandler,
 } from '../../../UnifiedWizardHandler';
 import { PartOutAddWizard } from './part-out-add.wizard';
-import { Component } from '../component/component.entity';
 import { getMessage } from '../../../shared/helpers';
 
-const componentTypeName: DbEntities = 'componentSelect';
-const partsInTypeName: DbEntities = 'partsInBatchSelect';
+const componentTypeName: AdditionalWizardSelections = 'componentSelect';
+const partsInTypeName: AdditionalWizardSelections = 'partsInBatchSelect';
 
 const steps: WizardStepType[] = [
   { message: 'Комплектующее:', type: componentTypeName },
@@ -38,8 +37,6 @@ async function print(ctx: CustomWizardContext, entity: PartOut): Promise<void> {
   await ctx.reply(`Добавлено`);
 }
 
-let selectedComponent: Component | null = null;
-
 async function handleSpecificRequest(
   this: PartOutAddWizard,
   ctx: CustomWizardContext,
@@ -54,11 +51,11 @@ async function handleSpecificRequest(
       );
       return true;
     case partsInTypeName:
-      const partsInList = await this.service.getRemainingListByComponent(
-        selectedComponent.id,
-      );
-
-      await replyWithCancelButton(ctx, `${stepRequest.message}${partsInList}`);
+      // const partsInList = await this.service.getRemainingListByComponent(
+      //   selectedComponent.id,
+      // );
+      //
+      // await replyWithCancelButton(ctx, `${stepRequest.message}${partsInList}`);
       return true;
   }
 }
@@ -69,11 +66,10 @@ async function handleSpecificAnswer(
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
   const message = getMessage(ctx);
+  const selectedNumber = parseInt(message.text);
 
   switch (stepAnswer.type) {
     case componentTypeName:
-      const selectedNumber = parseInt(message.text);
-
       const components = await this.componentService.findAll();
       const component = components[selectedNumber - 1];
       if (!component) {
@@ -81,21 +77,23 @@ async function handleSpecificAnswer(
         return false;
       }
 
-      // ctx.wizard.state.partIn.component = component; // *-* check saving
-      selectedComponent = component; // *-* check saving
+      ctx.wizard.state.partIn.component = component;
       return true;
     case partsInTypeName:
-      // const partsInList = await this.service.getListByComponent(
-      //   ctx.wizard.state.partIn.component.id,
-      // );
+      const partsInList = await this.service.getListByComponent(
+        ctx.wizard.state.partIn.component.id,
+      );
+      const selectedPartIn = partsInList[selectedNumber - 1];
+      if (!selectedPartIn) {
+        await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
+        return false;
+      }
 
       if (message.text === '--') {
         // by order
 
         return false;
       }
-
-      // const selectedNumber = parseInt(message.text);
 
       // await this.service.create(entity);
       return false;

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Account } from './account.entity';
 import { Transaction } from '../transaction/transaction.entity';
 import { TransactionService } from '../transaction/transaction.service';
+import { UserRole } from '../../../shared/interfaces';
 
 @Injectable()
 export class AccountService {
@@ -90,5 +91,23 @@ export class AccountService {
     creditTransaction.transactionDate = date;
     creditTransaction.description = `<- ${fromAccount.name}: ${description ?? ''}`;
     await this.transactionService.create(creditTransaction);
+  }
+
+  async formatList(accounts: Account[]): Promise<string[]> {
+    if (accounts.length === 0) return null;
+
+    const formattedOrders = [];
+    let index = 1;
+    for (const account of accounts) {
+      const formattedAccount = this.formatSingleWithRole(account, 'manager');
+      formattedOrders.push(`\n№${index}\n${formattedAccount}`);
+      index++;
+    }
+
+    return formattedOrders;
+  }
+
+  private formatSingleWithRole(account: Account, userRole: UserRole): string {
+    return `${account.format(userRole)}\n`;
   }
 }
