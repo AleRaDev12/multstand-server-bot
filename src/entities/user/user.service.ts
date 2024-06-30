@@ -25,10 +25,11 @@ export class UserService {
     return user;
   }
 
-  async approveRequest(userId: number): Promise<void> {
+  async approveRequest(userId: number, name: string): Promise<void> {
     const user = await this.repository.findOne({ where: { id: userId } });
     if (user) {
       user.role = 'master';
+      user.name = name;
       await this.repository.save(user);
     }
   }

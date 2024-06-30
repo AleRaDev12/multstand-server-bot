@@ -1,6 +1,4 @@
 import { Action, Ctx, InjectBot, Start, Update } from 'nestjs-telegraf';
-import { UseGuards } from '@nestjs/common';
-import { RegistrationGuard } from './guards/registration-guard.service';
 import { Scenes, Telegraf } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
@@ -27,7 +25,6 @@ export class BotUpdate {
   }
 
   @Start()
-  @UseGuards(RegistrationGuard)
   async onStart(@Ctx() ctx: CustomContext): Promise<void> {
     if (ctx.notRegistered) {
       await ctx.reply('Нет доступа');

@@ -7,7 +7,7 @@ import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 
 @Scene(SCENES.MENU)
-@SceneRoles('manager', 'master')
+@SceneRoles('manager', 'master', 'unregistered')
 export class MenuScene {
   constructor(
     @Inject(UserService)
@@ -17,16 +17,18 @@ export class MenuScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     const telegramUserId = ctx.from.id;
-    const role = await this.userService.getRoleByUserId(telegramUserId);
+    const user = await this.userService.findByTelegramId(telegramUserId);
+    const role = user.role;
 
-    const menu =
-      role === 'manager'
-        ? MENU_MANAGER
-        : role === 'master'
-          ? MENU_MASTER
-          : null;
+    if (role === 'unregistered') {
+      await ctx.reply('Ваша регистрация ещё не подтверждена');
+      return;
+    }
 
-    await ctx.reply('Выберите действие:', menu);
+    if (['manager', 'master'].includes(role)) {
+      await ctx.reply(`Добро пожаловать, ${user.name} (роль: ${user.role}).`);
+      await ctx.reply('Меню:', MENU[role]);
+    }
   }
 
   @Action('client')
@@ -92,21 +94,32 @@ export class MenuScene {
       await ctx.reply(e.message);
     }
   }
+
+  @Action('user_registration')
+  async onUserRegistration(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.REGISTER));
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
 }
 
-const MENU_MANAGER = Markup.inlineKeyboard([
-  [Markup.button.callback('Клиенты', 'client')],
-  [Markup.button.callback('Заказы', 'order')],
+const MENU = {
+  manager: Markup.inlineKeyboard([
+    [Markup.button.callback('Клиенты', 'client')],
+    [Markup.button.callback('Заказы', 'order')],
 
-  [Markup.button.callback('Компоненты', 'parts')],
-  [
-    Markup.button.callback('Работа', 'add_work'),
-    Markup.button.callback('Задача', 'add_task'),
-  ],
-  [Markup.button.callback('Деньги', 'money')],
-]);
-
-const MENU_MASTER = Markup.inlineKeyboard([
-  [Markup.button.callback('➕ Работа', 'add_work')],
-  [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
-]);
+    [Markup.button.callback('Компоненты', 'parts')],
+    [
+      Markup.button.callback('Работа', 'add_work'),
+      Markup.button.callback('Задача', 'add_task'),
+    ],
+    [Markup.button.callback('Деньги', 'money')],
+    [Markup.button.callback('Регистрации', 'user_registration')],
+  ]),
+  master: Markup.inlineKeyboard([
+    [Markup.button.callback('➕ Работа', 'add_work')],
+    [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
+  ]),
+};

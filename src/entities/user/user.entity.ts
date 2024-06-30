@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../nullable-column.decorator';
 import { BaseEntity } from '../base.entity';
+import { UserRole } from '../../shared/interfaces';
 
 @Entity()
 export class User extends BaseEntity {
@@ -21,5 +22,5 @@ export class User extends BaseEntity {
   telegramUserId: number;
 
   @NullableColumn()
-  role: string; // 'manager', 'master', 'unregistered'
+  role: UserRole;
 }

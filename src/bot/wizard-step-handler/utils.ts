@@ -2,9 +2,10 @@ import { Markup } from 'telegraf';
 import { CustomWizardContext } from '../../shared/interfaces';
 import { getMessage, getValueUnionByIndex } from '../../shared/helpers';
 import { BotActions } from '../bot.update';
+import { SceneContext } from 'telegraf/scenes';
 
 export async function replyWithCancelButton(
-  ctx: CustomWizardContext,
+  ctx: CustomWizardContext | SceneContext,
   message: string,
 ) {
   await ctx.reply(

@@ -129,7 +129,7 @@ export const formatLabels = (
     .join('\n');
 };
 
-export const getMessage = (ctx: CustomWizardContext) => {
+export const getMessage = (ctx: CustomWizardContext | Scenes.SceneContext) => {
   // TODO: update types
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error

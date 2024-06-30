@@ -1,9 +1,11 @@
-import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
+import { Action, Ctx, On, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Scenes } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
+import { getMessage } from '../shared/helpers';
+import { replyWithCancelButton } from './wizard-step-handler/utils';
 
 @Scene(SCENES.REGISTER)
 @SceneRoles('manager')
@@ -15,18 +17,62 @@ export class RegisterUserScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext) {
-    const telegramUserId = ctx.from.id;
-    await this.userService.createRequest(telegramUserId);
+    const requestsList = await this.userService.getRegistrationRequests();
     await ctx.reply(
-      'Заявка на регистрацию отправлена. Ожидайте подтверждения.',
+      requestsList
+        .map((request, index) => `${index + 1}. ${request.telegramUserId}`)
+        .join('\n'),
     );
+    await ctx.reply('Введите номер и имя пользователя через запятую');
   }
 
-  @Action(/register_(.+)/)
+  @On('text')
   async onRegister(@Ctx() ctx: Scenes.SceneContext) {
-    const userId = 1; // Number(ctx.match[1]);
-    await this.userService.approveRequest(userId);
+    const message = getMessage(ctx);
+    const enteredValues = message.text.split(',');
+
+    if (enteredValues.length !== 2) {
+      await replyWithCancelButton(
+        ctx,
+        'Некорректный ввод. Пожалуйста, введите номер и имя пользователя через запятую.',
+      );
+      return;
+    }
+
+    const selectedNumber = parseInt(enteredValues[0].trim());
+    const name = enteredValues[1].trim();
+
+    if (isNaN(selectedNumber) || selectedNumber < 1) {
+      await replyWithCancelButton(
+        ctx,
+        'Некорректный номер. Пожалуйста, введите действительный номер.',
+      );
+      return;
+    }
+
+    const requestsList = await this.userService.getRegistrationRequests();
+
+    if (selectedNumber > requestsList.length) {
+      await replyWithCancelButton(
+        ctx,
+        'Некорректный номер. Пожалуйста, выберите номер из списка.',
+      );
+      return;
+    }
+
+    if (!name) {
+      await replyWithCancelButton(
+        ctx,
+        'Некорректное имя. Пожалуйста, введите имя пользователя.',
+      );
+      return;
+    }
+
+    const selectedUser = requestsList[selectedNumber - 1];
+
+    await this.userService.approveRequest(selectedUser.id, name);
     await ctx.reply('Пользователь зарегистрирован.');
     await ctx.scene.leave();
+    await ctx.scene.enter(SCENES.MENU);
   }
 }
