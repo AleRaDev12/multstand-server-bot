@@ -3,13 +3,11 @@ import {
   AdditionalWizardSelections,
   WizardStepType,
 } from '../../../shared/interfaces';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
 import { TransactionAddWizard } from './transaction-add.wizard';
 import { Transaction } from './transaction.entity';
 import { getMessage } from '../../../shared/helpers';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const entityName = 'transaction';
 const accountSelectType: AdditionalWizardSelections = 'accountSelect';
@@ -91,7 +89,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const TransactionAddWizardHandler = UnifiedWizardHandler<Transaction>({
+export const TransactionAddWizardHandler = wizardStepHandler<Transaction>({
   getEntity,
   setEntity,
   save,

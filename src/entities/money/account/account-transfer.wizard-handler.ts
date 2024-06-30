@@ -1,7 +1,3 @@
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
 import { Account } from './account.entity';
 import {
   CustomWizardContext,
@@ -10,6 +6,8 @@ import {
 } from '../../../shared/interfaces';
 import { AccountTransferWizard } from './account-transfer.wizard';
 import { getMessage } from '../../../shared/helpers';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const stateEntityName = 'accountTransfer';
 type TransferMoney = {
@@ -118,14 +116,12 @@ async function handleSpecificRequest(
   }
 }
 
-export const AccountTransferWizardHandler = UnifiedWizardHandler<TransferMoney>(
-  {
-    getEntity,
-    setEntity,
-    save,
-    print,
-    initialSteps: steps,
-    handleSpecificAnswer,
-    handleSpecificRequest,
-  },
-);
+export const AccountTransferWizardHandler = wizardStepHandler<TransferMoney>({
+  getEntity,
+  setEntity,
+  save,
+  print,
+  initialSteps: steps,
+  handleSpecificAnswer,
+  handleSpecificRequest,
+});

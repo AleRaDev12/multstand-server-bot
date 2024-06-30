@@ -4,12 +4,11 @@ import {
   WizardStepType,
 } from '../../../shared/interfaces';
 import { Transaction } from './transaction.entity';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
+
 import { TransactionOrderAddWizard } from './add-transaction-order.wizard';
 import { getMessage } from '../../../shared/helpers';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const entityName = 'transactionOrder';
 const orderSelectType: AdditionalWizardSelections = 'orderSelect';
@@ -120,7 +119,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const TransactionOrderWizardHandler = UnifiedWizardHandler<Transaction>({
+export const TransactionOrderWizardHandler = wizardStepHandler<Transaction>({
   getEntity,
   setEntity,
   save,

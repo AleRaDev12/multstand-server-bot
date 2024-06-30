@@ -3,14 +3,12 @@ import {
   CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
 import { Transaction } from '../../money/transaction/transaction.entity';
 import { getMessage } from '../../../shared/helpers';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const componentTypeName: AdditionalWizardSelections = 'componentSelect';
 const accountSelect: AdditionalWizardSelections = 'accountSelect';
@@ -96,8 +94,10 @@ async function handleSpecificAnswer(
       const message = getMessage(ctx);
 
       const selectedNumber = parseInt(message.text);
+      console.log('*-* selectedNumber', selectedNumber);
 
       const components = await this.componentService.findAll();
+      console.log('*-* components', components);
       const component = components[selectedNumber - 1];
       if (!component) {
         await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
@@ -125,7 +125,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const PartInWizardHandler = UnifiedWizardHandler<PartIn>({
+export const PartInWizardHandler = wizardStepHandler<PartIn>({
   getEntity,
   setEntity,
   save,

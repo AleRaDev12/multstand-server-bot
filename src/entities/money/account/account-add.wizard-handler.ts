@@ -2,9 +2,8 @@ import {
   CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
-import { Transaction } from '../transaction/transaction.entity';
 import { AccountAddWizard } from './account-add.wizard';
-import { UnifiedWizardHandler } from '../../../UnifiedWizardHandler';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Account } from './account.entity';
 
 const entityName = 'account';
@@ -30,7 +29,7 @@ async function print(ctx: CustomWizardContext, entity: Account): Promise<void> {
   await ctx.reply(`Добавлено`);
 }
 
-export const AccountAddWizardHandler = UnifiedWizardHandler<Account>({
+export const AccountAddWizardHandler = wizardStepHandler<Account>({
   getEntity,
   setEntity,
   save,

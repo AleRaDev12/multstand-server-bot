@@ -2,7 +2,7 @@ import {
   CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
-import { UnifiedWizardHandler } from '../../../UnifiedWizardHandler';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from './component.entity';
 
 const steps: WizardStepType[] = [
@@ -32,7 +32,7 @@ async function print(
   await ctx.reply(`${entity.name} добавлен`);
 }
 
-export const ComponentWizardHandler = UnifiedWizardHandler<Component>({
+export const ComponentWizardHandler = wizardStepHandler<Component>({
   getEntity,
   setEntity,
   save,

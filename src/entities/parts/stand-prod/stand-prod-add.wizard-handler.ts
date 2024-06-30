@@ -6,10 +6,8 @@ import {
 import { StandProd } from './stand-prod.entity';
 import { StandProdAddWizard } from './stand-prod-add.wizard';
 import { getMessage } from '../../../shared/helpers';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const standOrderSelectType: AdditionalWizardSelections = 'standOrderSelect';
 const entityName = 'standProd';
@@ -88,7 +86,7 @@ async function handleSpecificRequest(
   }
 }
 
-export const StandProdAddWizardHandler = UnifiedWizardHandler<StandProd>({
+export const StandProdAddWizardHandler = wizardStepHandler<StandProd>({
   getEntity,
   setEntity,
   save,

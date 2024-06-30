@@ -3,13 +3,11 @@ import {
   AdditionalWizardSelections,
   WizardStepType,
 } from '../../shared/interfaces';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../UnifiedWizardHandler';
 import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
 import { getMessage } from '../../shared/helpers';
+import { replyWithCancelButton } from '../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
 
 const masterSelectType: AdditionalWizardSelections = 'masterSelect';
 const taskSelectType: AdditionalWizardSelections = 'taskSelect';
@@ -190,7 +188,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const WorkWizardHandler = UnifiedWizardHandler<Work>({
+export const WorkWizardHandler = wizardStepHandler<Work>({
   getEntity,
   setEntity,
   save,

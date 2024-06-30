@@ -4,12 +4,10 @@ import {
   CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
 import { PartOutAddWizard } from './part-out-add.wizard';
 import { getMessage } from '../../../shared/helpers';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const componentTypeName: AdditionalWizardSelections = 'componentSelect';
 const partsInTypeName: AdditionalWizardSelections = 'partsInBatchSelect';
@@ -100,7 +98,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const PartOutWizardHandler = UnifiedWizardHandler<PartOut>({
+export const PartOutWizardHandler = wizardStepHandler<PartOut>({
   getEntity,
   setEntity,
   save,

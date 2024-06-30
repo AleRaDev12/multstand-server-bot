@@ -3,12 +3,10 @@ import { Inject } from '@nestjs/common';
 import { CustomWizardContext, WizardStepTypeN } from '../../shared/interfaces';
 import { Client } from './client.entity';
 import { ClientService } from './client.service';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../UnifiedWizardHandler';
 import { WIZARDS } from '../../shared/scenes-wizards';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
+import { replyWithCancelButton } from '../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
 
 const entityName = 'client';
 
@@ -40,7 +38,7 @@ async function print(ctx: CustomWizardContext, entity: Client): Promise<void> {
   );
 }
 
-export const ClientUpdateWizardHandler = UnifiedWizardHandler<Client>({
+export const ClientUpdateWizardHandler = wizardStepHandler<Client>({
   getEntity,
   setEntity,
   save,

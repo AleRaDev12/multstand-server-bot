@@ -1,8 +1,4 @@
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../UnifiedWizardHandler';
 import { Task } from './task.entity';
 import {
   generateMessage,
@@ -10,6 +6,8 @@ import {
   getValueUnionByIndex,
 } from '../../shared/helpers';
 import { TaskAddWizard } from './task-add-wizard';
+import { replyWithCancelButton } from '../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
 
 const steps: WizardStepType[] = [
   { message: 'Категория задачи:', field: 'category', type: 'string' },
@@ -95,7 +93,7 @@ async function handleSpecificRequest(
   return true;
 }
 
-export const TaskWizardHandler = UnifiedWizardHandler<Task>({
+export const TaskWizardHandler = wizardStepHandler<Task>({
   getEntity,
   setEntity,
   save,

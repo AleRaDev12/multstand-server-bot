@@ -1,7 +1,7 @@
 import { CustomWizardContext, WizardStepTypeN } from '../../shared/interfaces';
 import { Client } from './client.entity';
 import { ClientAddWizard } from './client-add.wizard';
-import { UnifiedWizardHandler } from '../../UnifiedWizardHandler';
+import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
 
 const entityName = 'client';
 
@@ -33,7 +33,7 @@ async function print(ctx: CustomWizardContext, entity: Client): Promise<void> {
   );
 }
 
-export const ClientWizardHandler = UnifiedWizardHandler<Client>({
+export const ClientWizardHandler = wizardStepHandler<Client>({
   getEntity,
   setEntity,
   save,

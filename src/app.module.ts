@@ -1,5 +1,5 @@
 import { SceneRoleGuard } from './bot/guards/scene-role.guard';
-import { sessionMiddleware } from './middleware/session.middleware';
+import { sessionMiddleware } from './bot/middleware/session.middleware';
 import { Task } from './entities/tasks/task.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';

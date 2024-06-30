@@ -2,13 +2,11 @@ import {
   CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
-import {
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
 import { Order } from './order.entity';
 import { OrderAddWizard } from './order-add.wizard';
 import { getMessage } from '../../../shared/helpers';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const selectTypeName = 'clientSelect';
 
@@ -78,7 +76,7 @@ async function handleSpecificRequest(
   return true;
 }
 
-export const OrderAddWizardHandler = UnifiedWizardHandler<Order>({
+export const OrderAddWizardHandler = wizardStepHandler<Order>({
   getEntity,
   setEntity,
   save,

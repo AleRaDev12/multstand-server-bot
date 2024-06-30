@@ -6,14 +6,15 @@ import {
   WizardStepTypeN,
 } from '../../../shared/interfaces';
 import { StandOrder } from './stand-order.entity';
-import {
-  handleAnswerUnion,
-  replyWithCancelButton,
-  UnifiedWizardHandler,
-} from '../../../UnifiedWizardHandler';
+
 import { StandOrderAddWizard } from './stand-order-add.wizard';
 import { getMessage, printUnion } from '../../../shared/helpers';
 import { StandOrderStatus } from './stand-order-types';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import {
+  handleAnswerUnion,
+  replyWithCancelButton,
+} from '../../../bot/wizard-step-handler/utils';
 
 const orderSelectType: AdditionalWizardSelections = 'orderSelect';
 const orderModelSelectType: AdditionalWizardSelections = 'orderModelSelect';
@@ -191,7 +192,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const StandOrderAddWizardHandler = UnifiedWizardHandler<StandOrder>({
+export const StandOrderAddWizardHandler = wizardStepHandler<StandOrder>({
   getEntity,
   setEntity,
   save,

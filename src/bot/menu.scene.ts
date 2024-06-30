@@ -107,6 +107,6 @@ const MENU_MANAGER = Markup.inlineKeyboard([
 ]);
 
 const MENU_MASTER = Markup.inlineKeyboard([
-  [Markup.button.callback('Работа', 'add_work')],
+  [Markup.button.callback('➕ Работа', 'add_work')],
   [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
 ]);
