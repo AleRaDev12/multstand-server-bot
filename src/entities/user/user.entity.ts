@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../nullable-column.decorator';
 import { BaseEntity } from '../base.entity';
 import { UserRole } from '../../shared/interfaces';
+import { Master } from '../master/master.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -23,4 +24,7 @@ export class User extends BaseEntity {
 
   @NullableColumn()
   role: UserRole;
+
+  @OneToMany(() => Master, (master) => master.user)
+  master: Master[];
 }
