@@ -8,6 +8,9 @@ import { SCENES } from './shared/scenes-wizards';
 import { Markup } from 'telegraf';
 import { BaseEntity } from './entities/base.entity';
 
+import { format, subDays } from 'date-fns';
+import { BotActions } from './bot/bot.update';
+
 interface UnifiedWizardHandlerOptions<T> {
   getEntity: (ctx: CustomWizardContext) => T;
   setEntity: (ctx: CustomWizardContext) => void;
@@ -169,12 +172,43 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
               entity[stepAnswer.field] = booleanValue;
               break;
             case 'date':
-              const date = Date.parse(message.text);
-              if (!isNaN(date)) {
-                entity[stepAnswer.field] = new Date(date);
+              if (ctx.wizard.state.selectedDate) {
+                entity[stepAnswer.field] = ctx.wizard.state.selectedDate;
+                ctx.wizard.state.selectedDate = undefined;
               } else {
-                await replyWithCancelButton(ctx, 'Введите корректную дату.');
-                return false;
+                const now = new Date();
+                let resultDate: Date | null = null;
+
+                if (/^\d{1,2}$/.test(message.text)) {
+                  const day = parseInt(message.text);
+                  const lastDayOfMonth = new Date(
+                    now.getFullYear(),
+                    now.getMonth() + 1,
+                    0,
+                  ).getDate();
+                  if (day > 0 && day <= lastDayOfMonth) {
+                    resultDate = new Date(
+                      now.getFullYear(),
+                      now.getMonth(),
+                      day,
+                    );
+                  }
+                } else {
+                  const parsedDate = new Date(message.text);
+                  if (
+                    !isNaN(parsedDate.getTime()) &&
+                    parsedDate.toISOString().slice(0, 10) === message.text
+                  ) {
+                    resultDate = parsedDate;
+                  }
+                }
+
+                if (resultDate && resultDate.getTime() > 0) {
+                  entity[stepAnswer.field] = resultDate;
+                } else {
+                  await replyWithCancelButton(ctx, 'Введите корректную дату.');
+                  return false;
+                }
               }
               break;
             default:
@@ -185,7 +219,6 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
                   stepAnswer,
                   entity,
                 );
-                console.log('*-* result', result);
               } else {
                 await replyWithCancelButton(ctx, 'Ошибка 1');
                 return false;
@@ -195,7 +228,6 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
 
         const steps = ctx.wizard.state.steps;
         const isLastStep = stepForAnswerNumber === steps.length - 1;
-        console.log('*-* isLastStep', isLastStep, stepForAnswerNumber);
         if (isLastStep) {
           const creatingEntity = await save.call(this, entity, ctx);
           await print(ctx, creatingEntity);
@@ -224,6 +256,27 @@ export function UnifiedWizardHandler<T extends BaseEntity>(
               ctx,
               generateMessage(steps[stepIndex - 1]),
             );
+            if (stepRequest.type === 'date') {
+              const today = new Date();
+              const monthName = format(today, 'MMMM');
+              await ctx.reply(
+                `В формате "ГГГГ-ММ-ДД"\nЛибо число текущего месяца (сейчас на сервере ${monthName})\nЛибо используйте быстрый выбор.`,
+                Markup.inlineKeyboard([
+                  Markup.button.callback(
+                    `Позавчера${format(subDays(today, 2), 'yyyy-MM-dd')}`,
+                    BotActions.DATE_BEFORE_YESTERDAY,
+                  ),
+                  Markup.button.callback(
+                    `Вчера${format(subDays(today, 1), 'yyyy-MM-dd')}`,
+                    BotActions.DATE_YESTERDAY,
+                  ),
+                  Markup.button.callback(
+                    `Сегодня${format(today, 'yyyy-MM-dd')}`,
+                    BotActions.DATE_TODAY,
+                  ),
+                ]),
+              );
+            }
             ctx.wizard.next();
             return true;
           }
@@ -255,7 +308,9 @@ export async function replyWithCancelButton(
 ) {
   await ctx.reply(
     message,
-    Markup.inlineKeyboard([Markup.button.callback('Отмена', 'cancel')]),
+    Markup.inlineKeyboard([
+      Markup.button.callback('Отмена', BotActions.CANCEL),
+    ]),
   );
 }
 

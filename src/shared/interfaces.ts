@@ -92,6 +92,7 @@ export type AllEntities = {
 
 interface CustomWizardSessionData extends WizardSessionData, AllEntities {
   steps?: WizardStepType[];
+  selectedDate?: Date;
 }
 
 interface CustomWizardContextWizard<
