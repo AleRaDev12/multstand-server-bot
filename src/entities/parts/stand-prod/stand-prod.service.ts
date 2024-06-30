@@ -4,6 +4,14 @@ import { Repository } from 'typeorm';
 import { UserService } from '../../user/user.service';
 import { StandProd } from './stand-prod.entity';
 import { UserRole } from '../../../shared/interfaces';
+import { PartOut } from '../part-out/part-out.entity';
+
+interface ComponentSummary {
+  componentName: string;
+  totalCount: number;
+  unitCost: number;
+  totalCost: number;
+}
 
 @Injectable()
 export class StandProdService {
@@ -12,6 +20,8 @@ export class StandProdService {
     private repository: Repository<StandProd>,
     @Inject(UserService)
     private readonly userService: UserService,
+    @InjectRepository(PartOut)
+    private partOutRepository: Repository<PartOut>,
   ) {}
 
   async create(standProd: StandProd): Promise<StandProd> {
@@ -40,29 +50,82 @@ export class StandProdService {
     );
   }
 
-  async formatList(standProds: StandProd[], userId: number): Promise<string[]> {
-    if (standProds.length === 0) return null;
+  async findComponentsByStandProd(
+    standProdId: number,
+  ): Promise<ComponentSummary[]> {
+    const partOuts = await this.partOutRepository.find({
+      where: { standProd: { id: standProdId } },
+      relations: ['partIn', 'partIn.component'],
+    });
 
-    const userRole = await this.userService.getRoleByUserId(userId);
+    const componentMap: { [componentName: string]: ComponentSummary } = {};
 
-    const formattedProds = [];
-    let index = 1;
-    for (const standProd of standProds) {
-      const formattedProd = this.formatSingleWithRole(standProd, userRole);
-      formattedProds.push(`\n№${index}\n${formattedProd}`);
-      index++;
+    for (const partOut of partOuts) {
+      const componentName = partOut.partIn.component.name;
+      const unitCost = partOut.partIn.amount / partOut.partIn.count;
+      const totalCost = unitCost * partOut.count;
+
+      if (componentMap[componentName]) {
+        componentMap[componentName].totalCount += partOut.count;
+        componentMap[componentName].totalCost += totalCost;
+      } else {
+        componentMap[componentName] = {
+          componentName,
+          totalCount: partOut.count,
+          unitCost,
+          totalCost,
+        };
+      }
     }
 
-    return formattedProds;
+    return Object.values(componentMap);
   }
 
-  private formatSingleWithRole(
+  async formatList(list: StandProd[], userId: number): Promise<string[]> {
+    const formattedList: string[] = [];
+
+    for (const standProd of list) {
+      const formatted = await this.formatSingleWithRole(
+        standProd,
+        await this.userService.getRoleByUserId(userId),
+      );
+      formattedList.push(formatted);
+    }
+
+    return formattedList;
+  }
+
+  private async formatSingleWithRole(
     standProd: StandProd,
     userRole: UserRole,
-  ): string {
+  ): Promise<string> {
     const orderStateText = standProd?.standOrder?.order
       ? `💼 Статус заказа: ${standProd?.standOrder?.order?.status}`
       : '💼 Заказ: -';
-    return `${standProd.format(userRole)}\n\n${orderStateText}\n\n🛠 Станок-заказ:\n${standProd.standOrder?.format(userRole) || '-'}`;
+
+    let componentsInfo = '';
+    const components = await this.findComponentsByStandProd(standProd.id);
+
+    if (userRole === 'manager') {
+      const totalCost = components.reduce(
+        (sum, comp) => sum + comp.totalCost,
+        0,
+      );
+      componentsInfo = components
+        .map((comp) => {
+          return `- ${comp.componentName} (${comp.totalCount}ед, по ~: ${comp.unitCost.toFixed(2)} руб, итого: ${comp.totalCost.toFixed(2)})`;
+        })
+        .join('\n');
+      componentsInfo = `\n\n🛠 Компоненты:\n${componentsInfo}\nСуммарная стоимость: ${totalCost.toFixed(2)}`;
+    } else {
+      componentsInfo = components
+        .map((comp) => {
+          return `- ${comp.componentName} (${comp.totalCount}ед)`;
+        })
+        .join('\n');
+      componentsInfo = `\n\n🛠 Компоненты:\n${componentsInfo}`;
+    }
+
+    return `${standProd.format(userRole)}\n\n${orderStateText}${componentsInfo}\n\n🛠 Станок-заказ:\n${standProd.standOrder?.format(userRole) || '-'}`;
   }
 }

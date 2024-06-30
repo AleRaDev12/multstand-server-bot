@@ -6,10 +6,11 @@ import { StandProdService } from './stand-prod.service';
 import { StandOrderModule } from '../../orders/stand-order/stand-order.module';
 import { StandProdListScene } from './stand-prod-list.scene';
 import { UserModule } from '../../user/user.module';
+import { PartOut } from '../part-out/part-out.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([StandProd]),
+    TypeOrmModule.forFeature([StandProd, PartOut]),
     StandOrderModule,
     UserModule,
   ],

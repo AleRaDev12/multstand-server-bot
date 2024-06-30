@@ -97,4 +97,11 @@ export class PartOutService {
       )
       .join('\n\n');
   };
+
+  async findComponentsByStandProd(standProdId: number): Promise<PartOut[]> {
+    return this.repository.find({
+      where: { standProd: { id: standProdId } },
+      relations: ['partIn', 'partIn.component'],
+    });
+  }
 }

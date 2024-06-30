@@ -96,8 +96,8 @@ async function handleSpecificRequest(
       }
 
       await ctx.reply(stepRequest.message);
-      for (const item of formattedList) {
-        await ctx.reply(item);
+      for (let i = 0; i < formattedList.length; i++) {
+        await ctx.reply(`№${i + 1}\n${formattedList[i]}`);
       }
 
       await replyWithCancelButton(ctx, `-`);

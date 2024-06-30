@@ -17,9 +17,7 @@ import { PartsScene } from './parts.scene';
     PartInModule,
     forwardRef(() => PartOutModule), // *-* remake this after to use without forwardRefer
     StandProdModule,
-    TypeOrmModule.forFeature([Component]),
-    TypeOrmModule.forFeature([PartIn]),
-    TypeOrmModule.forFeature([PartOut]),
+    TypeOrmModule.forFeature([Component, PartIn, PartOut]),
   ],
   providers: [PartsScene, PartsRemainingListScene, PartsService],
   exports: [PartsService],

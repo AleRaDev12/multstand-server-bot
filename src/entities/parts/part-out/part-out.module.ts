@@ -11,11 +11,10 @@ import { StandProdModule } from '../stand-prod/stand-prod.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PartOut]),
-    TypeOrmModule.forFeature([PartIn]),
+    TypeOrmModule.forFeature([PartOut, PartIn]),
     ComponentModule,
     StandProdModule,
-    forwardRef(() => PartsModule), // *-* remake this after to use without forwardRefe
+    forwardRef(() => PartsModule), // *-* remake this after to use without forwardRef
   ],
   providers: [PartOutService, PartOutAddWizard, PartOutListScene],
   exports: [PartOutService],
