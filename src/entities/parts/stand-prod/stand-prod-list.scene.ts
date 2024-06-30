@@ -26,7 +26,10 @@ export class StandProdListScene {
     if (!list || list.length === 0) {
       await ctx.reply('Записей нет');
     } else {
-      const formattedList = await this.service.formatList(list, ctx.userId);
+      const formattedList = await this.service.formatList(
+        list,
+        ctx.telegramUserId,
+      );
       for (const item of formattedList) {
         await ctx.reply(item);
       }

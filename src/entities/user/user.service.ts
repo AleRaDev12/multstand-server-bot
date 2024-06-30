@@ -14,6 +14,10 @@ export class UserService {
     private masterService: MasterService,
   ) {}
 
+  async findAll(): Promise<User[]> {
+    return this.repository.find();
+  }
+
   async createRequest(userId: number): Promise<User> {
     let user = await this.repository.findOne({
       where: { telegramUserId: userId },
@@ -46,7 +50,7 @@ export class UserService {
     return this.repository.findOne({ where: { telegramUserId } });
   }
 
-  async getRoleByUserId(telegramUserId: number): Promise<UserRole> {
+  async getRoleByTelegramUserId(telegramUserId: number): Promise<UserRole> {
     const user = await this.repository.findOne({ where: { telegramUserId } });
     if (
       user &&

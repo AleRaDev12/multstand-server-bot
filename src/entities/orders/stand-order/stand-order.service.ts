@@ -39,7 +39,7 @@ export class StandOrderService {
   async formatSingle(standOrder: StandOrder, userId: number): Promise<string> {
     return this.formatSingleWithRole(
       standOrder,
-      await this.userService.getRoleByUserId(userId),
+      await this.userService.getRoleByTelegramUserId(userId),
     );
   }
 
@@ -49,7 +49,7 @@ export class StandOrderService {
   ): Promise<string[]> {
     if (standOrders.length === 0) return null;
 
-    const userRole = await this.userService.getRoleByUserId(userId);
+    const userRole = await this.userService.getRoleByTelegramUserId(userId);
 
     const formattedOrders = [];
     let index = 1;

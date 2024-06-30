@@ -29,7 +29,10 @@ export class StandProdNotLinkedListScene {
     if (!list || list.length === 0) {
       await ctx.reply('Записей нет');
     } else {
-      const formattedList = await this.service.formatList(list, ctx.userId);
+      const formattedList = await this.service.formatList(
+        list,
+        ctx.telegramUserId,
+      );
 
       for (const standProd of formattedList) {
         await ctx.reply(standProd);
@@ -37,7 +40,9 @@ export class StandProdNotLinkedListScene {
     }
 
     await ctx.scene.leave();
-    const userRole = await this.userService.getRoleByUserId(ctx.userId);
+    const userRole = await this.userService.getRoleByTelegramUserId(
+      ctx.telegramUserId,
+    );
 
     switch (userRole) {
       case 'manager':

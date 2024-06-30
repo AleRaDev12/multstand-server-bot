@@ -7,6 +7,8 @@ import { WorkAddWizard } from './work-add.wizard';
 import { ComponentModule } from '../parts/component/component.module';
 import { MasterModule } from '../master/master.module';
 import { StandProdModule } from '../parts/stand-prod/stand-prod.module';
+import { WorkListScene } from './work-list.scene';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -15,7 +17,8 @@ import { StandProdModule } from '../parts/stand-prod/stand-prod.module';
     TaskModule,
     StandProdModule,
     MasterModule,
+    UserModule,
   ],
-  providers: [WorkService, WorkAddWizard],
+  providers: [WorkService, WorkAddWizard, WorkListScene],
 })
 export class WorkModule {}

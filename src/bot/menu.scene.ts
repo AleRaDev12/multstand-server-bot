@@ -103,6 +103,15 @@ export class MenuScene {
       await ctx.reply(e.message);
     }
   }
+
+  @Action('work_list')
+  async onWorkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORK_LIST));
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
 }
 
 const MENU = {
@@ -112,14 +121,18 @@ const MENU = {
 
     [Markup.button.callback('Компоненты', 'parts')],
     [
-      Markup.button.callback('Работа', 'add_work'),
-      Markup.button.callback('Задача', 'add_task'),
+      Markup.button.callback('➕ Задача', 'add_task'),
+      Markup.button.callback('➕ Работа', 'add_work'),
+      Markup.button.callback('📊 Работа', 'work_list'),
     ],
     [Markup.button.callback('Деньги', 'money')],
     [Markup.button.callback('Регистрации', 'user_registration')],
   ]),
   master: Markup.inlineKeyboard([
-    [Markup.button.callback('➕ Работа', 'add_work')],
+    [
+      Markup.button.callback('➕ Работа', 'add_work'),
+      Markup.button.callback('📊 Список, сумма', 'work_list'),
+    ],
     [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
   ]),
 };

@@ -46,7 +46,7 @@ export class StandProdService {
   async formatSingle(standProd: StandProd, userId: number): Promise<string> {
     return this.formatSingleWithRole(
       standProd,
-      await this.userService.getRoleByUserId(userId),
+      await this.userService.getRoleByTelegramUserId(userId),
     );
   }
 
@@ -87,7 +87,7 @@ export class StandProdService {
     for (const standProd of list) {
       const formatted = await this.formatSingleWithRole(
         standProd,
-        await this.userService.getRoleByUserId(userId),
+        await this.userService.getRoleByTelegramUserId(userId),
       );
       formattedList.push(formatted);
     }

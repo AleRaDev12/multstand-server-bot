@@ -2,7 +2,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Scenes } from 'telegraf';
 
 export interface SceneContextWithUserId extends Scenes.SceneContext {
-  userId: number;
+  telegramUserId: number;
 }
 
 export const CtxWithUserId = createParamDecorator(
@@ -21,7 +21,7 @@ export const CtxWithUserId = createParamDecorator(
       Object.getOwnPropertyDescriptors(scenesContext),
     );
 
-    extendedContext.userId = userId;
+    extendedContext.telegramUserId = userId;
 
     return extendedContext as SceneContextWithUserId;
   },
