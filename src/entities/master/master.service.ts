@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Master } from './master.entity';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class MasterService {
@@ -25,5 +26,13 @@ export class MasterService {
       where: { user: { telegramUserId: telegramId } },
       relations: ['user'],
     });
+  }
+
+  async createMaster(user: User, paymentCoefficient: number): Promise<Master> {
+    const master = this.repository.create({
+      user,
+      paymentCoefficient,
+    });
+    return this.repository.save(master);
   }
 }

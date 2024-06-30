@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { UserRole } from '../../shared/interfaces';
+import { MasterService } from '../master/master.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private repository: Repository<User>,
+    @Inject(MasterService)
+    private masterService: MasterService,
   ) {}
 
   async createRequest(userId: number): Promise<User> {
@@ -31,6 +34,7 @@ export class UserService {
       user.role = 'master';
       user.name = name;
       await this.repository.save(user);
+      await this.masterService.createMaster(user, 1);
     }
   }
 

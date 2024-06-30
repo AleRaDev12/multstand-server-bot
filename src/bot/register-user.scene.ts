@@ -18,7 +18,12 @@ export class RegisterUserScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext) {
     const requestsList = await this.userService.getRegistrationRequests();
-    await ctx.reply(
+    if (!requestsList || requestsList.length === 0) {
+      await replyWithCancelButton(ctx, 'Список пуст.');
+      return;
+    }
+    await replyWithCancelButton(
+      ctx,
       requestsList
         .map((request, index) => `${index + 1}. ${request.telegramUserId}`)
         .join('\n'),
