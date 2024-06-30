@@ -8,8 +8,8 @@ import {
 import { BaseEntity } from '../base.entity';
 import { Task } from '../tasks/task.entity';
 import { NullableColumn } from '../nullable-column.decorator';
-import { StandProd } from '../component/stand-prod/stand-prod.entity';
 import { Master } from '../master/master.entity';
+import { StandProd } from '../parts/stand-prod/stand-prod.entity';
 
 @Entity()
 export class Work extends BaseEntity {

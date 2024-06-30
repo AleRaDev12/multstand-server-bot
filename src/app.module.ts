@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotModule } from './bot/bot.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Component } from './entities/component/component/component.entity';
+import { Component } from './entities/parts/component/component.entity';
 import { UserModule } from './entities/user/user.module';
 import { SeedService } from './seed.service';
 import { APP_GUARD } from '@nestjs/core';

@@ -41,7 +41,7 @@ export class StandProdNotLinkedListScene {
 
     switch (userRole) {
       case 'manager':
-        await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
+        await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
         break;
       default:
         await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.MENU));

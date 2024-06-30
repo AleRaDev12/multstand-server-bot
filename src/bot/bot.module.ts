@@ -1,23 +1,23 @@
-import { ClientsModule } from '../entities/client/clients.module';
-import { Module } from '@nestjs/common';
 import { OrderModule } from '../entities/orders/order/order.module';
-import { StandProdModule } from '../entities/component/stand-prod/stand-prod.module';
-import { PartInModule } from '../entities/component/part-in/part-in.module';
-import { PartOutModule } from '../entities/component/part-out/part-out.module';
+import { StandProdModule } from '../entities/parts/stand-prod/stand-prod.module';
+import { PartInModule } from '../entities/parts/part-in/part-in.module';
+import { PartOutModule } from '../entities/parts/part-out/part-out.module';
 import { WorkModule } from '../entities/work/work.module';
 import { TaskModule } from '../entities/tasks/task.module';
 import { StandOrderModule } from '../entities/orders/stand-order/stand-order.module';
+import { PartsModule } from '../entities/parts/partsModule';
 import { UserModule } from '../entities/user/user.module';
 import { TransactionModule } from '../entities/money/transaction/transaction.module';
+import { MasterModule } from '../entities/master/master.module';
+import { AccountModule } from '../entities/money/account/account.module';
 import { BotUpdate } from './bot.update';
 import { MenuScene } from './menu.scene';
 import { RegisterUserScene } from './register-user.scene';
 import { RegistrationScene } from './registrationScene';
 import { OrdersScene } from '../entities/orders/orders.scene';
-import { MasterModule } from '../entities/master/master.module';
-import { AccountModule } from '../entities/money/account/account.module';
 import { MoneyScene } from '../entities/money/money.scene';
-import { ComponentsModule } from '../entities/component/components.module';
+import { Module } from '@nestjs/common';
+import { ClientsModule } from '../entities/client/clients.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { ComponentsModule } from '../entities/component/components.module';
     WorkModule,
     TaskModule,
     StandOrderModule,
-    ComponentsModule,
+    PartsModule,
     UserModule,
     TransactionModule,
     MasterModule,

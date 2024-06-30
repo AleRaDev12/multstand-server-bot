@@ -72,9 +72,9 @@ export class MenuScene {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_TASK));
   }
 
-  @Action('components')
-  async components(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
+  @Action('parts')
+  async parts(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
   }
 
   @Action('money')
@@ -98,7 +98,7 @@ const MENU_MANAGER = Markup.inlineKeyboard([
   [Markup.button.callback('Клиенты', 'client')],
   [Markup.button.callback('Заказы', 'order')],
 
-  [Markup.button.callback('Компоненты', 'components')],
+  [Markup.button.callback('Компоненты', 'parts')],
   [
     Markup.button.callback('Работа', 'add_work'),
     Markup.button.callback('Задача', 'add_task'),

@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { PartInModule } from './part-in/part-in.module';
 import { PartOutModule } from './part-out/part-out.module';
 import { StandProdModule } from './stand-prod/stand-prod.module';
-import { ComponentsScene } from './components.scene';
-import { ComponentsRemainingListScene } from './parts-remaining-list.scene';
+import { PartsScene } from './partsScene';
+import { PartsRemainingListScene } from './parts-remaining-list.scene';
 import { ComponentModule } from './component/component.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PartIn } from './part-in/part-in.entity';
 import { PartOut } from './part-out/part-out.entity';
-import { ComponentsService } from './components.service';
+import { PartsService } from './parts.service';
 import { Component } from './component/component.entity';
 
 @Module({
@@ -21,7 +21,7 @@ import { Component } from './component/component.entity';
     TypeOrmModule.forFeature([PartIn]),
     TypeOrmModule.forFeature([PartOut]),
   ],
-  providers: [ComponentsScene, ComponentsRemainingListScene, ComponentsService],
+  providers: [PartsScene, PartsRemainingListScene, PartsService],
   exports: [],
 })
-export class ComponentsModule {}
+export class PartsModule {}

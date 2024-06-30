@@ -32,6 +32,6 @@ export class StandProdListScene {
       }
     }
     await ctx.scene.leave();
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
   }
 }

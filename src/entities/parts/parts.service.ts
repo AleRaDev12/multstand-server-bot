@@ -6,10 +6,10 @@ import { PartOut } from './part-out/part-out.entity';
 import { PartIn } from './part-in/part-in.entity';
 
 @Injectable()
-export class ComponentsService {
+export class PartsService {
   constructor(
     @InjectRepository(Component)
-    private repository: Repository<Component>,
+    private componentRepository: Repository<Component>,
     @InjectRepository(PartIn)
     private partInRepository: Repository<PartIn>,
     @InjectRepository(PartOut)
@@ -17,7 +17,7 @@ export class ComponentsService {
   ) {}
 
   async getRemainingList(): Promise<string[]> {
-    const components = await this.repository.find();
+    const components = await this.componentRepository.find();
     const remainingList = await Promise.all(
       components.map(async (component) => {
         const totalIn = await this.partInRepository

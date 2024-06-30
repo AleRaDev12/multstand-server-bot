@@ -5,37 +5,52 @@ import { Markup, Scenes } from 'telegraf';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 
-@Scene(SCENES.COMPONENTS)
+enum Actions {
+  COMPONENT_LIST = 'component_list',
+  COMPONENT_ADD = 'component_add',
+  PARTS_REMAINING_LIST = 'parts_remaining_list',
+  PART_IN_LIST = 'part_in_list',
+  PART_IN_ADD = 'part_in_add',
+  PART_OUT_LIST = 'part_out_list',
+  PART_OUT_ADD = 'part_out_add',
+  STAND_PROD_LIST = 'stand_prod_list',
+  STAND_PROD_ADD = 'stand_prod_add',
+}
+
+@Scene(SCENES.PARTS)
 @SceneRoles('manager')
-export class ComponentsScene extends BaseScene {
+export class PartsScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await ctx.reply(
       'Компоненты:',
       Markup.inlineKeyboard([
         [
-          Markup.button.callback('📑 Комплектующие', 'component_list'),
-          Markup.button.callback('➕', 'component_add'),
-          Markup.button.callback('Остатки', 'component_remaining_list'),
+          Markup.button.callback('📑 Комплектующие', Actions.COMPONENT_LIST),
+          Markup.button.callback('➕', Actions.COMPONENT_ADD),
+          Markup.button.callback('Остатки', Actions.PARTS_REMAINING_LIST),
         ],
         [
-          Markup.button.callback('📑 Поступление', 'part_in_list'),
-          Markup.button.callback('➕', 'part_in_add'),
+          Markup.button.callback('📑 Поступление', Actions.PART_IN_LIST),
+          Markup.button.callback('➕', Actions.PART_IN_ADD),
         ],
         [
-          Markup.button.callback('📑 Расход (на станки)', 'part_out_list'),
-          Markup.button.callback('➕', 'part_out_add'),
+          Markup.button.callback(
+            '📑 Расход (на станки)',
+            Actions.PART_OUT_LIST,
+          ),
+          Markup.button.callback('➕', Actions.PART_OUT_ADD),
         ],
         [
-          Markup.button.callback('📑 Станки-прод', 'stand_prod_list'),
-          Markup.button.callback('➕', 'stand_prod_add'),
+          Markup.button.callback('📑 Станки-прод', Actions.STAND_PROD_LIST),
+          Markup.button.callback('➕', Actions.STAND_PROD_ADD),
         ],
         [this.menuButton],
       ]),
     );
   }
 
-  @Action('component_list')
+  @Action(Actions.COMPONENT_LIST)
   async componentList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () =>
@@ -46,7 +61,7 @@ export class ComponentsScene extends BaseScene {
     }
   }
 
-  @Action('component_add')
+  @Action(Actions.COMPONENT_ADD)
   async componentAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () =>
@@ -57,18 +72,18 @@ export class ComponentsScene extends BaseScene {
     }
   }
 
-  @Action('component_remaining_list')
+  @Action(Actions.PARTS_REMAINING_LIST)
   async componentRemainingList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () =>
-        ctx.scene.enter(SCENES.COMPONENT_REMAINING_LIST),
+        ctx.scene.enter(SCENES.PARTS_REMAINING_LIST),
       );
     } catch (e) {
       await ctx.reply(e.message);
     }
   }
 
-  @Action('part_in_list')
+  @Action(Actions.PART_IN_LIST)
   async partInList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PART_IN_LIST));
@@ -77,12 +92,12 @@ export class ComponentsScene extends BaseScene {
     }
   }
 
-  @Action('part_in_add')
+  @Action(Actions.PART_IN_ADD)
   async partInAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_PART_IN));
   }
 
-  @Action('part_out_list')
+  @Action(Actions.PART_OUT_LIST)
   async partOutList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PART_OUT_LIST));
@@ -91,12 +106,12 @@ export class ComponentsScene extends BaseScene {
     }
   }
 
-  @Action('part_out_add')
+  @Action(Actions.PART_OUT_ADD)
   async partOutAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_PART_OUT));
   }
 
-  @Action('stand_prod_list')
+  @Action(Actions.STAND_PROD_LIST)
   async standProdList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () =>
@@ -107,7 +122,7 @@ export class ComponentsScene extends BaseScene {
     }
   }
 
-  @Action('stand_prod_add')
+  @Action(Actions.STAND_PROD_ADD)
   async standProdAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_STAND_PROD));
   }

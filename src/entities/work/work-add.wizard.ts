@@ -1,13 +1,13 @@
 import { On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
 import { WIZARDS } from '../../shared/scenes-wizards';
-import { ComponentService } from '../component/component/component.service';
+import { ComponentService } from '../parts/component/component.service';
 import { WorkService } from './work.service';
 import { WorkWizardHandler } from './work.wizard-handler';
 import { TaskService } from '../tasks/task.service';
-import { StandProdService } from '../component/stand-prod/stand-prod.service';
 import { MasterService } from '../master/master.service';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
+import { StandProdService } from '../parts/stand-prod/stand-prod.service';
 
 @Wizard(WIZARDS.ADD_WORK)
 @SceneRoles('manager', 'master')

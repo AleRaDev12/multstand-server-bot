@@ -4,14 +4,14 @@ import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { Inject } from '@nestjs/common';
 import { Scenes } from 'telegraf';
-import { ComponentsService } from './components.service';
+import { PartsService } from './parts.service';
 
-@Scene(SCENES.COMPONENT_REMAINING_LIST)
+@Scene(SCENES.PARTS_REMAINING_LIST)
 @SceneRoles('manager')
-export class ComponentsRemainingListScene {
+export class PartsRemainingListScene {
   constructor(
-    @Inject(ComponentsService)
-    readonly componentsService: ComponentsService,
+    @Inject(PartsService)
+    readonly componentsService: PartsService,
   ) {}
 
   @SceneEnter()
@@ -25,6 +25,6 @@ export class ComponentsRemainingListScene {
     }
 
     await ctx.scene.leave();
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
   }
 }

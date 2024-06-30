@@ -1,7 +1,7 @@
 import { PartOut } from './part-out.entity';
 import {
-  CustomWizardContext,
   AdditionalWizardSelections,
+  CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
 import {
@@ -70,8 +70,8 @@ async function handleSpecificAnswer(
 
   switch (stepAnswer.type) {
     case componentTypeName:
-      const components = await this.componentService.findAll();
-      const component = components[selectedNumber - 1];
+      const componentList = await this.componentService.findAll();
+      const component = componentList[selectedNumber - 1];
       if (!component) {
         await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
         return false;

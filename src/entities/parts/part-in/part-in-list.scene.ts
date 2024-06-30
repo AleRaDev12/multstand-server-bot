@@ -3,22 +3,30 @@ import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { Scenes } from 'telegraf';
 import { handleButtonPress } from '../../../shared/helpers';
-import { PartOutService } from './part-out.service';
+import { PartInService } from './part-in.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 
-@Scene(SCENES.PART_OUT_LIST)
+@Scene(SCENES.PART_IN_LIST)
 @SceneRoles('manager')
-export class PartOutListScene {
+export class PartInListScene {
   constructor(
-    @Inject(PartOutService)
-    readonly service: PartOutService,
+    @Inject(PartInService)
+    readonly service: PartInService,
   ) {}
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    const list = await this.service.getList();
-    await ctx.reply(list ?? 'Записей нет');
+    const partsInList = await this.service.getFormattedList();
+
+    if (!partsInList) {
+      await ctx.reply('Записей нет');
+    } else {
+      for (const partIn of partsInList) {
+        await ctx.reply(partIn);
+      }
+    }
+
     await ctx.scene.leave();
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
   }
 }

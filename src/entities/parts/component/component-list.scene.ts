@@ -19,6 +19,6 @@ export class ComponentListScene {
     const list = await this.service.getList();
     await ctx.reply(list ?? 'Записей нет');
     await ctx.scene.leave();
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.COMPONENTS));
+    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
   }
 }

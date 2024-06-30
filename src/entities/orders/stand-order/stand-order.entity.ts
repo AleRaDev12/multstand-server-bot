@@ -15,7 +15,7 @@ import { Order } from '../order/order.entity';
 import { StandOrderStatus, StandOrderStatusType } from './stand-order-types';
 import { formatStandOrder } from './stand-order-formatting';
 import { UserRole } from '../../../shared/interfaces';
-import { StandProd } from '../../component/stand-prod/stand-prod.entity';
+import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
 
 @Entity()
 export class StandOrder extends BaseEntity {

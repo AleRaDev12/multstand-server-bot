@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './entities/tasks/task.entity';
 import { seedTasks } from './entities/tasks/task-seed';
-import { Component } from './entities/component/component/component.entity';
-import { seedComponents } from './entities/component/component/component-seed';
+import { Component } from './entities/parts/component/component.entity';
+import { seedComponents } from './entities/parts/component/component-seed';
 
 @Injectable()
 export class SeedService implements OnModuleInit {

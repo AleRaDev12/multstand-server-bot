@@ -2,9 +2,9 @@ import { BaseEntity, EntityFieldsMap } from '../../base.entity';
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { Order } from '../../orders/order/order.entity';
-import { PartIn } from '../../component/part-in/part-in.entity';
 import { Master } from '../../master/master.entity';
 import { Account } from '../account/account.entity';
+import { PartIn } from '../../parts/part-in/part-in.entity';
 
 @Entity()
 export class Transaction extends BaseEntity {
