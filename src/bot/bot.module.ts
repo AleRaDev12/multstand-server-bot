@@ -5,7 +5,6 @@ import { PartOutModule } from '../entities/parts/part-out/part-out.module';
 import { WorkModule } from '../entities/work/work.module';
 import { TaskModule } from '../entities/tasks/task.module';
 import { StandOrderModule } from '../entities/orders/stand-order/stand-order.module';
-import { PartsModule } from '../entities/parts/partsModule';
 import { UserModule } from '../entities/user/user.module';
 import { TransactionModule } from '../entities/money/transaction/transaction.module';
 import { MasterModule } from '../entities/master/master.module';
@@ -18,6 +17,7 @@ import { OrdersScene } from '../entities/orders/orders.scene';
 import { MoneyScene } from '../entities/money/money.scene';
 import { Module } from '@nestjs/common';
 import { ClientsModule } from '../entities/client/clients.module';
+import { PartsModule } from '../entities/parts/parts.module';
 
 @Module({
   imports: [

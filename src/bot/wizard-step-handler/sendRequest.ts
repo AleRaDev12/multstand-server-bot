@@ -46,18 +46,18 @@ async function sendDateOptions(ctx: CustomWizardContext) {
   const today = new Date();
   const monthName = format(today, 'MMMM');
   await ctx.reply(
-    `In "YYYY-MM-DD" format\nOr the day of the current month (server's current month is ${monthName})\nOr use quick selection.`,
+    `В формате "ГГГГ-ММ-ДД"\nИли день текущего месяца (текущий месяц сервера — ${monthName})\nИли используйте быстрый выбор.`,
     Markup.inlineKeyboard([
       Markup.button.callback(
-        `Day before yesterday ${format(subDays(today, 2), 'yyyy-MM-dd')}`,
+        `Позавчера ${format(subDays(today, 2), 'yyyy-MM-dd')}`,
         BotActions.DATE_BEFORE_YESTERDAY,
       ),
       Markup.button.callback(
-        `Yesterday ${format(subDays(today, 1), 'yyyy-MM-dd')}`,
+        `Вчера ${format(subDays(today, 1), 'yyyy-MM-dd')}`,
         BotActions.DATE_YESTERDAY,
       ),
       Markup.button.callback(
-        `Today ${format(today, 'yyyy-MM-dd')}`,
+        `Сегодня ${format(today, 'yyyy-MM-dd')}`,
         BotActions.DATE_TODAY,
       ),
     ]),

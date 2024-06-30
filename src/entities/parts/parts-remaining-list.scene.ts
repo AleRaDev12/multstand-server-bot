@@ -17,11 +17,12 @@ export class PartsRemainingListScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     const list = await this.componentsService.getRemainingList();
+    const formattedList = this.componentsService.formatRemainingList(list);
 
-    if (!list) {
+    if (!formattedList) {
       await ctx.reply('Записей нет');
     } else {
-      await ctx.reply(list.join('\n'));
+      await ctx.reply(formattedList.join('\n'));
     }
 
     await ctx.scene.leave();
