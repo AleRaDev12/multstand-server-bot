@@ -7,7 +7,6 @@ import { PartOutModule } from '../entities/component/part-out/part-out.module';
 import { WorkModule } from '../entities/work/work.module';
 import { TaskModule } from '../entities/tasks/task.module';
 import { StandOrderModule } from '../entities/orders/stand-order/stand-order.module';
-import { ComponentModule } from '../entities/component/component/component.module';
 import { UserModule } from '../entities/user/user.module';
 import { TransactionModule } from '../entities/money/transaction/transaction.module';
 import { BotUpdate } from './bot.update';
@@ -15,10 +14,10 @@ import { MenuScene } from './menu.scene';
 import { RegisterUserScene } from './register-user.scene';
 import { RegistrationScene } from './registrationScene';
 import { OrdersScene } from '../entities/orders/orders.scene';
-import { ComponentsScene } from '../entities/component/components.scene';
 import { MasterModule } from '../entities/master/master.module';
 import { AccountModule } from '../entities/money/account/account.module';
 import { MoneyScene } from '../entities/money/money.scene';
+import { ComponentsModule } from '../entities/component/components.module';
 
 @Module({
   imports: [
@@ -30,7 +29,7 @@ import { MoneyScene } from '../entities/money/money.scene';
     WorkModule,
     TaskModule,
     StandOrderModule,
-    ComponentModule,
+    ComponentsModule,
     UserModule,
     TransactionModule,
     MasterModule,
@@ -41,7 +40,6 @@ import { MoneyScene } from '../entities/money/money.scene';
     MenuScene,
     RegisterUserScene,
     RegistrationScene,
-    ComponentsScene,
     OrdersScene,
     MoneyScene,
   ],

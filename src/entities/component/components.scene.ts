@@ -16,6 +16,7 @@ export class ComponentsScene extends BaseScene {
         [
           Markup.button.callback('📑 Комплектующие', 'component_list'),
           Markup.button.callback('➕', 'component_add'),
+          Markup.button.callback('Остатки', 'component_remaining_list'),
         ],
         [
           Markup.button.callback('📑 Поступление', 'part_in_list'),
@@ -50,6 +51,17 @@ export class ComponentsScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () =>
         ctx.scene.enter(WIZARDS.ADD_COMPONENT),
+      );
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('component_remaining_list')
+  async componentRemainingList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(SCENES.COMPONENT_REMAINING_LIST),
       );
     } catch (e) {
       await ctx.reply(e.message);
