@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Task } from './entities/tasks/task.entity';
-import { seedTasks } from './entities/tasks/task-seed';
+import { Task } from './entities/works/tasks/task.entity';
+import { seedTasks } from './entities/works/tasks/task-seed';
 import { Component } from './entities/parts/component/component.entity';
 import { seedComponents } from './entities/parts/component/component-seed';
 

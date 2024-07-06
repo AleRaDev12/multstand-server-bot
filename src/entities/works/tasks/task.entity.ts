@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '../base.entity';
-import { NullableColumn } from '../nullable-column.decorator';
+import { BaseEntity } from '../../base.entity';
+import { NullableColumn } from '../../nullable-column.decorator';
 
 @Entity()
 export class Task extends BaseEntity {

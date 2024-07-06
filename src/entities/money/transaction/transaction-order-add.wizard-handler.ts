@@ -5,10 +5,10 @@ import {
 } from '../../../shared/interfaces';
 import { Transaction } from './transaction.entity';
 
-import { TransactionOrderAddWizard } from './add-transaction-order.wizard';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { TransactionOrderAddWizard } from './transaction-order-add.wizard';
 
 const entityName = 'transactionOrder';
 const orderSelectType: AdditionalWizardSelections = 'orderSelect';

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Work } from './work.entity';
-import { Master } from '../master/master.entity';
-import { Transaction } from '../money/transaction/transaction.entity';
+import { Master } from '../../master/master.entity';
+import { Transaction } from '../../money/transaction/transaction.entity';
 
 interface Earnings {
   totalEarned: number;

@@ -2,12 +2,12 @@ import {
   CustomWizardContext,
   AdditionalWizardSelections,
   WizardStepType,
-} from '../../shared/interfaces';
+} from '../../../shared/interfaces';
 import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
-import { getMessage } from '../../shared/helpers';
-import { replyWithCancelButton } from '../../bot/wizard-step-handler/utils';
-import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
+import { getMessage } from '../../../shared/helpers';
+import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
 const masterSelectType: AdditionalWizardSelections = 'masterSelect';
 const taskSelectType: AdditionalWizardSelections = 'taskSelect';

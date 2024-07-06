@@ -4,7 +4,7 @@ import { NullableColumn } from '../../nullable-column.decorator';
 import { StandProd } from '../stand-prod/stand-prod.entity';
 import { formatLabels } from '../../../shared/helpers';
 import { PartIn } from '../part-in/part-in.entity';
-import { Work } from '../../work/work.entity';
+import { Work } from '../../works/work/work.entity';
 
 @Entity()
 export class PartOut extends BaseEntity {

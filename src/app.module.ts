@@ -1,6 +1,6 @@
 import { SceneRoleGuard } from './bot/guards/scene-role.guard';
 import { sessionMiddleware } from './bot/middleware/session.middleware';
-import { Task } from './entities/tasks/task.entity';
+import { Task } from './entities/works/tasks/task.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';

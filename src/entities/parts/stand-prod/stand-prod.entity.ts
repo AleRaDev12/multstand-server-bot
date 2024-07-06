@@ -1,6 +1,6 @@
 import { Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { StandOrder } from '../../orders/stand-order/stand-order.entity';
-import { Work } from '../../work/work.entity';
+import { Work } from '../../works/work/work.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { UserRole } from '../../../shared/interfaces';
 import { formatStandProd } from './stand-prod-formatting';

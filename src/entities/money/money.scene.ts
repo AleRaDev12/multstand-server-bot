@@ -19,10 +19,10 @@ export class MoneyScene extends BaseScene {
 
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    const balance = await this.accountService.getAccountBalancesList();
+    const balances = await this.accountService.getAccountBalancesList();
 
     await ctx.reply(
-      `Текущий баланс:\n${balance}`,
+      `Текущий баланс:\n${balances.join('\n')}`,
       Markup.inlineKeyboard([
         [
           Markup.button.callback('📑 Транзакции', 'transactions_list'),

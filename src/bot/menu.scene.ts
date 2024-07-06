@@ -64,16 +64,6 @@ export class MenuScene {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_PART_OUT));
   }
 
-  @Action('add_work')
-  async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_WORK));
-  }
-
-  @Action('add_task')
-  async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_TASK));
-  }
-
   @Action('parts')
   async parts(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
@@ -104,10 +94,10 @@ export class MenuScene {
     }
   }
 
-  @Action('work_list')
-  async onWorkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+  @Action('works')
+  async onWorks(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
-      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORK_LIST));
+      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORKS));
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -120,11 +110,7 @@ const MENU = {
     [Markup.button.callback('Заказы', 'order')],
 
     [Markup.button.callback('Компоненты', 'parts')],
-    [
-      Markup.button.callback('➕ Задача', 'add_task'),
-      Markup.button.callback('➕ Работа', 'add_work'),
-      Markup.button.callback('📊 Работа', 'work_list'),
-    ],
+    [Markup.button.callback('Работа', 'works')],
     [Markup.button.callback('Деньги', 'money')],
     [Markup.button.callback('Регистрации', 'user_registration')],
   ]),

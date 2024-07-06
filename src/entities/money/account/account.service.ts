@@ -30,10 +30,12 @@ export class AccountService {
   }
 
   async getAccountBalances(): Promise<{ [key: string]: number }> {
+    // TODO: Rewrite to get balances from query
     const accounts = await this.repository.find({
       relations: ['transactions'],
     });
     const balances: { [key: string]: number } = {};
+    let totalBalance = 0;
 
     for (const account of accounts) {
       const balance = account.transactions.reduce(
@@ -41,16 +43,19 @@ export class AccountService {
         0,
       );
       balances[account.name] = balance;
+      totalBalance += balance;
     }
+
+    balances['Сумма'] = totalBalance;
 
     return balances;
   }
 
-  async getAccountBalancesList(): Promise<string> {
+  async getAccountBalancesList(): Promise<string[]> {
     const balances = await this.getAccountBalances();
-    return Object.keys(balances)
-      .map((key) => `${key}: ${balances[key]}`)
-      .join('\n');
+    return Object.keys(balances).map(
+      (key) => `${key}: ${balances[key].toFixed(2)}`,
+    );
   }
 
   async transferMoney(params: {

@@ -5,8 +5,8 @@ import { TransactionAddWizard } from './transaction-add.wizard';
 import { TransactionListScene } from './transaction-list.scene';
 import { OrderModule } from '../../orders/order/order.module';
 import { Transaction } from './transaction.entity';
-import { TransactionOrderAddWizard } from './add-transaction-order.wizard';
 import { AccountModule } from '../account/account.module';
+import { TransactionOrderAddWizard } from './transaction-order-add.wizard';
 
 @Module({
   imports: [

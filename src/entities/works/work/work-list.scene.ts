@@ -5,10 +5,10 @@ import { WorkService } from './work.service';
 import {
   CtxWithUserId,
   SceneContextWithUserId,
-} from '../../bot/decorators/ctx-with-user-id.decorator';
-import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
-import { SCENES } from '../../shared/scenes-wizards';
-import { UserService } from '../user/user.service';
+} from '../../../bot/decorators/ctx-with-user-id.decorator';
+import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
+import { SCENES } from '../../../shared/scenes-wizards';
+import { UserService } from '../../user/user.service';
 
 @Scene(SCENES.WORK_LIST)
 @SceneRoles('manager', 'master')

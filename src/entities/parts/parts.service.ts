@@ -68,7 +68,7 @@ export class PartsService {
     return remainingList.map((item) => {
       const inTransitText =
         item.inTransitCount > 0 ? `\n+${item.inTransitCount} в доставке` : '';
-      return `ID${item.component.id}\n${item.component.name} (${item.component.type})\nОстаток: ${item.inStockCount}${inTransitText}`;
+      return `ID: ${item.component.id}\n${item.component.name} (${item.component.type})\nОстаток: ${item.inStockCount}${inTransitText}`;
     });
   }
 
