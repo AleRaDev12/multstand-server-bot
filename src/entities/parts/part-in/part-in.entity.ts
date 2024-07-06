@@ -23,7 +23,7 @@ export class PartIn extends BaseEntity {
     amount: 'Стоимость партии с доставкой',
     count: 'Количество',
     description: 'Описание',
-    id: 'id поступления части',
+    id: 'id partIn',
   };
 
   public format(): string {

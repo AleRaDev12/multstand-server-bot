@@ -8,6 +8,7 @@ import { ComponentModule } from '../component/component.module';
 import { PartOutListScene } from './part-out-list.scene';
 import { PartsModule } from '../parts.module';
 import { StandProdModule } from '../stand-prod/stand-prod.module';
+import { UserModule } from '../../user/user.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { StandProdModule } from '../stand-prod/stand-prod.module';
     ComponentModule,
     StandProdModule,
     forwardRef(() => PartsModule), // *-* remake this after to use without forwardRef
+    UserModule,
   ],
   providers: [PartOutService, PartOutAddWizard, PartOutListScene],
   exports: [PartOutService],

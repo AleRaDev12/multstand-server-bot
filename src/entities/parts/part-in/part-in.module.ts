@@ -7,6 +7,7 @@ import { ComponentModule } from '../component/component.module';
 import { TransactionModule } from '../../money/transaction/transaction.module';
 import { PartInListScene } from './part-in-list.scene';
 import { AccountModule } from '../../money/account/account.module';
+import { UserModule } from '../../user/user.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AccountModule } from '../../money/account/account.module';
     ComponentModule,
     TransactionModule,
     AccountModule,
+    UserModule,
   ],
   providers: [PartInService, PartInAddWizard, PartInListScene],
   exports: [PartInService],

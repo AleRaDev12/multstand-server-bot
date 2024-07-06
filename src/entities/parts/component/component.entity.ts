@@ -1,7 +1,8 @@
-import { BaseEntity } from '../../base.entity';
+import { BaseEntity, LabelsType } from '../../base.entity';
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
-import { formatLabels } from '../../../shared/helpers';
+import { formatComponent } from './component-formatting';
+import { UserRole } from '../../../shared/interfaces';
 
 @Entity()
 export class Component extends BaseEntity {
@@ -23,8 +24,8 @@ export class Component extends BaseEntity {
     id: 'id компонента',
   };
 
-  public format() {
-    return formatLabels(this, this.labels);
+  public format(userRole: UserRole, labelType: LabelsType = 'short') {
+    return formatComponent(this, userRole, labelType);
   }
 
   @PrimaryGeneratedColumn()

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PartOut } from './part-out.entity';
 import { PartIn } from '../part-in/part-in.entity';
+import { UserRole } from '../../../shared/interfaces';
 
 @Injectable()
 export class PartOutService {
@@ -21,10 +22,10 @@ export class PartOutService {
     return this.repository.find({ relations: ['partIn', 'partIn.component'] });
   }
 
-  async getList(): Promise<string | null> {
+  async getList(userRole: UserRole): Promise<string | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
-    return this.formatPartOutList(list);
+    return this.formatPartOutList(list, userRole);
   }
 
   async findByComponent(componentId: number): Promise<PartOut[]> {
@@ -32,12 +33,6 @@ export class PartOutService {
       where: { partIn: { component: { id: componentId } } },
       relations: ['partIn', 'partIn.component'],
     });
-  }
-
-  async getListByComponent(componentId: number): Promise<string | null> {
-    const list = await this.findByComponent(componentId);
-    if (list.length === 0) return null;
-    return this.formatPartOutList(list);
   }
 
   async findRemainingPartIn(): Promise<
@@ -78,11 +73,11 @@ export class PartOutService {
     return this.formatRemainingPartInList(list);
   }
 
-  private formatPartOutList = (list: PartOut[]): string => {
+  private formatPartOutList = (list: PartOut[], userRole: UserRole): string => {
     return list
       .map(
         (item, i) =>
-          `${i + 1}.\n${item.partIn.component.format()}\n${item.format()}`,
+          `${i + 1}.\n${item.partIn.component.format(userRole)}\n${item.format()}`,
       )
       .join('\n\n');
   };
