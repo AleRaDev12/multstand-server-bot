@@ -41,10 +41,8 @@ export class WorkListScene {
           `🙍🏻‍♂️ Пользователь: ${user.name}. Актуальный коэффициент: ${user.master[0].paymentCoefficient}`,
         );
       const works = await this.workService.findAllByUserId(user.id);
-      const totalEarnings = works.reduce(
-        (sum, work) => sum + work.cost * work.count * work.paymentCoefficient,
-        0,
-      );
+
+      const earnings = await this.workService.calculateEarnings(user.id);
 
       const workList = works.map((work, index) => {
         const standProds = work.standProd
@@ -54,7 +52,9 @@ export class WorkListScene {
         return `${index + 1}. ${work.task.shownName}\nДата: ${work.date}\nКоличество: ${work.count}\n\nСтанки: ${standProds}\n\nСтанки-заказы:\n${work.standProd.map((item) => `${item?.standOrder?.format(userRole)}\n`)}\n\nОплата: ${work.cost * work.count * work.paymentCoefficient}₽ (по ${work.cost * work.paymentCoefficient}₽${userRole === 'manager' ? ` к: ${work.paymentCoefficient}` : ''})\n\n`;
       });
 
-      await ctx.reply(`Сумма: ${totalEarnings}\n\nВыполненные задачи:`);
+      await ctx.reply(
+        `Начислено: ${earnings.totalEarned}\nВыплачено: ${earnings.alreadyPaid}\nОсталось выплатить: ${earnings.toPay}\n\nВыполненные задачи:`,
+      );
       for (const work of workList) {
         await ctx.reply(work);
       }

@@ -9,10 +9,12 @@ import { MasterModule } from '../master/master.module';
 import { StandProdModule } from '../parts/stand-prod/stand-prod.module';
 import { WorkListScene } from './work-list.scene';
 import { UserModule } from '../user/user.module';
+import { Transaction } from '../money/transaction/transaction.entity';
+import { Master } from '../master/master.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Work]),
+    TypeOrmModule.forFeature([Work, Transaction, Master]),
     ComponentModule,
     TaskModule,
     StandProdModule,
