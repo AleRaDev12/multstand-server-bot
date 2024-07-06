@@ -8,7 +8,7 @@ export async function handleNumberInput<T>(
   entity: T,
 ): Promise<boolean> {
   const message = getMessage(ctx);
-  const number = parseFloat(message.text);
+  const number = parseFloat(message.text.replaceAll(',', '.'));
   if (!isNaN(number)) {
     entity[field] = number;
     return true;
