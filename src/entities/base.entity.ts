@@ -3,6 +3,7 @@ import { UserRole } from '../shared/interfaces';
 export abstract class BaseEntity {
   public static entityName: string;
   public static nullable: { [key: string]: boolean };
+  abstract format(userRole: UserRole, labelType?: LabelsType): string;
 }
 
 export type EntityFieldsMap<T, P> = {

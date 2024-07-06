@@ -16,6 +16,7 @@ import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
 import { Account } from '../entities/money/account/account.entity';
 import { Scenes } from 'telegraf';
 import { Transaction } from '../entities/money/transaction/transaction.entity';
+import { LabelsType } from '../entities/base.entity';
 
 export type KeyOfAllEntities = {
   [K in keyof AllEntities]: AllEntities[K] extends undefined
@@ -116,3 +117,8 @@ export interface CustomContext extends Scenes.SceneContext {
 }
 
 export type UserRole = 'manager' | 'master' | 'unregistered' | 'unknown';
+
+export type FormatFunction = (
+  userRole: UserRole,
+  labelType: LabelsType,
+) => string;

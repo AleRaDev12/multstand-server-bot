@@ -81,7 +81,7 @@ export class Order extends BaseEntity {
     status: false,
   };
 
-  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+  public format(userRole: UserRole, labelType: LabelsType = 'short') {
     return formatOrder(this, userRole, labelType);
   }
 }

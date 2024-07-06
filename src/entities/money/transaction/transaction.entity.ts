@@ -1,10 +1,11 @@
-import { BaseEntity, EntityFieldsMap } from '../../base.entity';
+import { BaseEntity, EntityFieldsMap, LabelsType } from '../../base.entity';
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { Order } from '../../orders/order/order.entity';
 import { Master } from '../../master/master.entity';
 import { Account } from '../account/account.entity';
 import { PartIn } from '../../parts/part-in/part-in.entity';
+import { UserRole } from '../../../shared/interfaces';
 
 @Entity()
 export class Transaction extends BaseEntity {
@@ -44,4 +45,8 @@ export class Transaction extends BaseEntity {
     nullable: false,
   })
   account: Account;
+
+  public format(userRole: UserRole, labelType?: LabelsType): string {
+    return `Not implemented yet for ${this.constructor.name}`;
+  }
 }

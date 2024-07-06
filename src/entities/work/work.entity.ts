@@ -5,11 +5,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BaseEntity } from '../base.entity';
+import { BaseEntity, LabelsType } from '../base.entity';
 import { Task } from '../tasks/task.entity';
 import { NullableColumn } from '../nullable-column.decorator';
 import { Master } from '../master/master.entity';
 import { StandProd } from '../parts/stand-prod/stand-prod.entity';
+import { UserRole } from '../../shared/interfaces';
 
 @Entity()
 export class Work extends BaseEntity {
@@ -52,4 +53,8 @@ export class Work extends BaseEntity {
 
   @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
   paymentCoefficient: number;
+
+  public format(userRole: UserRole, labelType?: LabelsType): string {
+    return `Not implemented yet for ${this.constructor.name}`;
+  }
 }

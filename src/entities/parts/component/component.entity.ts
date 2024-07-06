@@ -23,7 +23,7 @@ export class Component extends BaseEntity {
     id: 'id компонента',
   };
 
-  public format(): string {
+  public format() {
     return formatLabels(this, this.labels);
   }
 

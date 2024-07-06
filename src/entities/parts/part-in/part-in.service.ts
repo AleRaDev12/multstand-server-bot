@@ -33,6 +33,8 @@ export class PartInService {
     const list = await this.findAll();
     if (list.length === 0) return null;
 
-    return list.map((item, i) => `${i + 1}. ${item.format()}`);
+    return list.map(
+      (item, i) => `№${i + 1}.\n${item.component.format()}\n${item.format()}`,
+    );
   }
 }

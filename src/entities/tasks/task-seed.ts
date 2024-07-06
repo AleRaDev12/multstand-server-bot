@@ -1,6 +1,9 @@
 import { Task } from './task.entity';
 
-export const seedTasks: Omit<Task, 'id'>[] = [
+export const seedTasks: Pick<
+  Task,
+  'name' | 'category' | 'shownName' | 'duration' | 'cost'
+>[] = [
   // Решил удалить
   // {
   //   category: '',

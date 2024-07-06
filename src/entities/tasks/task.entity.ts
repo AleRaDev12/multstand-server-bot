@@ -30,4 +30,8 @@ export class Task extends BaseEntity {
 
   @NullableColumn({ type: 'int' })
   duration: number;
+
+  public format(): string {
+    return `Not implemented yet for ${this.constructor.name}`;
+  }
 }

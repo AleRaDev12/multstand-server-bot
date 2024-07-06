@@ -1,6 +1,6 @@
 import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../nullable-column.decorator';
-import { BaseEntity } from '../base.entity';
+import { BaseEntity, LabelsType } from '../base.entity';
 import { UserRole } from '../../shared/interfaces';
 import { Master } from '../master/master.entity';
 
@@ -27,4 +27,8 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Master, (master) => master.user)
   master: Master[];
+
+  public format(userRole: UserRole, labelType?: LabelsType): string {
+    return `Not implemented yet for ${this.constructor.name}`;
+  }
 }

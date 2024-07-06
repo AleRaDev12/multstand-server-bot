@@ -16,6 +16,7 @@ type TransferMoney = {
   amount: number;
   date: Date;
   description: string;
+  format: () => string;
 };
 
 // Define entity type for account selection
