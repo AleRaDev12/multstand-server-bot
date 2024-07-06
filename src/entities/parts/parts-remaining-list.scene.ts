@@ -21,8 +21,9 @@ export class PartsRemainingListScene {
 
     if (!formattedList) {
       await ctx.reply('Записей нет');
-    } else {
-      await ctx.reply(formattedList.join('\n'));
+    }
+    for (const item in formattedList) {
+      await ctx.reply(formattedList[item]);
     }
 
     await ctx.scene.leave();
