@@ -17,14 +17,18 @@ export class TransactionListScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: CustomWizardContext): Promise<void> {
     const transactions = await this.transactionService.findAll();
-    const transactionList = transactions
-      .map((transaction, index) => {
-        return `${index + 1}. ${transaction.description ? transaction.description : 'Без описания'}\nДата: ${transaction.transactionDate}\nСумма: ${transaction.amount}`;
-      })
-      .join('\n\n');
+    const transactionList = transactions.map((transaction, index) => {
+      return `№${index + 1}.\n${transaction.description ? transaction.description : 'Без описания'}\nДата: ${transaction.transactionDate}\nСумма: ${transaction.amount}`;
+    });
+
+    await ctx.reply('Транзакции:');
+
+    for (const transaction of transactionList) {
+      await ctx.reply(transaction);
+    }
 
     await ctx.reply(
-      `Транзакции:\n\n${transactionList}`,
+      `Готово`,
       Markup.inlineKeyboard([
         [Markup.button.callback('Назад в меню', 'back_to_menu')],
       ]),

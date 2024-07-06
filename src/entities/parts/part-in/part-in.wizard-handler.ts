@@ -75,7 +75,7 @@ async function handleSpecificRequest(
 
       await replyWithCancelButton(
         ctx,
-        `${stepRequest.message}${formattedList.join('\n')}`,
+        `${stepRequest.message}${formattedList.join()}`,
       );
       return true;
     }
