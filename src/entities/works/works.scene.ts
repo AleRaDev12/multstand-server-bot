@@ -17,6 +17,7 @@ export class WorksScene extends BaseScene {
           Markup.button.callback('➕ Задача', 'add_task'),
           Markup.button.callback('➕ Работа', 'add_work'),
           Markup.button.callback('📊 Работа', 'work_list'),
+          Markup.button.callback('Выплата', 'work_payment'),
         ],
         [this.menuButton],
       ]),
@@ -25,7 +26,7 @@ export class WorksScene extends BaseScene {
 
   @Action('add_work')
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_WORK));
+    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.WORK_ADD));
   }
 
   @Action('add_task')
@@ -37,6 +38,15 @@ export class WorksScene extends BaseScene {
   async onWorkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORK_LIST));
+    } catch (e) {
+      await ctx.reply(e.message);
+    }
+  }
+
+  @Action('work_payment')
+  async onWorkPayment(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.WORK_PAYMENT));
     } catch (e) {
       await ctx.reply(e.message);
     }

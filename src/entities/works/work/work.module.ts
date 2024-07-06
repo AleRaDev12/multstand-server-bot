@@ -11,6 +11,9 @@ import { WorkListScene } from './work-list.scene';
 import { UserModule } from '../../user/user.module';
 import { Transaction } from '../../money/transaction/transaction.entity';
 import { Master } from '../../master/master.entity';
+import { WorkPaymentTransactionWizard } from './work-payment-transaction.wizard';
+import { TransactionModule } from '../../money/transaction/transaction.module';
+import { AccountModule } from '../../money/account/account.module';
 
 @Module({
   imports: [
@@ -20,7 +23,15 @@ import { Master } from '../../master/master.entity';
     StandProdModule,
     MasterModule,
     UserModule,
+    TransactionModule,
+    AccountModule,
   ],
-  providers: [WorkService, WorkAddWizard, WorkListScene],
+  providers: [
+    WorkService,
+    WorkAddWizard,
+    WorkListScene,
+    WorkPaymentTransactionWizard,
+  ],
+  exports: [WorkService],
 })
 export class WorkModule {}

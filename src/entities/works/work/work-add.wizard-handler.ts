@@ -188,7 +188,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const WorkWizardHandler = wizardStepHandler<Work>({
+export const WorkAddWizardHandler = wizardStepHandler<Work>({
   getEntity,
   setEntity,
   save,
