@@ -117,7 +117,7 @@ async function handleSpecificAnswer(
         try {
           const totalRemaining =
             await this.partsService.getTotalRemainingCount(componentId);
-          if (totalRemaining < count) {
+          if (totalRemaining.inStock < count) {
             await replyWithCancelButton(
               ctx,
               'Недостаточно компонентов в остатке. Пожалуйста, начните заново.',

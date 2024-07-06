@@ -1,19 +1,21 @@
+import { StandProd } from './stand-prod/stand-prod.entity';
+import { Component } from './component/component.entity';
+import { PartIn } from './part-in/part-in.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Component } from './component/component.entity';
 import { PartOut } from './part-out/part-out.entity';
-import { PartIn } from './part-in/part-in.entity';
-import { StandProd } from './stand-prod/stand-prod.entity';
 
 type RemainingComponent = {
   component: Component;
-  remainingCount: number;
+  inStockCount: number;
+  inTransitCount: number;
 };
 
 type RemainingPartsIn = {
   partIn: PartIn;
-  remainingCount: number;
+  inStockCount: number;
+  inTransitCount: number;
 };
 
 @Injectable()
@@ -29,38 +31,44 @@ export class PartsService {
 
   async getRemainingList(): Promise<RemainingComponent[]> {
     const components = await this.componentRepository.find();
-    const remainingList: (RemainingComponent | null)[] = await Promise.all(
+    const remainingList: RemainingComponent[] = await Promise.all(
       components.map(async (component) => {
-        const totalIn = await this.partInRepository
-          .createQueryBuilder('partIn')
-          .where('partIn.componentId = :componentId', {
-            componentId: component.id,
-          })
-          .select('SUM(partIn.count)', 'total')
-          .getRawOne();
+        const partsIn = await this.partInRepository.find({
+          where: { component: { id: component.id } },
+          relations: ['partsOut'],
+        });
 
-        const totalOut = await this.partOutRepository
-          .createQueryBuilder('partOut')
-          .leftJoin('partOut.partIn', 'partIn')
-          .where('partIn.componentId = :componentId', {
-            componentId: component.id,
-          })
-          .select('SUM(partOut.count)', 'total')
-          .getRawOne();
+        let inStockCount = 0;
+        let inTransitCount = 0;
 
-        const remaining = (totalIn?.total || 0) - (totalOut?.total || 0);
+        partsIn.forEach((partIn) => {
+          const totalPartOutCount = partIn.partsOut.reduce(
+            (sum, partOut) => sum + partOut.count,
+            0,
+          );
+          const remainingCount = partIn.count - totalPartOutCount;
 
-        if (remaining === 0) return null;
-        return { component, remainingCount: remaining };
+          if (partIn.dateArrival) {
+            inStockCount += remainingCount;
+          } else {
+            inTransitCount += remainingCount;
+          }
+        });
+
+        return { component, inStockCount, inTransitCount };
       }),
     );
 
-    return remainingList.filter(Boolean);
+    return remainingList.filter(
+      (item) => item.inStockCount > 0 || item.inTransitCount > 0,
+    );
   }
 
   formatRemainingList(remainingList: RemainingComponent[]): string[] {
     return remainingList.map((item) => {
-      return `Номер комплектующего: ${item.component.id}\n${item.component.name} (${item.component.type})\nОстаток: ${item.remainingCount}`;
+      const inTransitText =
+        item.inTransitCount > 0 ? `\n+${item.inTransitCount} в доставке` : '';
+      return `ID${item.component.id}\n${item.component.name} (${item.component.type})\nОстаток: ${item.inStockCount}${inTransitText}`;
     });
   }
 
@@ -79,21 +87,34 @@ export class PartsService {
           0,
         );
         const remainingCount = partIn.count - totalPartOutCount;
-        return { partIn, remainingCount };
+        return {
+          partIn,
+          inStockCount: partIn.dateArrival ? remainingCount : 0,
+          inTransitCount: partIn.dateArrival ? 0 : remainingCount,
+        };
       })
-      .filter((item) => item.remainingCount !== 0);
+      .filter((item) => item.inStockCount > 0 || item.inTransitCount > 0);
   }
 
   formatRemainingPartInList(list: RemainingPartsIn[]): string[] {
-    return list.map(
-      ({ partIn, remainingCount }) =>
-        `${partIn.format()}\nОсталось: ${remainingCount}`,
-    );
+    return list.map(({ partIn, inStockCount, inTransitCount }) => {
+      const inTransitText =
+        inTransitCount > 0 ? ` +${inTransitCount} в доставке` : '';
+      return `${partIn.format()}\nОсталось: ${inStockCount}${inTransitText}`;
+    });
   }
 
-  async getTotalRemainingCount(componentId: number): Promise<number> {
+  async getTotalRemainingCount(
+    componentId: number,
+  ): Promise<{ inStock: number; inTransit: number }> {
     const remainingList = await this.getRemainingListByComponent(componentId);
-    return remainingList.reduce((sum, item) => sum + item.remainingCount, 0);
+    return remainingList.reduce(
+      (sum, item) => ({
+        inStock: sum.inStock + item.inStockCount,
+        inTransit: sum.inTransit + item.inTransitCount,
+      }),
+      { inStock: 0, inTransit: 0 },
+    );
   }
 
   async writeOffComponents(
@@ -109,7 +130,7 @@ export class PartsService {
     for (const item of remainingList) {
       if (remainingCount <= 0) break;
 
-      const writeOffCount = Math.min(remainingCount, item.remainingCount);
+      const writeOffCount = Math.min(remainingCount, item.inStockCount);
       const partOut = new PartOut();
       partOut.partIn = item.partIn;
       partOut.count = writeOffCount;
