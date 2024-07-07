@@ -6,7 +6,7 @@ import {
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
 import { Transaction } from '../../money/transaction/transaction.entity';
-import { getMessage } from '../../../shared/helpers';
+import { formatWithListIndexes, getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 
@@ -40,7 +40,7 @@ async function save(
   const transaction = new Transaction();
 
   transaction.transactionDate = new Date();
-  transaction.amount = entity.amount;
+  transaction.amount = -entity.amount;
   transaction.description = `Покупка комплектующего: ${entity.component.name} в количестве ${entity.count} на сумму ${entity.amount}`;
   transaction.partIn = partIn;
   transaction.account = ctx.wizard.state.account;
@@ -61,19 +61,22 @@ async function handleSpecificRequest(
   switch (stepRequest.type) {
     case componentTypeName: {
       const componentsList = await this.componentService.getList();
+      const listWithIndexes = formatWithListIndexes(componentsList);
+
       await replyWithCancelButton(
         ctx,
-        `${stepRequest.message}${componentsList}`,
+        `${stepRequest.message}${listWithIndexes.join('\n')}`,
       );
       return true;
     }
     case accountSelect: {
       const accountsList = await this.accountService.findAll();
       const formattedList = await this.accountService.formatList(accountsList);
+      const formattedListWithIndexes = formatWithListIndexes(formattedList);
 
       await replyWithCancelButton(
         ctx,
-        `${stepRequest.message}${formattedList.join()}`,
+        `${stepRequest.message}${formattedListWithIndexes.join()}`,
       );
       return true;
     }
@@ -119,7 +122,7 @@ async function handleSpecificAnswer(
   }
 }
 
-export const PartInWizardHandler = wizardStepHandler<PartIn>({
+export const PartInAddWizardHandler = wizardStepHandler<PartIn>({
   getEntity,
   setEntity,
   save,

@@ -5,6 +5,7 @@ import { Scenes } from 'telegraf';
 import { handleButtonPress } from '../../../shared/helpers';
 import { ComponentService } from './component.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
+import { formatWithListIndexes } from '../../../../dist/src/shared/helpers';
 
 @Scene(SCENES.COMPONENT_LIST)
 @SceneRoles('manager')
@@ -17,7 +18,12 @@ export class ComponentListScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     const list = await this.service.getList();
-    await ctx.reply(list ?? 'Записей нет');
+    if (!list || list.length === 0) {
+      await ctx.reply('Записей нет');
+      return;
+    }
+    await ctx.reply(formatWithListIndexes(list).join('\n'));
+
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
   }

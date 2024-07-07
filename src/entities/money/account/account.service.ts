@@ -102,11 +102,9 @@ export class AccountService {
     if (accounts.length === 0) return null;
 
     const formattedOrders = [];
-    let index = 1;
     for (const account of accounts) {
       const formattedAccount = this.formatSingleWithRole(account, 'manager');
-      formattedOrders.push(`\n№${index}\n${formattedAccount}`);
-      index++;
+      formattedOrders.push(formattedAccount);
     }
 
     return formattedOrders;
