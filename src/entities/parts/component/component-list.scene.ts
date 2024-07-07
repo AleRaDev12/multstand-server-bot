@@ -2,10 +2,12 @@ import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { Scenes } from 'telegraf';
-import { handleButtonPress } from '../../../shared/helpers';
+import {
+  formatWithListIndexes,
+  handleButtonPress,
+} from '../../../shared/helpers';
 import { ComponentService } from './component.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
-import { formatWithListIndexes } from '../../../../dist/src/shared/helpers';
 
 @Scene(SCENES.COMPONENT_LIST)
 @SceneRoles('manager')
