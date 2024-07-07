@@ -68,7 +68,7 @@ async function handleSpecificRequest(
   switch (stepRequest.type) {
     case standOrderSelectType: {
       const standsProdList = await this.standOrderService.findAll();
-      const formattedList = this.standOrderService.formatList(
+      const formattedList = await this.standOrderService.formatList(
         standsProdList,
         ctx.userRole,
       );
