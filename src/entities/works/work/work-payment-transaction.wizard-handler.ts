@@ -36,6 +36,7 @@ function setEntity(ctx: CustomWizardContext): void {
 
 function save(this: WorkPaymentTransactionWizard, entity: Transaction) {
   entity.amount = -entity.amount;
+  entity.description = `Выплата ${entity.master.user.name}`;
   return this.transactionService.create(entity);
 }
 
