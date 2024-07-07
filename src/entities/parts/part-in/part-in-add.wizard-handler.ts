@@ -46,12 +46,6 @@ async function save(
 
   const transaction = ctx.wizard.state.transaction;
 
-  console.log(
-    '*-* ctx.wizard.state.transaction',
-    ctx.wizard.state.transaction.transactionDate,
-  );
-  console.log('*-* transaction', transaction);
-
   transaction.amount = -entity.amount;
   transaction.partIn = partIn;
   transaction.account = ctx.wizard.state.account;
