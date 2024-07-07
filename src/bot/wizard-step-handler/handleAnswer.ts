@@ -1,10 +1,16 @@
+import {
+  AllEntities,
+  CustomWizardContext,
+  WizardStepType,
+} from '../../shared/interfaces';
+import { UnifiedWizardHandlerOptions } from './types';
+import { replyWithCancelButton } from './utils';
+import { handleInputByType } from './handleInputByType';
 import { SCENES } from '../../shared/scenes-wizards';
 import { BaseEntity } from '../../entities/base.entity';
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
-import { UnifiedWizardHandlerOptions } from './types';
-import { handleInputByType } from './handleInputByType';
 import { getMessage } from '../../shared/helpers';
-import { replyWithCancelButton } from './utils';
+
+type EntityOrRecord = BaseEntity | Record<string, any>;
 
 export async function handleAnswer<T extends BaseEntity>(
   this: any,
@@ -41,12 +47,30 @@ export async function handleAnswer<T extends BaseEntity>(
   }
 
   if (message.text !== '-') {
+    let targetEntity: EntityOrRecord;
+
+    if (stepAnswer.linkedEntity === 'temp') {
+      targetEntity =
+        ctx.wizard.state.tempData || (ctx.wizard.state.tempData = {});
+    } else if (stepAnswer.linkedEntity) {
+      targetEntity = ctx.wizard.state[
+        stepAnswer.linkedEntity
+      ] as EntityOrRecord;
+    } else {
+      targetEntity = entity;
+    }
+
     const result = await handleInputByType(
       ctx,
       stepAnswer,
-      entity,
-      handleSpecificAnswer,
+      targetEntity,
+      handleSpecificAnswer as (
+        ctx: CustomWizardContext,
+        stepAnswer: WizardStepType,
+        entity: EntityOrRecord,
+      ) => Promise<boolean>,
     );
+
     if (!result) return false;
   }
 

@@ -41,16 +41,19 @@ export type WizardStepType = {
 } & (
   | {
       field?: KeyOfAllEntities;
+      linkedEntity?: keyof AllEntities;
       type: 'string' | 'number' | 'date' | 'boolean';
       union?: undefined;
     }
   | {
       field?: KeyOfAllEntities;
+      linkedEntity?: keyof AllEntities;
       type: 'union';
       union: object;
     }
   | {
       field?: KeyOfAllEntities;
+      linkedEntity?: keyof AllEntities;
       type: AdditionalWizardSelections;
       union?: undefined;
     }
@@ -89,10 +92,12 @@ export type AllEntities = {
   component?: Component;
   standOrder?: StandOrder;
   account?: Account;
+  temp?: object;
 };
 
 interface CustomWizardSessionData extends WizardSessionData, AllEntities {
   steps?: WizardStepType[];
+  tempData?: object;
   selectedDate?: Date;
 }
 

@@ -1,16 +1,17 @@
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { getMessage } from '../../shared/helpers';
-
 import { UnifiedWizardHandlerOptions } from './types';
+import { BaseEntity } from '../../entities/base.entity';
+import { handleAnswerUnion, replyWithCancelButton } from './utils';
 import {
   handleBooleanInput,
   handleDateInput,
   handleNumberInput,
 } from './inputHandlers';
-import { BaseEntity } from '../../entities/base.entity';
-import { handleAnswerUnion, replyWithCancelButton } from './utils';
 
-export async function handleInputByType<T extends BaseEntity>(
+export async function handleInputByType<
+  T extends BaseEntity | Record<string, any>,
+>(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
   entity: T,

@@ -17,6 +17,12 @@ const steps: WizardStepType[] = [
   { message: 'Комплектующее:', type: componentTypeName },
   { message: 'Дата заказа:', field: 'dateOrder', type: 'date' },
   { message: 'Дата получения:', field: 'dateArrival', type: 'date' },
+  {
+    message: 'Дата оплаты:',
+    field: 'transactionDate',
+    linkedEntity: 'transaction',
+    type: 'date',
+  },
   { message: 'Стоимость партии:', field: 'amount', type: 'number' },
   { message: 'Количество шт:', field: 'count', type: 'number' },
   { message: 'Списано со счёта:', type: accountSelect },
@@ -28,6 +34,7 @@ function getEntity(ctx: CustomWizardContext): PartIn {
 
 function setEntity(ctx: CustomWizardContext): void {
   ctx.wizard.state.partIn = new PartIn();
+  ctx.wizard.state.transaction = new Transaction();
 }
 
 async function save(
@@ -37,13 +44,18 @@ async function save(
 ) {
   const partIn = await this.service.create(entity);
 
-  const transaction = new Transaction();
+  const transaction = ctx.wizard.state.transaction;
 
-  transaction.transactionDate = new Date();
+  console.log(
+    '*-* ctx.wizard.state.transaction',
+    ctx.wizard.state.transaction.transactionDate,
+  );
+  console.log('*-* transaction', transaction);
+
   transaction.amount = -entity.amount;
-  transaction.description = `Покупка комплектующего: ${entity.component.name} в количестве ${entity.count} на сумму ${entity.amount}`;
   transaction.partIn = partIn;
   transaction.account = ctx.wizard.state.account;
+  transaction.description = `Покупка комплектующего: ${entity.component.name} в количестве ${entity.count} на сумму ${entity.amount}`;
 
   await this.transactionService.create(transaction);
   return partIn;
@@ -76,7 +88,7 @@ async function handleSpecificRequest(
 
       await replyWithCancelButton(
         ctx,
-        `${stepRequest.message}${formattedListWithIndexes.join()}`,
+        `${stepRequest.message}\n${formattedListWithIndexes.join()}`,
       );
       return true;
     }

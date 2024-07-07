@@ -29,6 +29,7 @@ export function wizardStepHandler<T extends BaseEntity>(
         if (stepIndex === 1) {
           setEntity(ctx);
           ctx.wizard.state.steps = [...initialSteps];
+          ctx.wizard.state.tempData = {};
         }
 
         const steps = ctx.wizard.state.steps;

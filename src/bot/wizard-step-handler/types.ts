@@ -1,7 +1,9 @@
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { BaseEntity } from '../../entities/base.entity';
 
-export interface UnifiedWizardHandlerOptions<T extends BaseEntity> {
+export interface UnifiedWizardHandlerOptions<
+  T extends BaseEntity | Record<string, any>,
+> {
   getEntity: (ctx: CustomWizardContext) => T;
   setEntity: (ctx: CustomWizardContext) => void;
   save: (
