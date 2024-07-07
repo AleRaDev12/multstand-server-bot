@@ -6,6 +6,21 @@ import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 
+enum Actions {
+  CLIENT = 'client',
+  ORDER = 'order',
+  ADD_STAND = 'add_stand',
+  ADD_PARTS_IN = 'add_partsIn',
+  ADD_PARTS_OUT = 'add_partsOut',
+  PARTS = 'parts',
+  MONEY = 'money',
+  STAND_ORDERS_ACTIVE_LIST = 'stand_orders_active_list',
+  USER_REGISTRATION = 'user_registration',
+  WORKS = 'works',
+  WORK_ADD = 'work_add',
+  WORK_LIST = 'work_list',
+}
+
 @Scene(SCENES.MENU)
 @SceneRoles('manager', 'master', 'unregistered')
 export class MenuScene {
@@ -28,76 +43,78 @@ export class MenuScene {
     if (['manager', 'master'].includes(role)) {
       await ctx.reply(`Добро пожаловать, ${user.name} (роль: ${user.role}).`);
       await ctx.reply('Меню:', MENU[role]);
+      return;
     }
+
+    await ctx.reply('Неизвестная ошибка');
   }
 
-  @Action('client')
+  @Action(Actions.CLIENT)
   async onClient(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    try {
-      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.CLIENT));
-    } catch (e) {
-      await ctx.reply(e.message);
-    }
+    await this.enterScene(ctx, SCENES.CLIENT);
   }
 
-  @Action('order')
+  @Action(Actions.ORDER)
   async onOrder(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    try {
-      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDERS));
-    } catch (e) {
-      await ctx.reply(e.message);
-    }
+    await this.enterScene(ctx, SCENES.ORDERS);
   }
 
-  @Action('add_stand')
+  @Action(Actions.ADD_STAND)
   async onAddStandProd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_STAND_PROD));
+    await this.enterScene(ctx, WIZARDS.ADD_STAND_PROD);
   }
 
-  @Action('add_partsIn')
+  @Action(Actions.ADD_PARTS_IN)
   async onAddPartIn(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_PART_IN));
+    await this.enterScene(ctx, WIZARDS.ADD_PART_IN);
   }
 
-  @Action('add_partsOut')
+  @Action(Actions.ADD_PARTS_OUT)
   async onAddPartOut(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_PART_OUT));
+    await this.enterScene(ctx, WIZARDS.ADD_PART_OUT);
   }
 
-  @Action('parts')
+  @Action(Actions.PARTS)
   async parts(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
+    await this.enterScene(ctx, SCENES.PARTS);
   }
 
-  @Action('money')
+  @Action(Actions.MONEY)
   async onAddMoney(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.MONEY));
+    await this.enterScene(ctx, SCENES.MONEY);
   }
 
-  @Action('stand_orders_active_list')
+  @Action(Actions.STAND_ORDERS_ACTIVE_LIST)
   async standOrdersActiveList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    try {
-      await handleButtonPress(ctx, () =>
-        ctx.scene.enter(SCENES.STAND_ORDER_ACTIVE_LIST),
-      );
-    } catch (e) {
-      await ctx.reply(e.message);
-    }
+    await this.enterScene(ctx, SCENES.STAND_ORDER_ACTIVE_LIST);
   }
 
-  @Action('user_registration')
+  @Action(Actions.USER_REGISTRATION)
   async onUserRegistration(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    try {
-      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.REGISTER));
-    } catch (e) {
-      await ctx.reply(e.message);
-    }
+    await this.enterScene(ctx, SCENES.REGISTER);
   }
 
-  @Action('works')
+  @Action(Actions.WORKS)
   async onWorks(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await this.enterScene(ctx, SCENES.WORKS);
+  }
+
+  @Action(Actions.WORK_ADD)
+  async onWorkAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await this.enterScene(ctx, WIZARDS.WORK_ADD);
+  }
+
+  @Action(Actions.WORK_LIST)
+  async onWorkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await this.enterScene(ctx, SCENES.WORK_LIST);
+  }
+
+  private async enterScene(
+    ctx: Scenes.SceneContext,
+    scene: string,
+  ): Promise<void> {
     try {
-      await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORKS));
+      await handleButtonPress(ctx, () => ctx.scene.enter(scene));
     } catch (e) {
       await ctx.reply(e.message);
     }
@@ -106,19 +123,23 @@ export class MenuScene {
 
 const MENU = {
   manager: Markup.inlineKeyboard([
-    [Markup.button.callback('Клиенты', 'client')],
-    [Markup.button.callback('Заказы', 'order')],
-
-    [Markup.button.callback('Компоненты', 'parts')],
-    [Markup.button.callback('Работа', 'works')],
-    [Markup.button.callback('Деньги', 'money')],
-    [Markup.button.callback('Регистрации', 'user_registration')],
+    [Markup.button.callback('Клиенты', Actions.CLIENT)],
+    [Markup.button.callback('Заказы', Actions.ORDER)],
+    [Markup.button.callback('Компоненты', Actions.PARTS)],
+    [Markup.button.callback('Работа', Actions.WORKS)],
+    [Markup.button.callback('Деньги', Actions.MONEY)],
+    [Markup.button.callback('Регистрации', Actions.USER_REGISTRATION)],
   ]),
   master: Markup.inlineKeyboard([
     [
-      Markup.button.callback('➕ Работа', 'add_work'),
-      Markup.button.callback('📊 Список, сумма', 'work_list'),
+      Markup.button.callback('➕ Работа', Actions.WORK_ADD),
+      Markup.button.callback('📊 Список, сумма', Actions.WORK_LIST),
     ],
-    [Markup.button.callback('📑 Станки-заказы', 'stand_orders_active_list')],
+    [
+      Markup.button.callback(
+        '📑 Станки-заказы',
+        Actions.STAND_ORDERS_ACTIVE_LIST,
+      ),
+    ],
   ]),
 };
