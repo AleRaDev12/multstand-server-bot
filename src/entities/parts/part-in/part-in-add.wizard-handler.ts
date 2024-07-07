@@ -26,6 +26,7 @@ const steps: WizardStepType[] = [
   { message: 'Стоимость партии:', field: 'amount', type: 'number' },
   { message: 'Количество шт:', field: 'count', type: 'number' },
   { message: 'Списано со счёта:', type: accountSelect },
+  { message: 'Описание:', field: 'description', type: 'string' },
 ];
 
 function getEntity(ctx: CustomWizardContext): PartIn {
