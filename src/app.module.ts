@@ -8,7 +8,6 @@ import { BotModule } from './bot/bot.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Component } from './entities/parts/component/component.entity';
 import { UserModule } from './entities/user/user.module';
-import { SeedService } from './seed.service';
 import { APP_GUARD } from '@nestjs/core';
 
 @Module({
@@ -34,7 +33,6 @@ import { APP_GUARD } from '@nestjs/core';
     UserModule,
   ],
   providers: [
-    SeedService,
     {
       provide: APP_GUARD,
       useClass: SceneRoleGuard,
