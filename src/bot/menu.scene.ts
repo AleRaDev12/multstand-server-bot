@@ -6,7 +6,7 @@ import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 import { CtxAuth } from './decorators/ctx-auth.decorator';
-import { SceneAuthContext, UserRole } from '../shared/interfaces';
+import { SceneAuthContext } from '../shared/interfaces';
 
 enum Actions {
   CLIENT = 'client',
@@ -33,15 +33,8 @@ export class MenuScene {
 
   @SceneEnter()
   async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
-    const userRole = (ctx.session as unknown as { userRole: UserRole })
-      .userRole;
-    console.log('*-* ctx.session.userRole', userRole);
-
-    await ctx.reply(userRole);
-
-    const telegramUserId = ctx.from.id;
-    const user = await this.userService.findByTelegramId(telegramUserId);
-    const role = user.role;
+    const user = await this.userService.findByTelegramId(ctx.from.id);
+    const role = ctx.userRole;
 
     if (role === 'unregistered') {
       await ctx.reply('Ваша регистрация ещё не подтверждена');

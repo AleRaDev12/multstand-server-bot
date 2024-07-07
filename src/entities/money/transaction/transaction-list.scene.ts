@@ -1,10 +1,10 @@
-import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
-import { Markup } from 'telegraf';
+import { Scene, SceneEnter } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { SCENES } from '../../../shared/scenes-wizards';
-import { CustomWizardContext } from '../../../shared/interfaces';
+import { SceneAuthContext } from '../../../shared/interfaces';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
+import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
 
 @Scene(SCENES.TRANSACTION_LIST)
 @SceneRoles('manager')
@@ -15,15 +15,16 @@ export class TransactionListScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(@Ctx() ctx: CustomWizardContext): Promise<void> {
+  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
     const transactions = await this.transactionService.findAll();
-    const transactionList = transactions.map((transaction, index) => {
-      return `№${index + 1}.\n${transaction.description ? transaction.description : 'Без описания'}\nДата: ${transaction.transactionDate}\nСумма: ${transaction.amount}`;
-    });
+    const formattedList = await this.transactionService.formatList(
+      transactions,
+      ctx.userRole,
+    );
 
     await ctx.reply('Транзакции:');
 
-    for (const transaction of transactionList) {
+    for (const transaction of formattedList) {
       await ctx.reply(transaction);
     }
 

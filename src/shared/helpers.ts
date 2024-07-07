@@ -2,7 +2,6 @@ import { CustomWizardContext, WizardStepType } from './interfaces';
 import { Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './scenes-wizards';
 import { format } from 'date-fns';
-import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
 
 export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
@@ -139,3 +138,7 @@ export const getMessage = (ctx: CustomWizardContext | Scenes.SceneContext) => {
 export function assertNever(x: never): never {
   throw new Error(`Unexpected object: ${x}`);
 }
+
+export const formatWithListIndexes = (list: string[]): string[] => {
+  return list.map((item, index) => `№${index + 1}. ${item}`);
+};

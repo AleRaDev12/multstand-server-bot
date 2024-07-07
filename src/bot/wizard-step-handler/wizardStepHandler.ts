@@ -24,9 +24,6 @@ export function wizardStepHandler<T extends BaseEntity>(
       descriptor: PropertyDescriptor,
     ) {
       descriptor.value = async function (ctx: CustomWizardContext) {
-        console.log('*-* -------------------');
-        console.log('*-* stepIndex', stepIndex);
-
         const entity = getEntity(ctx);
 
         if (stepIndex === 1) {
@@ -39,9 +36,6 @@ export function wizardStepHandler<T extends BaseEntity>(
         const stepForRequestNumber = stepIndex - 1;
         const stepAnswer = steps[stepForAnswerNumber];
         const stepRequest = steps[stepForRequestNumber];
-
-        console.log('*-* stepAnswer', stepAnswer);
-        console.log('*-* stepRequest', stepRequest);
 
         if (stepAnswer) {
           const isOk = await handleAnswer.call(

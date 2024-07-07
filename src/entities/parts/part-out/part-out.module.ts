@@ -15,7 +15,7 @@ import { UserModule } from '../../user/user.module';
     TypeOrmModule.forFeature([PartOut, PartIn]),
     ComponentModule,
     StandProdModule,
-    forwardRef(() => PartsModule), // *-* remake this after to use without forwardRef
+    forwardRef(() => PartsModule), // TODO: *-* remake this after to use without forwardRef
     UserModule,
   ],
   providers: [PartOutService, PartOutAddWizard, PartOutListScene],

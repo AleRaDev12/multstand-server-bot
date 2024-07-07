@@ -45,8 +45,6 @@ async function save(
   transaction.partIn = partIn;
   transaction.account = ctx.wizard.state.account;
 
-  console.log('*-* transaction', transaction);
-
   await this.transactionService.create(transaction);
   return partIn;
 }
@@ -94,10 +92,7 @@ async function handleSpecificAnswer(
       const message = getMessage(ctx);
 
       const selectedNumber = parseInt(message.text);
-      console.log('*-* selectedNumber', selectedNumber);
-
       const components = await this.componentService.findAll();
-      console.log('*-* components', components);
       const component = components[selectedNumber - 1];
       if (!component) {
         await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
@@ -117,7 +112,6 @@ async function handleSpecificAnswer(
         return false;
       }
       ctx.wizard.state.account = account;
-      console.log('*-* ctx.wizard.state.account', ctx.wizard.state.account);
       return true;
     }
     default:

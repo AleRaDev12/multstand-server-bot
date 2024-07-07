@@ -28,7 +28,7 @@ export class StandProdNotLinkedListScene {
       const formattedList = await this.service.formatList(
         list,
         ctx.state.userRole,
-      ); // *-*
+      );
 
       for (const standProd of formattedList) {
         await ctx.reply(standProd);

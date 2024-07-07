@@ -18,8 +18,6 @@ export class StandProdListScene {
 
   @SceneEnter()
   async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
-    console.log('*-* ctx', ctx);
-    await ctx.reply(`userRole ${ctx.userRole}`);
     const list = await this.service.findAll();
     if (!list || list.length === 0) {
       await ctx.reply('Записей нет');

@@ -1,6 +1,6 @@
 import {
-  CustomWizardContext,
   AdditionalWizardSelections,
+  CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
 import { WorkAddWizard } from './work-add.wizard';
@@ -84,10 +84,9 @@ async function handleSpecificRequest(
     case standProdSelectType: {
       const standsProdList = await this.standProdService.findAll();
 
-      const userId = ctx.from.id;
       const formattedList = await this.standProdService.formatList(
         standsProdList,
-        'master', // *-*
+        ctx.userRole,
       );
 
       if (formattedList.length === 0) {
