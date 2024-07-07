@@ -1,9 +1,13 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { UserService } from '../../entities/user/user.service';
 import { TelegrafExecutionContext } from 'nestjs-telegraf';
+import { SceneContext, SceneSessionData } from 'telegraf/scenes';
 import { UserRole } from '../../shared/interfaces';
 import { SCENES } from '../../shared/scenes-wizards';
-import { SceneContext } from 'telegraf/scenes';
+
+export interface ExtendedSceneSessionData extends SceneSessionData {
+  userRole?: UserRole;
+}
 
 @Injectable()
 export class SceneRoleGuard implements CanActivate {
@@ -14,7 +18,9 @@ export class SceneRoleGuard implements CanActivate {
     const className = context.getClass().name;
 
     const ctx = TelegrafExecutionContext.create(context);
-    const telegrafContext = ctx.getContext<SceneContext>();
+    const telegrafContext = ctx.getContext<
+      SceneContext & { session: ExtendedSceneSessionData }
+    >();
 
     // Check if it's a scene enter, wizard enter, or wizard step
     const isSceneOrWizardEnter = this.isSceneOrWizardEnter(
@@ -40,7 +46,6 @@ export class SceneRoleGuard implements CanActivate {
     const user = await this.userService.findByTelegramId(from.id);
     if (!user) {
       await this.handleUnregistered(telegrafContext);
-      console.log('*-* handleUnregistered');
       return true;
     }
 
@@ -52,6 +57,9 @@ export class SceneRoleGuard implements CanActivate {
       await this.handleUnauthorized(telegrafContext);
       return false;
     }
+
+    // Save the role in session context
+    telegrafContext.session.userRole = user.role;
 
     return true;
   }

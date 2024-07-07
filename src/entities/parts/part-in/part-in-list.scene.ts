@@ -5,10 +5,9 @@ import { handleButtonPress } from '../../../shared/helpers';
 import { PartInService } from './part-in.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { UserService } from '../../user/user.service';
-import {
-  CtxWithUserId,
-  SceneContextWithUserId,
-} from '../../../bot/decorators/ctx-with-user-id.decorator';
+
+import { SceneAuthContext } from '../../../shared/interfaces';
+import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
 
 @Scene(SCENES.PART_IN_LIST)
 @SceneRoles('manager')
@@ -16,18 +15,13 @@ export class PartInListScene {
   constructor(
     @Inject(PartInService)
     readonly service: PartInService,
-
     @Inject(UserService)
     readonly userService: UserService,
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(
-    @CtxWithUserId() ctx: SceneContextWithUserId,
-  ): Promise<void> {
-    const userRole = await this.userService.getRoleByTelegramUserId(
-      ctx.telegramUserId,
-    );
+  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+    const userRole = ctx.userRole;
 
     const partsInList = await this.service.getFormattedList(userRole);
     if (!partsInList) {

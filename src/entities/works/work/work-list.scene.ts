@@ -1,14 +1,11 @@
 import { Scene, SceneEnter } from 'nestjs-telegraf';
-import { Markup } from 'telegraf';
 import { Inject } from '@nestjs/common';
 import { WorkService } from './work.service';
-import {
-  CtxWithUserId,
-  SceneContextWithUserId,
-} from '../../../bot/decorators/ctx-with-user-id.decorator';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { UserService } from '../../user/user.service';
+import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
+import { SceneAuthContext } from '../../../shared/interfaces';
 
 @Scene(SCENES.WORK_LIST)
 @SceneRoles('manager', 'master')
@@ -21,12 +18,9 @@ export class WorkListScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(
-    @CtxWithUserId() ctx: SceneContextWithUserId,
-  ): Promise<void> {
-    const user = await this.userService.findByTelegramId(ctx.telegramUserId);
-
-    const userRole = user.role;
+  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+    const user = await this.userService.findByTelegramId(ctx.from.id);
+    const userRole = ctx.userRole;
 
     const usersToShow =
       userRole === 'manager'

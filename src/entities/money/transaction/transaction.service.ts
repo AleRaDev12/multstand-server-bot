@@ -33,6 +33,8 @@ export class TransactionService {
     });
   }
 
+  // *-*
+
   async getBalance(): Promise<number> {
     const transactions = await this.findAll();
     return transactions.reduce(

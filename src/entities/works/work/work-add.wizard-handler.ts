@@ -87,7 +87,7 @@ async function handleSpecificRequest(
       const userId = ctx.from.id;
       const formattedList = await this.standProdService.formatList(
         standsProdList,
-        userId,
+        'master', // *-*
       );
 
       if (formattedList.length === 0) {

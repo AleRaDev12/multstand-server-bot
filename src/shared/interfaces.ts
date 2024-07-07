@@ -102,10 +102,21 @@ interface CustomWizardContextWizard<
   state: D;
 }
 
+export interface SceneAuthContext extends Scenes.SceneContext {
+  userRole: UserRole;
+}
+
 export interface CustomWizardContext<
   D extends CustomWizardSessionData = CustomWizardSessionData,
-> extends WizardContext<D> {
-  wizard: CustomWizardContextWizard<D>;
+> extends BaseWizardContext<D> {}
+
+interface BaseWizardContext<
+  D extends CustomWizardSessionData = CustomWizardSessionData,
+> extends Scenes.SceneContext {
+  session: Scenes.SceneSession<D>; // Используем session из SceneContext
+  scene: Scenes.SceneContextScene<BaseWizardContext<D>, D>; // Используем scene из SceneContext
+  wizard: CustomWizardContextWizard<D>; // Добавляем свойство wizard
+  userRole: UserRole; // Добавляем userRole
 }
 
 export type MessageType = {

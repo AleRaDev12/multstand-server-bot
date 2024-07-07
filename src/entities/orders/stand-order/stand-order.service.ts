@@ -45,11 +45,9 @@ export class StandOrderService {
 
   async formatList(
     standOrders: StandOrder[],
-    userId: number,
+    userRole: UserRole,
   ): Promise<string[]> {
     if (standOrders.length === 0) return null;
-
-    const userRole = await this.userService.getRoleByTelegramUserId(userId);
 
     const formattedOrders = [];
     let index = 1;

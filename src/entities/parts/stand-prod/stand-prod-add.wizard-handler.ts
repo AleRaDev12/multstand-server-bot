@@ -68,10 +68,9 @@ async function handleSpecificRequest(
   switch (stepRequest.type) {
     case standOrderSelectType: {
       const standsProdList = await this.standOrderService.findAll();
-      const userId = ctx.from.id;
       const formattedList = this.standOrderService.formatList(
         standsProdList,
-        userId,
+        ctx.userRole,
       );
 
       await replyWithCancelButton(

@@ -43,11 +43,11 @@ export class StandProdService {
     });
   }
 
-  async formatSingle(standProd: StandProd, userId: number): Promise<string> {
-    return this.formatSingleWithRole(
-      standProd,
-      await this.userService.getRoleByTelegramUserId(userId),
-    );
+  async formatSingle(
+    standProd: StandProd,
+    userRole: UserRole,
+  ): Promise<string> {
+    return this.formatSingleWithRole(standProd, userRole);
   }
 
   async findComponentsByStandProd(
@@ -81,14 +81,11 @@ export class StandProdService {
     return Object.values(componentMap);
   }
 
-  async formatList(list: StandProd[], userId: number): Promise<string[]> {
+  async formatList(list: StandProd[], userRole: UserRole): Promise<string[]> {
     const formattedList: string[] = [];
 
     for (const standProd of list) {
-      const formatted = await this.formatSingleWithRole(
-        standProd,
-        await this.userService.getRoleByTelegramUserId(userId),
-      );
+      const formatted = await this.formatSingleWithRole(standProd, userRole);
       formattedList.push(formatted);
     }
 
