@@ -28,7 +28,7 @@ const labels: EntityLabels<StandProd, string> = {
 
 export function formatStandProd(
   standProd: StandProd,
-  userRole: UserRole,
+  userRole: UserRole = 'master',
   labelType: LabelsType,
 ): string {
   return formatLabels(standProd, labels[userRole][labelType]);
