@@ -66,5 +66,5 @@ export function formatStandOrder(
   userRole: UserRole,
   labelType: LabelsType,
 ): string {
-  return formatLabels(standOrder, labels[userRole][labelType]);
+  return formatLabels(standOrder, labels[userRole ?? 'master'][labelType]);
 }
