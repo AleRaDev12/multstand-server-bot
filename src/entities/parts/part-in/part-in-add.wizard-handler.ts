@@ -9,6 +9,7 @@ import { Transaction } from '../../money/transaction/transaction.entity';
 import { formatWithListIndexes, getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../shared/senMessages';
 
 const componentTypeName: AdditionalWizardSelections = 'componentSelect';
 const accountSelect: AdditionalWizardSelections = 'accountSelect';
@@ -57,7 +58,7 @@ async function save(
 }
 
 async function print(ctx: CustomWizardContext, entity: PartIn): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 async function handleSpecificRequest(

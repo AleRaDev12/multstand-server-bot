@@ -5,6 +5,7 @@ import { Inject } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
+import { sendMessage } from '../../shared/senMessages';
 
 @Scene(SCENES.CLIENT_LIST)
 @SceneRoles('manager')
@@ -17,7 +18,7 @@ export class ClientListScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     const clientsList = await this.service.getList();
-    await ctx.reply(clientsList ?? 'Записей нет');
+    await sendMessage(ctx, clientsList ?? 'Записей нет');
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.CLIENT));
   }

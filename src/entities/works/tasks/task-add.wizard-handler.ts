@@ -11,6 +11,7 @@ import {
 import { TaskAddWizard } from './task-add-wizard';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../shared/senMessages';
 
 const steps: WizardStepType[] = [
   { message: 'Категория задачи:', field: 'category', type: 'string' },
@@ -41,7 +42,7 @@ function save(entity: Task) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Task): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 async function handleSpecificAnswer(

@@ -5,6 +5,7 @@ import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { Markup } from 'telegraf';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
+import { sendMessage } from '../../../shared/senMessages';
 
 @Scene(SCENES.ACCOUNT_LIST)
 @SceneRoles('manager')
@@ -23,7 +24,8 @@ export class AccountListScene {
       })
       .join('\n\n');
 
-    await ctx.reply(
+    await sendMessage(
+      ctx,
       `Счета:\n\n${accountList}`,
       Markup.inlineKeyboard([
         [Markup.button.callback('Назад в меню', 'back_to_menu')],

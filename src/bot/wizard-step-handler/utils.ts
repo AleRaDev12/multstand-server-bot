@@ -3,12 +3,14 @@ import { CustomWizardContext } from '../../shared/interfaces';
 import { getMessage, getValueUnionByIndex } from '../../shared/helpers';
 import { BotActions } from '../bot.update';
 import { SceneContext } from 'telegraf/scenes';
+import { sendMessage } from '../../shared/senMessages';
 
 export async function replyWithCancelButton(
   ctx: CustomWizardContext | SceneContext,
   message: string,
 ) {
-  await ctx.reply(
+  await sendMessage(
+    ctx,
     message,
     Markup.inlineKeyboard([
       Markup.button.callback('Отмена', BotActions.CANCEL),

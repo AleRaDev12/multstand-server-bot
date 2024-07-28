@@ -5,6 +5,7 @@ import {
 import { AccountAddWizard } from './account-add.wizard';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Account } from './account.entity';
+import { sendMessage } from '../../../shared/senMessages';
 
 const entityName = 'account';
 
@@ -26,7 +27,7 @@ async function save(this: AccountAddWizard, entity: Account) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Account): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 export const AccountAddWizardHandler = wizardStepHandler<Account>({

@@ -9,6 +9,7 @@ import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from '../component/component.entity';
+import { sendMessage } from '../../../shared/senMessages';
 
 const standProdTypeName: AdditionalWizardSelections = 'standProdSelect';
 const componentTypeName: AdditionalWizardSelections = 'componentSelect';
@@ -38,7 +39,7 @@ function save() {
 }
 
 async function print(ctx: CustomWizardContext, entity: PartOut): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 async function handleSpecificRequest(
@@ -131,7 +132,8 @@ async function handleSpecificAnswer(
             date,
             standProd,
           );
-          await ctx.reply(
+          await sendMessage(
+            ctx,
             `Успешно списано ${count} компонентов с ${partOuts.length} партий.`,
           );
           return true;

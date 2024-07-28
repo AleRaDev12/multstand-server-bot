@@ -5,6 +5,7 @@ import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { Inject } from '@nestjs/common';
 import { Scenes } from 'telegraf';
 import { PartsService } from './parts.service';
+import { sendMessage } from '../../shared/senMessages';
 
 @Scene(SCENES.PARTS_REMAINING_LIST)
 @SceneRoles('manager')
@@ -20,10 +21,10 @@ export class PartsRemainingListScene {
     const formattedList = this.componentsService.formatRemainingList(list);
 
     if (!formattedList) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
     }
     for (const item in formattedList) {
-      await ctx.reply(formattedList[item]);
+      await sendMessage(ctx, formattedList[item]);
     }
 
     await ctx.scene.leave();

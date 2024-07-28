@@ -7,6 +7,7 @@ import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 import { CtxAuth } from './decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../shared/interfaces';
+import { sendMessage } from '../shared/senMessages';
 
 enum Actions {
   CLIENT = 'client',
@@ -37,17 +38,20 @@ export class MenuScene {
     const role = ctx.userRole;
 
     if (role === 'unregistered') {
-      await ctx.reply('Ваша регистрация ещё не подтверждена');
+      await sendMessage(ctx, 'Ваша регистрация ещё не подтверждена');
       return;
     }
 
     if (['manager', 'master'].includes(role)) {
-      await ctx.reply(`Добро пожаловать, ${user.name} (роль: ${user.role}).`);
-      await ctx.reply('Меню:', MENU[role]);
+      await sendMessage(
+        ctx,
+        `Добро пожаловать, ${user.name} (роль: ${user.role}).`,
+      );
+      await sendMessage(ctx, 'Меню:', MENU[role]);
       return;
     }
 
-    await ctx.reply('Неизвестная ошибка');
+    await sendMessage(ctx, 'Неизвестная ошибка');
   }
 
   @Action(Actions.CLIENT)
@@ -117,7 +121,7 @@ export class MenuScene {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(scene));
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 }

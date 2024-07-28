@@ -5,6 +5,7 @@ import { SCENES } from '../../../shared/scenes-wizards';
 import { SceneAuthContext } from '../../../shared/interfaces';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
+import { sendMessage } from '../../../shared/senMessages';
 
 @Scene(SCENES.TRANSACTION_LIST)
 @SceneRoles('manager')
@@ -22,10 +23,10 @@ export class TransactionListScene {
       ctx.userRole,
     );
 
-    await ctx.reply('Транзакции:');
+    await sendMessage(ctx, 'Транзакции:');
 
     for (const transaction of formattedList) {
-      await ctx.reply(transaction);
+      await sendMessage(ctx, transaction);
     }
 
     await ctx.scene.leave();

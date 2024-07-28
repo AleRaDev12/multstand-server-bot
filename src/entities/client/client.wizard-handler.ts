@@ -2,6 +2,7 @@ import { CustomWizardContext, WizardStepTypeN } from '../../shared/interfaces';
 import { Client } from './client.entity';
 import { ClientAddWizard } from './client-add.wizard';
 import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../shared/senMessages';
 
 const entityName = 'client';
 
@@ -28,7 +29,8 @@ function save(this: ClientAddWizard, entity: Client) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Client): Promise<void> {
-  await ctx.reply(
+  await sendMessage(
+    ctx,
     `Клиент ${entity.firstName} ${entity.lastName} с номером ${entity.phoneNumber} из города ${entity.city} добавлен.`,
   );
 }

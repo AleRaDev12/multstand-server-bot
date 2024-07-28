@@ -4,6 +4,7 @@ import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { SceneContext, SceneSessionData } from 'telegraf/scenes';
 import { UserRole } from '../../shared/interfaces';
 import { SCENES } from '../../shared/scenes-wizards';
+import { sendMessage } from '../../shared/senMessages';
 
 export interface ExtendedSceneSessionData extends SceneSessionData {
   userRole?: UserRole;
@@ -65,19 +66,20 @@ export class SceneRoleGuard implements CanActivate {
   }
 
   private async handleUndefinedRoles(ctx: SceneContext, className: string) {
-    await ctx.reply(
+    await sendMessage(
+      ctx,
       `Ограничения ролей для сцены (${className}) не определены.`,
     );
     await ctx.scene.enter(SCENES.MENU);
   }
 
   private async handleUnauthorized(ctx: SceneContext) {
-    await ctx.reply(`У вас нет доступа к данной функции.`);
+    await sendMessage(ctx, `У вас нет доступа к данной функции.`);
     await ctx.scene.enter(SCENES.MENU);
   }
 
   private async handleUnregistered(ctx: SceneContext) {
-    await ctx.reply(`Вы не зарегистрированы.`);
+    await sendMessage(ctx, `Вы не зарегистрированы.`);
     await ctx.scene.enter(SCENES.REGISTRATION);
   }
 

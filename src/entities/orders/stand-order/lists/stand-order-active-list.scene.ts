@@ -7,6 +7,7 @@ import { SceneRoles } from '../../../../bot/decorators/scene-roles.decorator';
 import { UserService } from '../../../user/user.service';
 import { CtxAuth } from '../../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../../shared/interfaces';
+import { sendMessage } from '../../../../shared/senMessages';
 
 @Scene(SCENES.STAND_ORDER_ACTIVE_LIST)
 @SceneRoles('manager', 'master')
@@ -23,12 +24,12 @@ export class StandOrderActiveListScene {
     const list = await this.service.findInProgress();
 
     if (!list || list.length === 0) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
     } else {
       const formattedList = await this.service.formatList(list, ctx.userRole);
 
       for (const standOrder of formattedList) {
-        await ctx.reply(standOrder);
+        await sendMessage(ctx, standOrder);
       }
     }
 

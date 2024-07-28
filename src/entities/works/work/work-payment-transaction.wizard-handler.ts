@@ -8,6 +8,7 @@ import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { WorkPaymentTransactionWizard } from './work-payment-transaction.wizard';
 import { Transaction } from '../../money/transaction/transaction.entity';
+import { sendMessage } from '../../../shared/senMessages';
 
 const masterSelect: AdditionalWizardSelections = 'masterSelect';
 const accountSelect: AdditionalWizardSelections = 'accountSelect';
@@ -44,7 +45,7 @@ async function print(
   ctx: CustomWizardContext,
   entity: Transaction,
 ): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 async function handleSpecificRequest(

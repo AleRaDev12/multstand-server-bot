@@ -4,6 +4,7 @@ import {
 } from '../../../shared/interfaces';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from './component.entity';
+import { sendMessage } from '../../../shared/senMessages';
 
 const steps: WizardStepType[] = [
   { message: 'Название комплектующего:', field: 'name', type: 'string' },
@@ -29,7 +30,7 @@ async function print(
   ctx: CustomWizardContext,
   entity: Component,
 ): Promise<void> {
-  await ctx.reply(`${entity.name} добавлен`);
+  await sendMessage(ctx, `${entity.name} добавлен`);
 }
 
 export const ComponentWizardHandler = wizardStepHandler<Component>({

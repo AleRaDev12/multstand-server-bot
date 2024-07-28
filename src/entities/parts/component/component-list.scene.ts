@@ -8,6 +8,7 @@ import {
 } from '../../../shared/helpers';
 import { ComponentService } from './component.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
+import { sendMessage } from '../../../shared/senMessages';
 
 @Scene(SCENES.COMPONENT_LIST)
 @SceneRoles('manager')
@@ -21,10 +22,10 @@ export class ComponentListScene {
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     const list = await this.service.getList();
     if (!list || list.length === 0) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
       return;
     }
-    await ctx.reply(formatWithListIndexes(list).join('\n'));
+    await sendMessage(ctx, formatWithListIndexes(list).join('\n'));
 
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));

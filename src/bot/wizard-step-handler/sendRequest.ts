@@ -6,6 +6,7 @@ import { UnifiedWizardHandlerOptions } from './types';
 import { BaseEntity } from '../../entities/base.entity';
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { replyWithCancelButton } from './utils';
+import { sendMessage } from '../../shared/senMessages';
 
 export async function sendRequest<T extends BaseEntity>(
   this: any,
@@ -45,7 +46,8 @@ export async function sendRequest<T extends BaseEntity>(
 async function sendDateOptions(ctx: CustomWizardContext) {
   const today = new Date();
   const monthName = format(today, 'MMMM');
-  await ctx.reply(
+  await sendMessage(
+    ctx,
     `В формате "ГГГГ-ММ-ДД"\nИли день текущего месяца (текущий месяц сервера — ${monthName})\nИли используйте быстрый выбор.`,
     Markup.inlineKeyboard([
       Markup.button.callback(

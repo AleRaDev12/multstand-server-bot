@@ -7,6 +7,7 @@ import { OrderAddWizard } from './order-add.wizard';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../shared/senMessages';
 
 const selectTypeName = 'clientSelect';
 
@@ -40,7 +41,7 @@ function save(this: OrderAddWizard, entity: Order) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Order): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 async function handleSpecificAnswer(

@@ -6,6 +6,7 @@ import { handleButtonPress } from '../../../../shared/helpers';
 import { SceneRoles } from '../../../../bot/decorators/scene-roles.decorator';
 import { CtxAuth } from '../../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../../shared/interfaces';
+import { sendMessage } from '../../../../shared/senMessages';
 
 @Scene(SCENES.STAND_ORDER_LIST)
 @SceneRoles('manager')
@@ -19,13 +20,13 @@ export class StandOrderListScene {
   async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
     const list = await this.service.findAll();
     if (!list) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
     }
 
     const formattedList = await this.service.formatList(list, ctx.userRole);
 
     for (const standOrder of formattedList) {
-      await ctx.reply(standOrder);
+      await sendMessage(ctx, standOrder);
     }
 
     await ctx.scene.leave();

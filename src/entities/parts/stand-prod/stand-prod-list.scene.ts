@@ -7,6 +7,7 @@ import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { Inject } from '@nestjs/common';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../shared/interfaces';
+import { sendMessage } from '../../../shared/senMessages';
 
 @Scene(SCENES.STAND_PROD_LIST)
 @SceneRoles('manager')
@@ -20,11 +21,11 @@ export class StandProdListScene {
   async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
     const list = await this.service.findAll();
     if (!list || list.length === 0) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
     } else {
       const formattedList = await this.service.formatList(list, ctx.userRole);
       for (const item of formattedList) {
-        await ctx.reply(item);
+        await sendMessage(ctx, item);
       }
     }
     await ctx.scene.leave();

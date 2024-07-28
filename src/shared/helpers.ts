@@ -2,6 +2,7 @@ import { CustomWizardContext, WizardStepType } from './interfaces';
 import { Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './scenes-wizards';
 import { format } from 'date-fns';
+import { sendMessage } from './senMessages';
 
 export function printUnion<T>(e: T): string {
   const keys = Object.keys(e).filter((key) => isNaN(Number(key)));
@@ -80,7 +81,7 @@ export async function goToSceneOrWizard(
   try {
     await ctx.scene.enter(target);
   } catch (e) {
-    await ctx.reply(e.message);
+    await sendMessage(ctx, e.message);
   } finally {
     await ctx.answerCbQuery();
   }
@@ -93,7 +94,7 @@ export async function handleButtonPress(
   try {
     await action();
   } catch (e) {
-    await ctx.reply(e.message);
+    await sendMessage(ctx, e.message);
   } finally {
     await ctx.answerCbQuery();
   }

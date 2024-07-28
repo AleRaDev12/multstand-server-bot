@@ -6,6 +6,7 @@ import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 import { getMessage } from '../shared/helpers';
 import { replyWithCancelButton } from './wizard-step-handler/utils';
+import { sendMessage } from '../shared/senMessages';
 
 @Scene(SCENES.REGISTER)
 @SceneRoles('manager')
@@ -28,7 +29,7 @@ export class RegisterUserScene {
         .map((request, index) => `${index + 1}. ${request.telegramUserId}`)
         .join('\n'),
     );
-    await ctx.reply('Введите номер и имя пользователя через запятую');
+    await sendMessage(ctx, 'Введите номер и имя пользователя через запятую');
   }
 
   @On('text')
@@ -76,7 +77,7 @@ export class RegisterUserScene {
     const selectedUser = requestsList[selectedNumber - 1];
 
     await this.userService.approveRequest(selectedUser.id, name);
-    await ctx.reply('Пользователь зарегистрирован.');
+    await sendMessage(ctx, 'Пользователь зарегистрирован.');
     await ctx.scene.leave();
     await ctx.scene.enter(SCENES.MENU);
   }

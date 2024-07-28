@@ -9,6 +9,7 @@ import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { TransactionOrderAddWizard } from './transaction-order-add.wizard';
+import { sendMessage } from '../../../shared/senMessages';
 
 const entityName = 'transactionOrder';
 const orderSelectType: AdditionalWizardSelections = 'orderSelect';
@@ -46,7 +47,8 @@ async function print(
   ctx: CustomWizardContext,
   entity: Transaction,
 ): Promise<void> {
-  await ctx.reply(
+  await sendMessage(
+    ctx,
     `Транзакция на сумму ${entity.amount} для заказа ${entity.order.id} по счёту ${entity.account.name} добавлена.`,
   );
 }

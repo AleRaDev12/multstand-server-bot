@@ -4,6 +4,7 @@ import { SCENES } from '../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
+import { sendMessage } from '../shared/senMessages';
 
 @Scene(SCENES.REGISTRATION)
 @SceneRoles('unknown')
@@ -16,9 +17,9 @@ export class RegistrationScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext) {
     const userId = ctx.from.id;
-    await ctx.reply('Отправляется заявка на регистрацию.');
+    await sendMessage(ctx, 'Отправляется заявка на регистрацию.');
     await this.userService.createRequest(userId);
-    await ctx.reply('Отправлена. Ожидайте подтверждения.');
+    await sendMessage(ctx, 'Отправлена. Ожидайте подтверждения.');
     await ctx.scene.leave();
   }
 }

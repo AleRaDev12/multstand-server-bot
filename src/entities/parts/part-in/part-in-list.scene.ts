@@ -8,6 +8,7 @@ import { UserService } from '../../user/user.service';
 
 import { SceneAuthContext } from '../../../shared/interfaces';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
+import { sendMessage } from '../../../shared/senMessages';
 
 @Scene(SCENES.PART_IN_LIST)
 @SceneRoles('manager')
@@ -25,10 +26,10 @@ export class PartInListScene {
 
     const partsInList = await this.service.getFormattedList(userRole);
     if (!partsInList) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
     } else {
       for (const partIn of partsInList) {
-        await ctx.reply(partIn);
+        await sendMessage(ctx, partIn);
       }
     }
 

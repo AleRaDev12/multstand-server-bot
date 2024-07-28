@@ -15,6 +15,7 @@ import {
   handleAnswerUnion,
   replyWithCancelButton,
 } from '../../../bot/wizard-step-handler/utils';
+import { sendMessage } from '../../../shared/senMessages';
 
 const orderSelectType: AdditionalWizardSelections = 'orderSelect';
 const orderModelSelectType: AdditionalWizardSelections = 'orderModelSelect';
@@ -114,7 +115,7 @@ async function print(
   ctx: CustomWizardContext,
   entity: StandOrder,
 ): Promise<void> {
-  await ctx.reply(`Набор характеристик станка добавлен`);
+  await sendMessage(ctx, `Набор характеристик станка добавлен`);
 }
 
 async function handleSpecificRequest(
@@ -126,12 +127,12 @@ async function handleSpecificRequest(
     case orderSelectType: {
       const ordersList = await this.orderService.getFormattedList();
       if (!ordersList) {
-        await ctx.reply('Записей нет');
+        await sendMessage(ctx, 'Записей нет');
         return true;
       }
 
       for (const order of ordersList) {
-        await ctx.reply(order);
+        await sendMessage(ctx, order);
       }
 
       await replyWithCancelButton(ctx, '-');

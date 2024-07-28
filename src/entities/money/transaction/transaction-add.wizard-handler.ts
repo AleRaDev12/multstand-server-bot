@@ -8,6 +8,7 @@ import { Transaction } from './transaction.entity';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../shared/senMessages';
 
 const entityName = 'transaction';
 const accountSelect: AdditionalWizardSelections = 'accountSelect';
@@ -39,7 +40,7 @@ async function print(
   ctx: CustomWizardContext,
   entity: Transaction,
 ): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 async function handleSpecificRequest(

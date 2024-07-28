@@ -4,13 +4,15 @@ import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
 import { BaseScene } from '../../shared/base.scene';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
+import { sendMessage } from '../../shared/senMessages';
 
 @Scene(SCENES.CLIENT)
 @SceneRoles('manager')
 export class ClientScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.reply(
+    await sendMessage(
+      ctx,
       'Клиенты:',
       Markup.inlineKeyboard([
         [Markup.button.callback('Список', 'list')],
@@ -26,7 +28,7 @@ export class ClientScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.CLIENT_LIST));
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -35,7 +37,7 @@ export class ClientScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.CLIENT_ADD));
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -46,7 +48,7 @@ export class ClientScene extends BaseScene {
         ctx.scene.enter(WIZARDS.CLIENT_UPDATE),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 }

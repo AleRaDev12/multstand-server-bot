@@ -7,6 +7,7 @@ import { WIZARDS } from '../../shared/scenes-wizards';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { replyWithCancelButton } from '../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../shared/senMessages';
 
 const entityName = 'client';
 
@@ -33,7 +34,8 @@ async function save(this: ClientUpdateWizard, entity: Client) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Client): Promise<void> {
-  await ctx.reply(
+  await sendMessage(
+    ctx,
     `Клиент ${entity.firstName} ${entity.lastName} с номером ${entity.phoneNumber} из города ${entity.city} обновлен.`,
   );
 }

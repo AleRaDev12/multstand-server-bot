@@ -6,6 +6,7 @@ import { handleButtonPress } from '../../shared/helpers';
 import { Inject } from '@nestjs/common';
 import { AccountService } from './account/account.service';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
+import { sendMessage } from '../../shared/senMessages';
 
 @Scene(SCENES.MONEY)
 @SceneRoles('manager')
@@ -21,7 +22,8 @@ export class MoneyScene extends BaseScene {
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     const balances = await this.accountService.getAccountBalancesList();
 
-    await ctx.reply(
+    await sendMessage(
+      ctx,
       `Текущий баланс:\n${balances.join('\n')}`,
       Markup.inlineKeyboard([
         [
@@ -46,7 +48,7 @@ export class MoneyScene extends BaseScene {
         ctx.scene.enter(SCENES.TRANSACTION_LIST),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -57,7 +59,7 @@ export class MoneyScene extends BaseScene {
         ctx.scene.enter(WIZARDS.ADD_TRANSACTION),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -68,7 +70,7 @@ export class MoneyScene extends BaseScene {
         ctx.scene.enter(WIZARDS.ACCOUNT_TRANSFER),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -79,7 +81,7 @@ export class MoneyScene extends BaseScene {
         ctx.scene.enter(WIZARDS.ADD_TRANSACTION_ORDER),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -88,7 +90,7 @@ export class MoneyScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ACCOUNT_LIST));
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 

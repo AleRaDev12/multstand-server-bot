@@ -8,6 +8,7 @@ import { Work } from './work.entity';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../shared/senMessages';
 
 const masterSelectType: AdditionalWizardSelections = 'masterSelect';
 const taskSelectType: AdditionalWizardSelections = 'taskSelect';
@@ -39,7 +40,7 @@ function save(this: WorkAddWizard, entity: Work) {
 }
 
 async function print(ctx: CustomWizardContext, entity: Work): Promise<void> {
-  await ctx.reply(`Добавлено`);
+  await sendMessage(ctx, `Добавлено`);
 }
 
 async function handleSpecificRequest(
@@ -94,9 +95,9 @@ async function handleSpecificRequest(
         return true;
       }
 
-      await ctx.reply(stepRequest.message);
+      await sendMessage(ctx, stepRequest.message);
       for (let i = 0; i < formattedList.length; i++) {
-        await ctx.reply(`№${i + 1}\n${formattedList[i]}`);
+        await sendMessage(ctx, `№${i + 1}\n${formattedList[i]}`);
       }
 
       await replyWithCancelButton(ctx, `-`);

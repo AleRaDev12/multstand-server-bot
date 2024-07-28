@@ -4,6 +4,7 @@ import { BaseScene } from '../../shared/base.scene';
 import { Markup, Scenes } from 'telegraf';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
+import { sendMessage } from '../../shared/senMessages';
 
 enum Actions {
   COMPONENT_LIST = 'component_list',
@@ -22,7 +23,8 @@ enum Actions {
 export class PartsScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await ctx.reply(
+    await sendMessage(
+      ctx,
       'Компоненты:',
       Markup.inlineKeyboard([
         [
@@ -57,7 +59,7 @@ export class PartsScene extends BaseScene {
         ctx.scene.enter(SCENES.COMPONENT_LIST),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -68,7 +70,7 @@ export class PartsScene extends BaseScene {
         ctx.scene.enter(WIZARDS.ADD_COMPONENT),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -79,7 +81,7 @@ export class PartsScene extends BaseScene {
         ctx.scene.enter(SCENES.PARTS_REMAINING_LIST),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -88,7 +90,7 @@ export class PartsScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PART_IN_LIST));
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -102,7 +104,7 @@ export class PartsScene extends BaseScene {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PART_OUT_LIST));
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -118,7 +120,7 @@ export class PartsScene extends BaseScene {
         ctx.scene.enter(SCENES.STAND_PROD_LIST),
       );
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 

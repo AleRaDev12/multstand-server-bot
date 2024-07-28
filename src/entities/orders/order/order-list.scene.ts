@@ -5,6 +5,7 @@ import { Inject } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { handleButtonPress } from '../../../shared/helpers';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
+import { sendMessage } from '../../../shared/senMessages';
 
 @Scene(SCENES.ORDER_LIST)
 @SceneRoles('manager')
@@ -18,10 +19,10 @@ export class OrderListScene {
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     const ordersList = await this.service.getFormattedList();
     if (!ordersList) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
     } else {
       for (const order of ordersList) {
-        await ctx.reply(order);
+        await sendMessage(ctx, order);
       }
     }
     await ctx.scene.leave();

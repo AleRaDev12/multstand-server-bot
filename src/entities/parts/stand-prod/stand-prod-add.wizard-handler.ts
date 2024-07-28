@@ -8,6 +8,7 @@ import { StandProdAddWizard } from './stand-prod-add.wizard';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../shared/senMessages';
 
 const standOrderSelectType: AdditionalWizardSelections = 'standOrderSelect';
 const entityName = 'standProd';
@@ -30,7 +31,7 @@ function save(this: StandProdAddWizard, entity: StandProd) {
 }
 
 async function print(ctx: CustomWizardContext, entity: StandProd) {
-  await ctx.reply(`Набор характеристик станка добавлен`);
+  await sendMessage(ctx, `Набор характеристик станка добавлен`);
 }
 
 async function handleSpecificAnswer(

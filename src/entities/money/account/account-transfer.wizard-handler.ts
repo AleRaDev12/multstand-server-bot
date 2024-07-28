@@ -8,6 +8,7 @@ import { AccountTransferWizard } from './account-transfer.wizard';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../shared/senMessages';
 
 const stateEntityName = 'accountTransfer';
 type TransferMoney = {
@@ -60,7 +61,8 @@ async function print(
   ctx: CustomWizardContext,
   entity: TransferMoney,
 ): Promise<void> {
-  await ctx.reply(
+  await sendMessage(
+    ctx,
     `Перевод ${entity.amount} со счёта ${entity.fromAccount.name} на счёт ${entity.toAccount.name} выполнен.`,
   );
 }

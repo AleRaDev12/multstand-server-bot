@@ -7,6 +7,7 @@ import { handleButtonPress } from '../../../shared/helpers';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../shared/interfaces';
+import { sendMessage } from '../../../shared/senMessages';
 
 @Scene(SCENES.STAND_PROD_NOT_LINKED_LIST)
 @SceneRoles('manager', 'master')
@@ -23,7 +24,7 @@ export class StandProdNotLinkedListScene {
     const list = await this.service.findNotLinked();
 
     if (!list || list.length === 0) {
-      await ctx.reply('Записей нет');
+      await sendMessage(ctx, 'Записей нет');
     } else {
       const formattedList = await this.service.formatList(
         list,
@@ -31,7 +32,7 @@ export class StandProdNotLinkedListScene {
       );
 
       for (const standProd of formattedList) {
-        await ctx.reply(standProd);
+        await sendMessage(ctx, standProd);
       }
     }
 

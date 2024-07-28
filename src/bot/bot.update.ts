@@ -4,6 +4,7 @@ import { SCENES } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
 import { CustomContext, CustomWizardContext } from '../shared/interfaces';
 import { format, subDays } from 'date-fns';
+import { sendMessage } from '../shared/senMessages';
 
 export enum BotActions {
   CANCEL = 'cancel',
@@ -27,14 +28,14 @@ export class BotUpdate {
   @Start()
   async onStart(@Ctx() ctx: CustomContext): Promise<void> {
     if (ctx.notRegistered) {
-      await ctx.reply('Нет доступа');
+      await sendMessage(ctx, 'Нет доступа');
       return;
     }
 
     try {
       await ctx.scene.enter(SCENES.MENU);
     } catch (e) {
-      await ctx.reply(e.message);
+      await sendMessage(ctx, e.message);
     }
   }
 
@@ -52,7 +53,8 @@ export class BotUpdate {
       const date = new Date();
       ctx.wizard.state.selectedDate = date;
 
-      await ctx.reply(
+      await sendMessage(
+        ctx,
         `Выбрано: ${format(date, 'yyyy-MM-dd')}. Для продолжения введите любой текст, кроме "-"`,
       );
       await ctx.answerCbQuery();
@@ -65,7 +67,8 @@ export class BotUpdate {
       const date = subDays(new Date(), 1);
       ctx.wizard.state.selectedDate = date;
 
-      await ctx.reply(
+      await sendMessage(
+        ctx,
         `Выбрано: ${format(date, 'yyyy-MM-dd')}. Для продолжения введите любой текст, кроме "-"`,
       );
       await ctx.answerCbQuery();
@@ -78,7 +81,8 @@ export class BotUpdate {
       const date = subDays(new Date(), 2);
       ctx.wizard.state.selectedDate = date;
 
-      await ctx.reply(
+      await sendMessage(
+        ctx,
         `Выбрано: ${format(date, 'yyyy-MM-dd')}. Для продолжения введите любой текст, кроме "-"`,
       );
       await ctx.answerCbQuery();
