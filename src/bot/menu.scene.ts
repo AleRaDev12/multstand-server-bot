@@ -8,6 +8,7 @@ import { SceneRoles } from './decorators/scene-roles.decorator';
 import { CtxAuth } from './decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../shared/interfaces';
 import { sendMessage } from '../shared/senMessages';
+import { WorkService } from '../entities/works/work/work.service';
 
 enum Actions {
   CLIENT = 'client',
@@ -22,6 +23,9 @@ enum Actions {
   WORKS = 'works',
   WORK_ADD = 'work_add',
   WORK_LIST = 'work_list',
+  WORK_BALANCE = 'work_balance',
+  WORK_LIST_BY_DATE = 'work_list_by_date',
+  WORK_LIST_BY_STANDS = 'work_list_by_stands',
 }
 
 @Scene(SCENES.MENU)
@@ -30,6 +34,8 @@ export class MenuScene {
   constructor(
     @Inject(UserService)
     readonly userService: UserService,
+    @Inject(WorkService)
+    private readonly workService: WorkService,
   ) {}
 
   @SceneEnter()
@@ -114,6 +120,19 @@ export class MenuScene {
     await this.enterScene(ctx, SCENES.WORK_LIST);
   }
 
+  @Action(Actions.WORK_BALANCE)
+  async onWorkBalance(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+    const user = await this.userService.findByTelegramId(ctx.from.id);
+    const userId = user.id;
+    const earnings = await this.workService.calculateEarnings(userId);
+
+    await sendMessage(
+      ctx,
+      `Баланс:\nНачислено: ${earnings.totalEarned}\nВыплачено: ${earnings.alreadyPaid}\nОсталось выплатить: ${earnings.toPay}`,
+    );
+    await this.enterScene(ctx, SCENES.MENU);
+  }
+
   private async enterScene(
     ctx: Scenes.SceneContext,
     scene: string,
@@ -139,7 +158,15 @@ const MENU = {
     [
       Markup.button.callback('➕ Работа', Actions.WORK_ADD),
       Markup.button.callback('📊 Список, сумма', Actions.WORK_LIST),
+      Markup.button.callback('Баланс', Actions.WORK_BALANCE),
     ],
+    // [
+    //   Markup.button.callback('Работа - по дате', Actions.WORK_LIST_BY_DATE),
+    //   Markup.button.callback(
+    //     'Работа - по станкам',
+    //     Actions.WORK_LIST_BY_STANDS,
+    //   ),
+    // ],
     [
       Markup.button.callback(
         '📑 Станки-заказы',

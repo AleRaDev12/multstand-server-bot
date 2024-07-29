@@ -48,10 +48,10 @@ export class WorkListScene {
         return `${index + 1}. ${work.task.shownName}\nДата: ${work.date}\nКоличество: ${work.count}\n\nСтанки: ${standProds}\n\nСтанки-заказы:\n${work.standProd.map((item) => `${item?.standOrder?.format(userRole)}\n`)}\n\nОплата: ${work.cost * work.count * work.paymentCoefficient}₽ (по ${work.cost * work.paymentCoefficient}₽${userRole === 'manager' ? ` к: ${work.paymentCoefficient}` : ''})`;
       });
 
-      await sendMessage(
-        ctx,
-        `Начислено: ${earnings.totalEarned}\nВыплачено: ${earnings.alreadyPaid}\nОсталось выплатить: ${earnings.toPay}\n\nВыполненные задачи:`,
-      );
+      // await sendMessage(
+      //   ctx,
+      //   `Начислено: ${earnings.totalEarned}\nВыплачено: ${earnings.alreadyPaid}\nОсталось выплатить: ${earnings.toPay}\n\nВыполненные задачи:`,
+      // );
       await sendMessages(ctx, workList);
     }
 
