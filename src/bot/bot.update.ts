@@ -4,6 +4,9 @@ import { SCENES } from '../shared/scenes-wizards';
 import { handleButtonPress } from '../shared/helpers';
 import { CustomContext, CustomWizardContext } from '../shared/interfaces';
 import { format, subDays } from 'date-fns';
+import { UserService } from '../entities/user/user.service';
+import { Inject, OnApplicationBootstrap } from '@nestjs/common';
+import { SceneContext } from 'telegraf/typings/scenes';
 import { sendMessage } from '../shared/senMessages';
 
 export enum BotActions {
@@ -14,8 +17,11 @@ export enum BotActions {
 }
 
 @Update()
-export class BotUpdate {
-  constructor(@InjectBot() private bot: Telegraf) {
+export class BotUpdate implements OnApplicationBootstrap {
+  constructor(
+    @InjectBot() private bot: Telegraf<SceneContext>,
+    @Inject(UserService) private userService: UserService,
+  ) {
     this.setupCommands();
   }
 
@@ -23,6 +29,25 @@ export class BotUpdate {
     void this.bot.telegram.setMyCommands([
       { command: '/start', description: 'Запуск' },
     ]);
+  }
+
+  async onApplicationBootstrap() {
+    await this.notifyAllUsers();
+  }
+
+  async notifyAllUsers() {
+    const users = await this.userService.findAll();
+    for (const user of users) {
+      if (user.role !== 'unregistered' && user.role !== 'unknown')
+        try {
+          await this.bot.telegram.sendMessage(
+            user.telegramUserId,
+            'Бот перезапущен.\nКнопки из сообщений выше больше не активны.\nНажмите /start для продолжения работы.',
+          );
+        } catch (error) {
+          console.error(`Failed to notify user ${user.telegramUserId}:`, error);
+        }
+    }
   }
 
   @Start()

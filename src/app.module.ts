@@ -1,14 +1,14 @@
-import { SceneRoleGuard } from './bot/guards/scene-role.guard';
-import { sessionMiddleware } from './bot/middleware/session.middleware';
-import { Task } from './entities/works/tasks/task.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BotModule } from './bot/bot.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Component } from './entities/parts/component/component.entity';
 import { UserModule } from './entities/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
+import { SceneRoleGuard } from './bot/guards/scene-role.guard';
+import { sessionMiddleware } from './bot/middleware/session.middleware';
+import { Task } from './entities/works/tasks/task.entity';
+import { Component } from './entities/parts/component/component.entity';
 
 @Module({
   imports: [
