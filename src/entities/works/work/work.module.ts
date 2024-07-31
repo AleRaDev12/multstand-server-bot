@@ -1,7 +1,7 @@
 import { Work } from './work.entity';
 import { WorkService } from './work.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TaskModule } from '../tasks/task.module';
 import { WorkAddWizard } from './work-add.wizard';
 import { ComponentModule } from '../../parts/component/component.module';
@@ -14,13 +14,14 @@ import { Master } from '../../master/master.entity';
 import { WorkPaymentTransactionWizard } from './work-payment-transaction.wizard';
 import { TransactionModule } from '../../money/transaction/transaction.module';
 import { AccountModule } from '../../money/account/account.module';
+import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Work, Transaction, Master]),
+    TypeOrmModule.forFeature([Work, Transaction, Master, StandProd]),
     ComponentModule,
     TaskModule,
-    StandProdModule,
+    forwardRef(() => StandProdModule),
     MasterModule,
     UserModule,
     TransactionModule,

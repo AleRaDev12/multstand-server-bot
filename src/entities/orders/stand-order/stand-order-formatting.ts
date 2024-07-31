@@ -2,6 +2,7 @@ import { formatLabels } from '../../../shared/helpers';
 import { StandOrder } from './stand-order.entity';
 import { UserRole } from '../../../shared/interfaces';
 import { EntityLabels, LabelsType } from '../../base.entity';
+import { Tripod } from '../../unions';
 
 const labels: EntityLabels<StandOrder, string> = {
   manager: {
@@ -31,7 +32,6 @@ const labels: EntityLabels<StandOrder, string> = {
   },
   master: {
     short: {
-      id: 'Станок-заказ номер',
       model: 'Модель',
       painting: 'Обработка',
       glassesRegular: 'Стёкла об',
@@ -45,7 +45,6 @@ const labels: EntityLabels<StandOrder, string> = {
       rotaryMechanismsCount: 'Поворотные механизмы',
     },
     full: {
-      id: 'Станок-заказ номер',
       model: 'Модель',
       painting: 'Обработка',
       glassesRegular: 'Стёкла об',
@@ -66,5 +65,34 @@ export function formatStandOrder(
   userRole: UserRole,
   labelType: LabelsType,
 ): string {
+  if (labelType === 'line') {
+    return formatStandOrderLine(standOrder, userRole);
+  }
   return formatLabels(standOrder, labels[userRole ?? 'master'][labelType]);
+}
+
+function formatStandOrderLine(
+  standOrder: StandOrder,
+  userRole: UserRole,
+): string {
+  const parts = [
+    standOrder.model,
+    typeof standOrder.glassesRegular === 'number' &&
+      `${standOrder.glassesRegular}стОб`,
+    typeof standOrder.glassesHighTransparency === 'number' &&
+      `${standOrder.glassesHighTransparency}стПп`,
+    standOrder.painting,
+    standOrder.ledType,
+    standOrder.dimmersCount && `${standOrder.dimmersCount}рег`,
+    standOrder.shadingFabric && `${standOrder.shadingFabric}ткань`,
+    standOrder.smartphoneMount && `${standOrder.smartphoneMount}смарт`,
+    standOrder.tripod && standOrder.tripod !== Tripod.No && standOrder.tripod,
+    userRole === 'manager' && standOrder.cost,
+    userRole === 'manager' && standOrder.deliveryCost,
+    standOrder.sideWallsCount && `${standOrder.sideWallsCount}бок`,
+    standOrder.rotaryMechanismsCount &&
+      `${standOrder.rotaryMechanismsCount}пов`,
+  ];
+
+  return parts.filter(Boolean).join(' ');
 }

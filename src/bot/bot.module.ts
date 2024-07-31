@@ -24,7 +24,6 @@ import { WorksScene } from '../entities/works/works.scene';
   imports: [
     ClientsModule,
     OrderModule,
-    StandProdModule,
     PartInModule,
     PartOutModule,
     WorkModule,
@@ -35,6 +34,7 @@ import { WorksScene } from '../entities/works/works.scene';
     TransactionModule,
     MasterModule,
     AccountModule,
+    StandProdModule,
   ],
   providers: [
     BotUpdate,

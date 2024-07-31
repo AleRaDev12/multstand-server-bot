@@ -7,6 +7,7 @@ import { UserService } from '../../user/user.service';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../shared/interfaces';
 import { sendMessage, sendMessages } from '../../../shared/senMessages';
+import { Work } from './work.entity';
 
 @Scene(SCENES.WORK_LIST)
 @SceneRoles('manager', 'master')
@@ -31,28 +32,71 @@ export class WorkListScene {
         : [user];
 
     for (const user of usersToShow) {
-      if (userRole === 'manager')
+      if (userRole === 'manager') {
         await sendMessage(
           ctx,
           `🙍🏻‍♂️ Пользователь: ${user.name}. Актуальный коэффициент: ${user.master[0].paymentCoefficient}`,
         );
+      }
+
       const works = await this.workService.findAllByUserId(user.id);
 
-      const earnings = await this.workService.calculateEarnings(user.id);
+      // Группируем работы по дате
+      const worksByDate: { [key: string]: Work[] } = works.reduce(
+        (acc, work) => {
+          const dateKey = new Date(work.date).toISOString().split('T')[0];
+          if (!acc[dateKey]) {
+            acc[dateKey] = [];
+          }
+          acc[dateKey].push(work);
+          return acc;
+        },
+        {} as { [key: string]: Work[] },
+      );
 
-      const workList = works.map((work, index) => {
-        const standProds = work.standProd
-          .map((sp) => sp.format(userRole))
-          .join(', ');
+      const workList = Object.entries(worksByDate).map(([date, dateWorks]) => {
+        let output = `📅 Дата: ${date}\n`;
+        let totalCost = 0;
 
-        return `${index + 1}. ${work.task.shownName}\nДата: ${work.date}\nКоличество: ${work.count}\n\nСтанки: ${standProds}\n\nСтанки-заказы:\n${work.standProd.map((item) => `${item?.standOrder?.format(userRole)}\n`)}\n\nОплата: ${work.cost * work.count * work.paymentCoefficient}₽ (по ${work.cost * work.paymentCoefficient}₽${userRole === 'manager' ? ` к: ${work.paymentCoefficient}` : ''})`;
+        dateWorks.forEach((work, index) => {
+          const workCost = work.cost * work.count * work.paymentCoefficient;
+          totalCost += workCost;
+
+          output += `\n${index + 1}. ${work.task.shownName} (#${work.id})\n`;
+          output += `   Количество: ${work.count}\n`;
+          output += `   Стоимость: ${workCost.toFixed(2)}₽ (${work.cost * work.paymentCoefficient}₽ за ед.`;
+          if (userRole === 'manager') {
+            output += `, к: ${work.paymentCoefficient}`;
+          }
+          output += ')\n';
+
+          if (work.standProd && work.standProd.length > 0) {
+            output += '   # Изделия / # заказа (на наклейку):\n';
+            work.standProd.forEach((sp) => {
+              const standOrder = sp.standOrder;
+              const order = standOrder?.order;
+
+              output += `   📝 ${sp.id} / ${!standOrder ? '-' : standOrder.id + '  -  ' + standOrder.format(userRole, 'line')}\n`;
+              if (order) {
+                output += `      Заказ клиента #${order.id}\n`;
+              }
+            });
+          }
+        });
+
+        output += `\nИтого за ${date}: ${totalCost.toFixed(2)}₽\n`;
+        return output;
       });
 
-      // await sendMessage(
-      //   ctx,
-      //   `Начислено: ${earnings.totalEarned}\nВыплачено: ${earnings.alreadyPaid}\nОсталось выплатить: ${earnings.toPay}\n\nВыполненные задачи:`,
-      // );
       await sendMessages(ctx, workList);
+
+      if (userRole === 'manager') {
+        const earnings = await this.workService.calculateEarnings(user.id);
+        await sendMessage(
+          ctx,
+          `Общий баланс:\nНачислено: ${earnings.totalEarned.toFixed(2)}₽\nВыплачено: ${earnings.alreadyPaid.toFixed(2)}₽\nОсталось выплатить: ${earnings.toPay.toFixed(2)}₽`,
+        );
+      }
     }
 
     await ctx.scene.leave();

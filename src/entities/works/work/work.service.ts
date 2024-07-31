@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Work } from './work.entity';
 import { Master } from '../../master/master.entity';
 import { Transaction } from '../../money/transaction/transaction.entity';
+import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
 
 interface Earnings {
   totalEarned: number;
@@ -20,6 +21,8 @@ export class WorkService {
     private transactionRepository: Repository<Transaction>,
     @InjectRepository(Master)
     private masterRepository: Repository<Master>,
+    @InjectRepository(StandProd)
+    private standProdRepository: Repository<StandProd>,
   ) {}
 
   async create(work: Work): Promise<Work> {
@@ -98,6 +101,62 @@ StandProds: ${item.standProd.map((sp) => sp.description).join(', ')}`,
     return this.transactionRepository.find({
       where: { master: { id: master.id } },
       order: { transactionDate: 'DESC' },
+    });
+  }
+
+  async getWorksForStandProd(standProdId: number): Promise<Work[]> {
+    return this.repository.find({
+      where: { standProd: { id: standProdId } },
+      relations: ['task', 'master', 'master.user'],
+    });
+  }
+
+  async calculateWorkCostForStandProd(standProdId: number): Promise<number> {
+    const works = await this.repository.find({
+      where: { standProd: { id: standProdId } },
+    });
+
+    return works.reduce((total, work) => {
+      const workCost = work.cost * work.count * work.paymentCoefficient;
+      return total + workCost;
+    }, 0);
+  }
+
+  async getWorksByMaster(userId: number): Promise<Work[]> {
+    return this.repository.find({
+      where: { master: { user: { id: userId } } },
+      relations: [
+        'task',
+        'standProd',
+        'standProd.standOrder',
+        'standProd.standOrder.order',
+      ],
+    });
+  }
+
+  async findWorksByStandOrderId(standOrderId: number): Promise<Work[]> {
+    // Сначала найдем все StandProd, связанные с данным StandOrder
+    const standProds = await this.standProdRepository.find({
+      where: { standOrder: { id: standOrderId } },
+      relations: ['work'],
+    });
+
+    // Соберем все уникальные ID работ
+    const workIds = new Set<number>();
+    standProds.forEach((standProd) => {
+      standProd.work.forEach((work) => workIds.add(work.id));
+    });
+
+    // Если нет связанных работ, вернем пустой массив
+    if (workIds.size === 0) {
+      return [];
+    }
+
+    // Теперь найдем все эти работы с нужными связями
+    return this.repository.find({
+      where: { id: In(Array.from(workIds)) },
+      relations: ['task', 'master'],
+      order: { date: 'ASC' },
     });
   }
 }

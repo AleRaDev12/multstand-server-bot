@@ -6,21 +6,21 @@ import { formatLabels } from '../../../shared/helpers';
 const labels: EntityLabels<StandProd, string> = {
   manager: {
     short: {
-      id: 'Станок-изделие номер',
+      id: 'Изделие #',
       description: 'Описание',
     },
     full: {
-      id: 'Станок-изделие номер',
+      id: 'Изделие #',
       description: 'Описание',
     },
   },
   master: {
     short: {
-      id: 'Станок-изделие номер',
+      id: 'Изделие #',
       description: 'Описание',
     },
     full: {
-      id: 'Станок-изделие номер',
+      id: 'Изделие #',
       description: 'Описание',
     },
   },

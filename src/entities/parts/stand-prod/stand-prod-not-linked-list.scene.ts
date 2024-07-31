@@ -2,7 +2,6 @@ import { Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { Inject } from '@nestjs/common';
 import { StandProdService } from './stand-prod.service';
-import { UserService } from '../../user/user.service';
 import { handleButtonPress } from '../../../shared/helpers';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
@@ -15,8 +14,6 @@ export class StandProdNotLinkedListScene {
   constructor(
     @Inject(StandProdService)
     readonly service: StandProdService,
-    @Inject(UserService)
-    readonly userService: UserService,
   ) {}
 
   @SceneEnter()

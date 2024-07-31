@@ -21,8 +21,8 @@ export const Led = {
 };
 
 const Stand2D = {
-  mTM15: 'T-M-15',
-  mTL15: 'T-L-15',
+  mTM15: 'TM15',
+  mTL15: 'TL15',
   m2DMLite: '2D-M-Lite',
   mTMLite: 'T-Lite',
 };

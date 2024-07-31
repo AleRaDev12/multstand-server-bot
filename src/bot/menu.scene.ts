@@ -7,8 +7,9 @@ import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 import { CtxAuth } from './decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../shared/interfaces';
-import { sendMessage } from '../shared/senMessages';
+import { sendMessage, sendMessages } from '../shared/senMessages';
 import { WorkService } from '../entities/works/work/work.service';
+import { StandProdService } from '../entities/parts/stand-prod/stand-prod.service';
 
 enum Actions {
   CLIENT = 'client',
@@ -36,28 +37,19 @@ export class MenuScene {
     readonly userService: UserService,
     @Inject(WorkService)
     private readonly workService: WorkService,
+    @Inject(StandProdService)
+    private readonly standProdService: StandProdService,
   ) {}
 
   @SceneEnter()
   async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
-    const user = await this.userService.findByTelegramId(ctx.from.id);
     const role = ctx.userRole;
 
-    if (role === 'unregistered') {
-      await sendMessage(ctx, 'Ваша регистрация ещё не подтверждена');
-      return;
-    }
-
     if (['manager', 'master'].includes(role)) {
-      await sendMessage(
-        ctx,
-        `Добро пожаловать, ${user.name} (роль: ${user.role}).`,
-      );
       await sendMessage(ctx, 'Меню:', MENU[role]);
       return;
     }
-
-    await sendMessage(ctx, 'Неизвестная ошибка');
+    await sendMessage(ctx, `Меню недоступно для вашей роли: ${role}`);
   }
 
   @Action(Actions.CLIENT)
@@ -133,6 +125,16 @@ export class MenuScene {
     await this.enterScene(ctx, SCENES.MENU);
   }
 
+  @Action(Actions.WORK_LIST_BY_STANDS)
+  async onWorkListByStands(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+    const user = await this.userService.findByTelegramId(ctx.from.id);
+    const standsProdStat =
+      await this.standProdService.getStandProdsWithWorksByMaster(user.id);
+
+    await sendMessages(ctx, standsProdStat);
+    await this.enterScene(ctx, SCENES.MENU);
+  }
+
   private async enterScene(
     ctx: Scenes.SceneContext,
     scene: string,
@@ -155,23 +157,20 @@ const MENU = {
     [Markup.button.callback('Регистрации', Actions.USER_REGISTRATION)],
   ]),
   master: Markup.inlineKeyboard([
+    [Markup.button.callback('🔧️ Добавить отчёт', Actions.WORK_ADD)],
     [
-      Markup.button.callback('➕ Работа', Actions.WORK_ADD),
-      Markup.button.callback('📊 Список, сумма', Actions.WORK_LIST),
-      Markup.button.callback('Баланс', Actions.WORK_BALANCE),
+      Markup.button.callback('🔧️ Список по дате', Actions.WORK_LIST),
+      Markup.button.callback(
+        '🔧 Список по станкам',
+        Actions.WORK_LIST_BY_STANDS,
+      ),
     ],
-    // [
-    //   Markup.button.callback('Работа - по дате', Actions.WORK_LIST_BY_DATE),
-    //   Markup.button.callback(
-    //     'Работа - по станкам',
-    //     Actions.WORK_LIST_BY_STANDS,
-    //   ),
-    // ],
     [
       Markup.button.callback(
         '📑 Станки-заказы',
         Actions.STAND_ORDERS_ACTIVE_LIST,
       ),
     ],
+    [Markup.button.callback('💰 Баланс', Actions.WORK_BALANCE)],
   ]),
 };

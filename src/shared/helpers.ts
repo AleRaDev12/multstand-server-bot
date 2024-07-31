@@ -82,8 +82,6 @@ export async function goToSceneOrWizard(
     await ctx.scene.enter(target);
   } catch (e) {
     await sendMessage(ctx, e.message);
-  } finally {
-    await ctx.answerCbQuery();
   }
 }
 

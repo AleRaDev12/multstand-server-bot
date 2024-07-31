@@ -1,7 +1,7 @@
 import { Action, Ctx, InjectBot, Start, Update } from 'nestjs-telegraf';
 import { Scenes, Telegraf } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
-import { handleButtonPress } from '../shared/helpers';
+import { goToSceneOrWizard, handleButtonPress } from '../shared/helpers';
 import { CustomContext, CustomWizardContext } from '../shared/interfaces';
 import { format, subDays } from 'date-fns';
 import { UserService } from '../entities/user/user.service';
@@ -52,16 +52,31 @@ export class BotUpdate implements OnApplicationBootstrap {
 
   @Start()
   async onStart(@Ctx() ctx: CustomContext): Promise<void> {
-    if (ctx.notRegistered) {
+    const user = await this.userService.findByTelegramId(ctx.from.id);
+
+    if (!user || ctx.notRegistered) {
       await sendMessage(ctx, 'Нет доступа');
       return;
     }
 
-    try {
-      await ctx.scene.enter(SCENES.MENU);
-    } catch (e) {
-      await sendMessage(ctx, e.message);
+    const role = user.role;
+
+    if (role === 'unregistered') {
+      await sendMessage(ctx, 'Ваша регистрация ещё не подтверждена');
+      return;
     }
+
+    console.log('*-* includes', ['manager', 'master'].includes(role));
+    if (['manager', 'master'].includes(role)) {
+      await sendMessage(
+        ctx,
+        `Добро пожаловать, ${user.name} (роль: ${user.role}).`,
+      );
+      await goToSceneOrWizard(ctx, SCENES.MENU);
+      return;
+    }
+
+    await sendMessage(ctx, `Неизвестная роль пользователя: ${role}`);
   }
 
   @Action(BotActions.CANCEL)

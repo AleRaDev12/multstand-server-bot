@@ -99,6 +99,7 @@ interface CustomWizardSessionData extends WizardSessionData, AllEntities {
   steps?: WizardStepType[];
   tempData?: object;
   selectedDate?: Date;
+  userRole?: UserRole;
 }
 
 interface CustomWizardContextWizard<
@@ -115,13 +116,17 @@ export interface CustomWizardContext<
   D extends CustomWizardSessionData = CustomWizardSessionData,
 > extends BaseWizardContext<D> {}
 
+type ExtendedSceneSession<
+  D extends CustomWizardSessionData = CustomWizardSessionData,
+> = Scenes.SceneSession<D> & { userRole?: UserRole };
+
 interface BaseWizardContext<
   D extends CustomWizardSessionData = CustomWizardSessionData,
 > extends Scenes.SceneContext {
-  session: Scenes.SceneSession<D>; // Используем session из SceneContext
-  scene: Scenes.SceneContextScene<BaseWizardContext<D>, D>; // Используем scene из SceneContext
-  wizard: CustomWizardContextWizard<D>; // Добавляем свойство wizard
-  userRole: UserRole; // Добавляем userRole
+  session: ExtendedSceneSession<D>;
+  scene: Scenes.SceneContextScene<BaseWizardContext<D>, D>;
+  wizard: CustomWizardContextWizard<D>;
+  userRole: UserRole;
 }
 
 export type MessageType = {

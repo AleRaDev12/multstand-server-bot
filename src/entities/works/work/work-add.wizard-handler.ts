@@ -1,6 +1,7 @@
 import {
   AdditionalWizardSelections,
   CustomWizardContext,
+  UserRole,
   WizardStepType,
 } from '../../../shared/interfaces';
 import { WorkAddWizard } from './work-add.wizard';
@@ -8,7 +9,7 @@ import { Work } from './work.entity';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage, sendMessages } from '../../../shared/senMessages';
 
 const masterSelectType: AdditionalWizardSelections = 'masterSelect';
 const taskSelectType: AdditionalWizardSelections = 'taskSelect';
@@ -84,10 +85,9 @@ async function handleSpecificRequest(
 
     case standProdSelectType: {
       const standsProdList = await this.standProdService.findAll();
-
       const formattedList = await this.standProdService.formatList(
         standsProdList,
-        ctx.userRole,
+        ctx.session.userRole,
       );
 
       if (formattedList.length === 0) {
@@ -96,9 +96,10 @@ async function handleSpecificRequest(
       }
 
       await sendMessage(ctx, stepRequest.message);
-      for (let i = 0; i < formattedList.length; i++) {
-        await sendMessage(ctx, `№${i + 1}\n${formattedList[i]}`);
-      }
+      await sendMessages(
+        ctx,
+        formattedList.map((message, index) => `№${index + 1}\n${message}`),
+      );
 
       await replyWithCancelButton(ctx, `-`);
       return true;
