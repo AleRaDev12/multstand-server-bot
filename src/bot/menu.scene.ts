@@ -168,7 +168,7 @@ const MENU = {
     ],
     [Markup.button.callback('🔧️ Добавить отчёт', Actions.WORK_ADD)],
     [
-      Markup.button.callback('🔧️Мои отчёты: по дате', Actions.WORK_LIST),
+      Markup.button.callback('🔧️ Мои отчёты: по дате', Actions.WORK_LIST),
       Markup.button.callback(
         '🔧 Мои отчёты: по станкам',
         Actions.WORK_LIST_BY_STANDS,

@@ -28,7 +28,7 @@ export class StandOrder extends BaseEntity {
   order: Order;
 
   @OneToMany(() => StandProd, (standProd) => standProd.standOrder)
-  standProd: StandProd;
+  standProd: StandProd[];
 
   @NullableColumn({
     type: 'text',
