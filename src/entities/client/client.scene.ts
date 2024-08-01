@@ -13,8 +13,6 @@ import { SceneAuthContext } from '../../shared/interfaces';
 export class ClientScene extends BaseScene {
   @SceneEnter()
   async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
-    console.log('*-* CLIENT ctx.userRole', ctx.userRole);
-
     await sendMessage(
       ctx,
       'Клиенты:',

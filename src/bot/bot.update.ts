@@ -66,7 +66,6 @@ export class BotUpdate implements OnApplicationBootstrap {
       return;
     }
 
-    console.log('*-* includes', ['manager', 'master'].includes(role));
     if (['manager', 'master'].includes(role)) {
       await sendMessage(
         ctx,
