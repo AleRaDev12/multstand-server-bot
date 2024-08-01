@@ -206,7 +206,10 @@ export class StandProdService {
     return output;
   }
 
-  async getStandProdsWithWorksByMaster(userId: number): Promise<string[]> {
+  async getStandProdsWithWorksByMaster(
+    userId: number,
+    userRole: UserRole,
+  ): Promise<string[]> {
     const works = await this.workService.getWorksByMaster(userId);
 
     const standProdMap = new Map<
@@ -237,8 +240,12 @@ export class StandProdService {
     const result: string[] = [];
 
     for (const [, { standProd, works, totalCost }] of standProdMap) {
-      let output = `# Изделия / # заказа (на наклейку):\n📝️ ️️️️️️️️${standProd.id} / ${standProd.standOrder ? standProd.standOrder.id : '-'}\n\n`;
-      output += `Заказ клиента #${standProd.standOrder?.order?.id || '-'}\n`;
+      let output = `# Изделия / # заказа (на наклейку):\n📝️ ️️️️️️️️${standProd.id} / ${standProd.standOrder ? standProd.standOrder.id : '-'}\n`;
+      output += standProd.standOrder
+        ? standProd.standOrder.format(userRole, 'line')
+        : '';
+      output += '\n';
+      output += `Заказ клиента #${standProd.standOrder?.order?.id || '-'}\n\n`;
 
       output += 'Список выполненных задач:\n';
 

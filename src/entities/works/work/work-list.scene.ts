@@ -76,10 +76,10 @@ export class WorkListScene {
               const standOrder = sp.standOrder;
               const order = standOrder?.order;
 
-              output += `   📝 ${sp.id} / ${!standOrder ? '-' : standOrder.id + '  -  ' + standOrder.format(userRole, 'line')}\n`;
-              if (order) {
-                output += `      Заказ клиента #${order.id}\n`;
-              }
+              output += `   📝 ${sp.id} / ${!standOrder ? '-' : standOrder.id + ':\n      ' + standOrder.format(userRole, 'line')}\n`;
+              output += order
+                ? `      Заказ клиента #${order.id}\n`
+                : 'Заказ клиента: -\n';
             });
           }
         });

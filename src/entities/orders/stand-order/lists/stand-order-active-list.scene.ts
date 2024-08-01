@@ -33,8 +33,11 @@ export class StandOrderActiveListScene {
       await sendMessage(ctx, 'Записей нет');
     } else {
       for (const standOrder of list) {
-        let output = `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.id} / ${standOrder ? standOrder.id : '-'}\n\n`;
+        let output = `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.id} / ${standOrder.order ? standOrder.order.id : '-'}\n\n`;
         output += `${standOrder.format(ctx.userRole, 'line')}\n\n`;
+
+        let totalComponentsCost = 0;
+        let totalWorkCost = 0;
 
         // Добавляем информацию о комплектующих
         const components =
@@ -42,8 +45,17 @@ export class StandOrderActiveListScene {
         if (components.length > 0) {
           output += 'Установленные комплектующие:\n';
           components.forEach((comp) => {
-            output += `- ${comp.componentName} (${comp.totalCount}шт)\n`;
+            output += `- ${comp.componentName} (${comp.totalCount}шт)`;
+            if (ctx.userRole === 'manager') {
+              const componentCost = comp.unitCost * comp.totalCount;
+              output += ` - ${componentCost.toFixed(2)} ₽`;
+              totalComponentsCost += componentCost;
+            }
+            output += '\n';
           });
+          if (ctx.userRole === 'manager') {
+            output += `Общая стоимость комплектующих: ${totalComponentsCost.toFixed(2)} ₽\n`;
+          }
           output += '\n';
         }
 
@@ -59,20 +71,38 @@ export class StandOrderActiveListScene {
             (acc, work) => {
               const taskName = work.task.shownName;
               if (!acc[taskName]) {
-                acc[taskName] = 0;
+                acc[taskName] = { count: 0, cost: 0 };
               }
-              acc[taskName] += work.count;
+              acc[taskName].count += work.count;
+              if (ctx.userRole === 'manager') {
+                const workCost =
+                  work.cost * work.count * work.paymentCoefficient;
+                acc[taskName].cost += workCost;
+                totalWorkCost += workCost;
+              }
               return acc;
             },
-            {} as { [key: string]: number },
+            {} as { [key: string]: { count: number; cost: number } },
           );
 
           // Выводим объединенные работы
-          Object.entries(worksByTask).forEach(([taskName, totalCount]) => {
-            output += `- ${taskName} (${totalCount}шт)\n`;
+          Object.entries(worksByTask).forEach(([taskName, { count, cost }]) => {
+            output += `- ${taskName} (${count}шт)`;
+            if (ctx.userRole === 'manager') {
+              output += ` - ${cost.toFixed(2)} ₽`;
+            }
+            output += '\n';
           });
 
+          if (ctx.userRole === 'manager') {
+            output += `Общая стоимость работ: ${totalWorkCost.toFixed(2)} ₽\n`;
+          }
           output += '\n';
+        }
+
+        if (ctx.userRole === 'manager') {
+          const totalCost = totalComponentsCost + totalWorkCost;
+          output += `💰 Общая стоимость изделия: ${totalCost.toFixed(2)} ₽\n`;
         }
 
         await sendMessage(ctx, output);
