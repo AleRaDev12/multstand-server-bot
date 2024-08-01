@@ -47,7 +47,7 @@ export class StandOrderActiveListScene {
           ? `Заказ клиента #${standOrder.order.id}\n`
           : 'Заказ клиента: -';
 
-        output += '🛠 Комплектация:\n';
+        output += '\n🛠 Комплектация:\n';
         if (standOrder) {
           output += standOrder.format(ctx.userRole, 'full');
           output += '\n';
