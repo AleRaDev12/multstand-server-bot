@@ -24,6 +24,7 @@ export class Work extends BaseEntity {
     cost: false,
     count: false,
     paymentCoefficient: false,
+    description: true,
   };
 
   @PrimaryGeneratedColumn()
@@ -53,6 +54,9 @@ export class Work extends BaseEntity {
 
   @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
   paymentCoefficient: number;
+
+  @NullableColumn({ type: 'text' })
+  description: string;
 
   public format(userRole: UserRole, labelType?: LabelsType): string {
     return `Not implemented yet for ${this.constructor.name}`;

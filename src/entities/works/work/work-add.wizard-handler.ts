@@ -24,6 +24,11 @@ const commonSteps: WizardStepType[] = [
   },
   { message: 'Количество:', field: 'count', type: 'number' },
   { message: 'Дата выполнения:', field: 'date', type: 'date' },
+  {
+    message: 'Описание (для почасовой - обязательно):',
+    field: 'description',
+    type: 'string',
+  },
 ];
 
 const initialSteps: WizardStepType[] = [...commonSteps];
