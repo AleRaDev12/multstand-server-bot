@@ -19,7 +19,7 @@ const entityName = 'work';
 const commonSteps: WizardStepType[] = [
   { message: 'Задача:', type: taskSelectType },
   {
-    message: 'Станок-изделие. Можно выбрать несколько (номера через запятую):',
+    message: 'Станок-изделие:',
     type: standProdSelectType,
   },
   { message: 'Количество:', field: 'count', type: 'number' },
@@ -165,6 +165,14 @@ async function handleSpecificAnswer(
       const selectedNumbers = message.text
         .split(',')
         .map((num) => parseInt(num.trim()));
+
+      if (ctx.session.userRole !== 'manager' && selectedNumbers.length !== 1) {
+        await replyWithCancelButton(
+          ctx,
+          'Вы можете выбрать только одно изделие',
+        );
+        return false;
+      }
 
       const standsProd = await this.standProdService.findAll();
       const selectedStandsProd = selectedNumbers

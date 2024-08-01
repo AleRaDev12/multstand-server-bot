@@ -107,7 +107,13 @@ StandProds: ${item.standProd.map((sp) => sp.description).join(', ')}`,
   async getWorksForStandProd(standProdId: number): Promise<Work[]> {
     return this.repository.find({
       where: { standProd: { id: standProdId } },
-      relations: ['task', 'master', 'master.user'],
+      relations: [
+        'task',
+        'master',
+        'master.user',
+        'standProd',
+        'standProd.standOrder',
+      ],
     });
   }
 
@@ -158,5 +164,14 @@ StandProds: ${item.standProd.map((sp) => sp.description).join(', ')}`,
       relations: ['task', 'master'],
       order: { date: 'ASC' },
     });
+  }
+
+  async getStandProdsForWork(workId: number): Promise<StandProd[]> {
+    const work = await this.repository.findOne({
+      where: { id: workId },
+      relations: ['standProd'],
+    });
+
+    return work ? work.standProd : [];
   }
 }

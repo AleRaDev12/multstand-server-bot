@@ -33,7 +33,7 @@ export class StandOrderActiveListScene {
       await sendMessage(ctx, 'Записей нет');
     } else {
       for (const standOrder of list) {
-        let output = `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.id} / ${standOrder.order ? standOrder.order.id : '-'}\n\n`;
+        let output = `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.id} / ${standOrder ? standOrder.id : '-'}\n\n`;
         output += `${standOrder.format(ctx.userRole, 'line')}\n\n`;
 
         // Добавляем информацию о комплектующих

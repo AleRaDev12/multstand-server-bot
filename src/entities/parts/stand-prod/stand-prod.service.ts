@@ -101,7 +101,7 @@ export class StandProdService {
     const standOrder: StandOrder | undefined = standProd.standOrder;
     const order = standOrder?.order;
 
-    let output = `# Изделия / # заказа (на наклейку):\n📝️ ️️️️️️️️${standProd.id} / ${standOrder ? standOrder.id : '-'}\n\n`;
+    let output = `# Изделия / # заказа (на наклейку):\n📝️ ️️️️️️️️${standProd.id} / ${standOrder ? standOrder.id + '\n' + standOrder.format(userRole, 'line') : '-'}\n\n`;
     output += order ? `Заказ клиента #${order.id}\n` : '';
 
     output += '\n🛠 Комплектация:\n';
@@ -133,14 +133,15 @@ export class StandProdService {
     }
 
     output += '\n💼 Выполненная работа:\n';
-    const works = await this.workService.getWorksForStandProd(standProd.id);
+    const worksForCurrentStandProd =
+      await this.workService.getWorksForStandProd(standProd.id);
 
     let totalWorkCost = 0;
-    if (works.length === 0) {
+    if (worksForCurrentStandProd.length === 0) {
       output += '-\n\n';
     } else {
       // Группируем работы по мастерам
-      const worksByMaster = works.reduce(
+      const worksByMaster = worksForCurrentStandProd.reduce(
         (acc, work) => {
           const masterName = work.master.user?.name || 'Неизвестный мастер';
           if (!acc[masterName]) {
@@ -157,15 +158,36 @@ export class StandProdService {
         output += `* ${masterName}:\n`;
         let masterTotalCost = 0;
 
-        masterWorks.forEach((work) => {
-          output += `  - ${work.task.shownName} (${work.count}ед)\n`;
+        for (const work of masterWorks) {
+          // Получаем все standProd, связанные с этой работой
+          const allLinkedStandProds =
+            await this.workService.getStandProdsForWork(work.id);
+          const linkedStandProdsCount = allLinkedStandProds.length;
+
+          let workDescription = `  - ${work.task.shownName} (${work.count}ед`;
+
+          if (linkedStandProdsCount > 1) {
+            const otherStandProdIds = allLinkedStandProds
+              .filter((sp) => sp.id !== standProd.id)
+              .map((sp) => sp.id)
+              .join(' #');
+            workDescription += ` - на ${linkedStandProdsCount} изделия #${standProd.id} #${otherStandProdIds}`;
+          }
+
+          workDescription += `)`;
+
+          // Добавляем ID работы
+          workDescription += ` #${work.id}`;
+
+          output += workDescription + '\n';
+
           if (userRole === 'manager') {
             const workCost = work.cost * work.count * work.paymentCoefficient;
-            output += `    Стоимость: ${workCost.toFixed(2)} ₽\n`;
+            output += `    Стоимость: ${(workCost / linkedStandProdsCount).toFixed(2)} ₽${linkedStandProdsCount ? ` из расчёта  ${linkedStandProdsCount} шт` : ''}\n`;
             masterTotalCost += workCost;
             totalWorkCost += workCost;
           }
-        });
+        }
 
         if (userRole === 'manager') {
           output += `  Итого по мастеру: ${masterTotalCost.toFixed(2)} ₽\n`;
@@ -179,18 +201,6 @@ export class StandProdService {
         const totalCost = totalComponentsCost + totalWorkCost;
         output += `\n💰 Общая стоимость: ${totalCost.toFixed(2)} ₽\n`;
       }
-    }
-
-    output += `Описание: ${standProd.description || '-'}\n`;
-
-    if (userRole === 'manager') {
-      const workCost = await this.workService.calculateWorkCostForStandProd(
-        standProd.id,
-      );
-      output += `\nСтоимость работы: ${workCost.toFixed(2)} ₽\n`;
-
-      const totalCost = totalComponentsCost + workCost;
-      output += `\n💰 Общая стоимость: ${totalCost.toFixed(2)} ₽\n`;
     }
 
     return output;
