@@ -129,7 +129,10 @@ export class MenuScene {
   async onWorkListByStands(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
     const user = await this.userService.findByTelegramId(ctx.from.id);
     const standsProdStat =
-      await this.standProdService.getStandProdsWithWorksByMaster(user.id);
+      await this.standProdService.getStandProdsWithWorksByMaster(
+        user.id,
+        ctx.userRole,
+      );
 
     await sendMessages(ctx, standsProdStat);
     await this.enterScene(ctx, SCENES.MENU);
@@ -157,18 +160,18 @@ const MENU = {
     [Markup.button.callback('Регистрации', Actions.USER_REGISTRATION)],
   ]),
   master: Markup.inlineKeyboard([
-    [Markup.button.callback('🔧️ Добавить отчёт', Actions.WORK_ADD)],
-    [
-      Markup.button.callback('🔧️ Список по дате', Actions.WORK_LIST),
-      Markup.button.callback(
-        '🔧 Список по станкам',
-        Actions.WORK_LIST_BY_STANDS,
-      ),
-    ],
     [
       Markup.button.callback(
         '📑 Станки-заказы',
         Actions.STAND_ORDERS_ACTIVE_LIST,
+      ),
+    ],
+    [Markup.button.callback('🔧️ Добавить отчёт', Actions.WORK_ADD)],
+    [
+      Markup.button.callback('🔧️Мои отчёты: по дате', Actions.WORK_LIST),
+      Markup.button.callback(
+        '🔧 Мои отчёты: по станкам',
+        Actions.WORK_LIST_BY_STANDS,
       ),
     ],
     [Markup.button.callback('💰 Баланс', Actions.WORK_BALANCE)],
