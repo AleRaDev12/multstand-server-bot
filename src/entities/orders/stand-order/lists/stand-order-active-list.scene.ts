@@ -41,8 +41,11 @@ export class StandOrderActiveListScene {
           continue;
         }
 
-        output += `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.standProd ? standOrder.standProd[0].id : '-'} / ${standOrder.id}\n\n`;
         output += `${standOrder.format(ctx.userRole, 'line')}\n\n`;
+        output += `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.standProd ? standOrder.standProd[0].id : '-'} / ${standOrder.id}\n\n`;
+        output += standOrder.order
+          ? `Заказ клиента #${standOrder.order.id}\n`
+          : 'Заказ клиента: -';
 
         output += '🛠 Комплектация:\n';
         if (standOrder) {
