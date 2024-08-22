@@ -34,9 +34,6 @@ export class Order extends BaseEntity {
   })
   status: OrderStatusType;
 
-  @NullableColumn()
-  amount: number;
-
   @NullableColumn({ type: 'date' })
   contractDate: Date;
 
@@ -68,7 +65,6 @@ export class Order extends BaseEntity {
 
   public static nullable: EntityFieldsMap<Order, boolean> = {
     client: false,
-    amount: true, // remove this field in the future
     contractDate: false,
     daysToSend: true,
     sendingDeadlineDate: true,
