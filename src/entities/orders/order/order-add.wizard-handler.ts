@@ -15,17 +15,33 @@ const steps: WizardStepType[] = [
   { message: 'Выберите клиента:', type: selectTypeName },
   { message: 'Дата договора:', field: 'contractDate', type: 'date' },
   {
-    message: 'Количество дней на выполнение заказа:',
+    message: 'Количество дней до отправки:',
     field: 'daysToSend',
     type: 'number',
   },
   {
-    message: 'Крайняя дата поставки:',
+    message: 'Крайняя дата поставки. "-" чтобы пропустить.:',
     field: 'deliveryDeadlineDate',
     type: 'date',
   },
   { message: 'Адрес доставки:', field: 'deliveryAddress', type: 'string' },
   { message: 'Трек-номер:', field: 'deliveryTrackNumber', type: 'string' },
+  {
+    message: 'Тип доставки (до двери / до пункта выдачи / не СДЭК):',
+    field: 'deliveryType',
+    type: 'string',
+  },
+  {
+    message:
+      'Доплата за доставку за заказ в целом (есть ещё доплата каждого станка-заказа отдельно):',
+    field: 'deliveryCost',
+    type: 'number',
+  },
+  {
+    message: 'Описание:',
+    field: 'description',
+    type: 'number',
+  },
 ];
 
 function getEntity(ctx: CustomWizardContext): Order {
