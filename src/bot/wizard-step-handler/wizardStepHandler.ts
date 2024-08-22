@@ -3,6 +3,7 @@ import { handleAnswer } from './handleAnswer';
 import { sendRequest } from './sendRequest';
 import { BaseEntity } from '../../entities/base.entity';
 import { UnifiedWizardHandlerOptions } from './types';
+import { sendMessage } from '../../shared/senMessages';
 
 export function wizardStepHandler<T extends BaseEntity>(
   options: UnifiedWizardHandlerOptions<T>,
@@ -25,6 +26,22 @@ export function wizardStepHandler<T extends BaseEntity>(
     ) {
       descriptor.value = async function (ctx: CustomWizardContext) {
         const entity = getEntity(ctx);
+        let currentStep = stepIndex;
+
+        const isBackAction =
+          ctx.message && 'text' in ctx.message && ctx.message.text === '<';
+
+        if (isBackAction) {
+          if (stepIndex === 2) {
+            await sendMessage(ctx, 'Вы уже на первом шаге. Повторите ввод.');
+            currentStep = stepIndex - 1;
+            ctx.wizard.back();
+          } else {
+            currentStep = stepIndex - 2;
+            ctx.wizard.back();
+            ctx.wizard.back();
+          }
+        }
 
         if (stepIndex === 1) {
           setEntity(ctx);
@@ -33,12 +50,22 @@ export function wizardStepHandler<T extends BaseEntity>(
         }
 
         const steps = ctx.wizard.state.steps;
-        const stepForAnswerNumber = stepIndex - 2;
-        const stepForRequestNumber = stepIndex - 1;
-        const stepAnswer = steps[stepForAnswerNumber];
+        const stepForRequestNumber = currentStep - 1;
+        const stepForAnswerNumber = currentStep - 2;
         const stepRequest = steps[stepForRequestNumber];
+        const stepAnswer = steps[stepForAnswerNumber];
 
-        if (stepAnswer) {
+        if (stepRequest) {
+          await sendRequest.call(
+            this,
+            ctx,
+            stepRequest,
+            currentStep,
+            handleSpecificRequest,
+          );
+        }
+
+        if (stepAnswer && !isBackAction) {
           const isOk = await handleAnswer.call(
             this,
             ctx,
@@ -50,16 +77,6 @@ export function wizardStepHandler<T extends BaseEntity>(
             print.bind(this),
           );
           if (!isOk) return;
-        }
-
-        if (stepRequest) {
-          await sendRequest.call(
-            this,
-            ctx,
-            stepRequest,
-            stepIndex,
-            handleSpecificRequest,
-          );
         }
       };
 

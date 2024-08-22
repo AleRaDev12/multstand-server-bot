@@ -39,6 +39,11 @@ const commonSteps: WizardStepTypeN<StandOrder>[] = [
     type: 'number',
   },
   {
+    message: 'Стоимость доставки (если включена в цену станка в договоре):',
+    field: 'deliveryCost',
+    type: 'number',
+  },
+  {
     message: 'Тип обработки:',
     field: 'painting',
     type: 'union',
