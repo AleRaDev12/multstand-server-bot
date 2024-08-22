@@ -24,13 +24,13 @@ const steps: WizardStepType[] = [
     field: 'deliveryDeadlineDate',
     type: 'date',
   },
-  { message: 'Адрес доставки:', field: 'deliveryAddress', type: 'string' },
-  { message: 'Трек-номер:', field: 'deliveryTrackNumber', type: 'string' },
   {
-    message: 'Тип доставки (до двери / до пункта выдачи / не СДЭК):',
+    message: 'Доставка: кто платит / до двери / до пункта выдачи / не СДЭК:',
     field: 'deliveryType',
     type: 'string',
   },
+  { message: 'Адрес доставки:', field: 'deliveryAddress', type: 'string' },
+  { message: 'Трек-номер:', field: 'deliveryTrackNumber', type: 'string' },
   {
     message:
       'Доплата за доставку за заказ в целом (есть ещё доплата каждого станка-заказа отдельно):',
@@ -40,7 +40,7 @@ const steps: WizardStepType[] = [
   {
     message: 'Описание:',
     field: 'description',
-    type: 'number',
+    type: 'string',
   },
 ];
 
