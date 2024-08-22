@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:generate": "npm run typeorm -- migration:generate -d data-source.ts",
+    "migration:create": "typeorm migration:create src/migrations/name",
     "migration:run": "npm run typeorm -- migration:run -d data-source.ts",
     "migration:revert": "npm run typeorm -- migration:revert -d data-source.ts",
     "typecheck": "tsc --skipLibCheck && eslint src/ --quiet --cache --cache-strategy metadata"

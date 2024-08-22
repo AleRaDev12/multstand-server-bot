@@ -42,7 +42,7 @@ export class StandOrderActiveListScene {
         }
 
         output += `${standOrder.format(ctx.userRole, 'line')}\n\n`;
-        output += `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.standProd ? standOrder.standProd[0].id : '-'} / ${standOrder.id}\n\n`;
+        output += `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.standProd.length ? standOrder.standProd[0].id : '-'} / ${standOrder.id}\n\n`;
         output += standOrder.order
           ? `Заказ клиента #${standOrder.order.id}\n`
           : 'Заказ клиента: -';
@@ -50,6 +50,7 @@ export class StandOrderActiveListScene {
         output += '\n🛠 Комплектация:\n';
         if (standOrder) {
           output += standOrder.format(ctx.userRole, 'full');
+          output += `\nСтоимость с доставкой: ${standOrder.cost + standOrder.deliveryCost}\n`;
           output += '\n';
         } else {
           output += '-\n';
@@ -73,7 +74,7 @@ export class StandOrderActiveListScene {
             output += '\n';
           });
           if (ctx.userRole === 'manager') {
-            output += `Общая стоимость комплектующих: ${totalComponentsCost.toFixed(2)} ₽\n`;
+            output += `Себестоимость комплектующих: ${totalComponentsCost.toFixed(2)} ₽\n`;
           }
           output += '\n';
         }
@@ -114,14 +115,14 @@ export class StandOrderActiveListScene {
           });
 
           if (ctx.userRole === 'manager') {
-            output += `Общая стоимость работ: ${totalWorkCost.toFixed(2)} ₽\n`;
+            output += `Себестоимость работ: ${totalWorkCost.toFixed(2)} ₽\n`;
           }
           output += '\n';
         }
 
         if (ctx.userRole === 'manager') {
           const totalCost = totalComponentsCost + totalWorkCost;
-          output += `💰 Общая стоимость изделия: ${totalCost.toFixed(2)} ₽\n`;
+          output += `💰 Себестоимость всего изделия: ${totalCost.toFixed(2)} ₽\n`;
         }
         formattedOrders.push(output);
       }

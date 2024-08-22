@@ -16,13 +16,13 @@ export class OrdersScene extends BaseScene {
       'Заказы:',
       Markup.inlineKeyboard([
         [
-          Markup.button.callback('📑 Заказы', 'order_list'),
-          Markup.button.callback('➕', 'add_order'),
+          Markup.button.callback('➕ Заказ-клиент', 'add_order'),
+          Markup.button.callback('📑', 'order_list'),
         ],
         [
-          Markup.button.callback('📑 Станки-заказы', 'stand_orders_list'),
-          Markup.button.callback('Активные', 'stand_orders_active_list'),
-          Markup.button.callback('➕', 'add_stand_order'),
+          Markup.button.callback('➕ Заказ-станок', 'add_stand_order'),
+          Markup.button.callback('📑', 'stand_orders_list'),
+          Markup.button.callback('В работе', 'stand_orders_active_list'),
         ],
         [this.menuButton],
       ]),

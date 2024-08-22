@@ -1,4 +1,4 @@
-import { BaseEntity, LabelsType } from '../../base.entity';
+import { BaseEntity, EntityFieldsMap, LabelsType } from '../../base.entity';
 import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
@@ -102,7 +102,10 @@ export class StandOrder extends BaseEntity {
   @NullableColumn()
   deliveryCost: number;
 
-  public static nullable = {
+  @NullableColumn()
+  description: string;
+
+  public static nullable: EntityFieldsMap<StandOrder, boolean> = {
     order: false,
     model: false,
     cost: true,
@@ -118,6 +121,7 @@ export class StandOrder extends BaseEntity {
     rotaryMechanismsCount: true,
     deliveryCost: true,
     status: false,
+    description: true,
   };
 
   public format(userRole: UserRole, labelType: LabelsType = 'short'): string {

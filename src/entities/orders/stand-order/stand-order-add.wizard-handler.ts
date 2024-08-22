@@ -44,6 +44,11 @@ const commonSteps: WizardStepTypeN<StandOrder>[] = [
     type: 'number',
   },
   {
+    message: 'Описание:',
+    field: 'description',
+    type: 'string',
+  },
+  {
     message: 'Тип обработки:',
     field: 'painting',
     type: 'union',
