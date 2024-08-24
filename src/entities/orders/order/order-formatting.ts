@@ -42,7 +42,7 @@ function checkDeadlineConflict(order: Order): string | null {
   return null;
 }
 
-function generateDeadlineInfo(order: Order): string[] {
+export function generateOrderDeadline(order: Order): string[] {
   const { daysToSend, sendingDeadlineDate, deliveryDeadlineDate } = order;
   const currentDate = new Date();
   const additionalInfo = [];
@@ -75,7 +75,7 @@ export function formatOrder(
   const error = checkDeadlineConflict(order);
   if (error) return error;
 
-  const additionalInfo = generateDeadlineInfo(order);
+  const additionalInfo = generateOrderDeadline(order);
   const formattedLabels = formatLabels(order, labels[userRole][labelType]);
   return [formattedLabels, ...additionalInfo].filter(Boolean).join('\n');
 }

@@ -11,6 +11,7 @@ import { sendMessage, sendMessages } from '../../../../shared/senMessages';
 import { StandProdService } from '../../../parts/stand-prod/stand-prod.service';
 import { WorkService } from '../../../works/work/work.service';
 import { getEmitOutput } from 'ts-loader/dist/instances';
+import { generateOrderDeadline } from '../../order/order-formatting';
 
 @Scene(SCENES.STAND_ORDER_ACTIVE_LIST)
 @SceneRoles('manager', 'master')
@@ -44,8 +45,11 @@ export class StandOrderActiveListScene {
         output += `${standOrder.format(ctx.userRole, 'line')}\n\n`;
         output += `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.standProd.length ? standOrder.standProd[0].id : '-'} / ${standOrder.id}\n\n`;
         output += standOrder.order
-          ? `Заказ клиента #${standOrder.order.id}\n`
-          : 'Заказ клиента: -';
+          ? `Order #${standOrder.order.id}\n`
+          : 'Order: -';
+
+        output += generateOrderDeadline(standOrder.order).join('\n');
+        output += '\n';
 
         output += '\n🛠 Комплектация:\n';
         if (standOrder) {
