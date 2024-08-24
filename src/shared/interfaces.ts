@@ -16,7 +16,6 @@ import { StandOrder } from '../entities/orders/stand-order/stand-order.entity';
 import { Account } from '../entities/money/account/account.entity';
 import { Scenes } from 'telegraf';
 import { Transaction } from '../entities/money/transaction/transaction.entity';
-import { LabelsType } from '../entities/base.entity';
 
 export type KeyOfAllEntities = {
   [K in keyof AllEntities]: AllEntities[K] extends undefined
@@ -34,7 +33,9 @@ export type AdditionalWizardSelections =
   | 'orderModelSelect'
   | 'partsInBatchSelect'
   | 'masterSelect'
-  | 'accountSelect';
+  | 'accountSelect'
+  | 'taxAccountSelect'
+  | 'transferTaxSelect';
 
 export type WizardStepType = {
   message: string;
@@ -104,8 +105,9 @@ interface CustomWizardSessionData extends WizardSessionData, AllEntities {
 
 interface CustomWizardContextWizard<
   D extends CustomWizardSessionData = CustomWizardSessionData,
-> extends WizardContextWizard<WizardContext<D>> {
-  state: D;
+  E = object,
+> extends WizardContextWizard<WizardContext<D & E>> {
+  state: D & E;
 }
 
 export interface SceneAuthContext extends Scenes.SceneContext {
@@ -114,18 +116,21 @@ export interface SceneAuthContext extends Scenes.SceneContext {
 
 export interface CustomWizardContext<
   D extends CustomWizardSessionData = CustomWizardSessionData,
-> extends BaseWizardContext<D> {}
+  E = object,
+> extends BaseWizardContext<D, E> {}
 
 type ExtendedSceneSession<
   D extends CustomWizardSessionData = CustomWizardSessionData,
-> = Scenes.SceneSession<D> & { userRole?: UserRole };
+  E = object,
+> = Scenes.SceneSession<D & E> & { userRole?: UserRole };
 
 interface BaseWizardContext<
   D extends CustomWizardSessionData = CustomWizardSessionData,
+  E = object,
 > extends Scenes.SceneContext {
-  session: ExtendedSceneSession<D>;
-  scene: Scenes.SceneContextScene<BaseWizardContext<D>, D>;
-  wizard: CustomWizardContextWizard<D>;
+  session: ExtendedSceneSession<D, E>;
+  scene: Scenes.SceneContextScene<BaseWizardContext<D, E>, D & E>;
+  wizard: CustomWizardContextWizard<D, E>;
   userRole: UserRole;
 }
 
@@ -138,8 +143,3 @@ export interface CustomContext extends Scenes.SceneContext {
 }
 
 export type UserRole = 'manager' | 'master' | 'unregistered' | 'unknown';
-
-export type FormatFunction = (
-  userRole: UserRole,
-  labelType: LabelsType,
-) => string;

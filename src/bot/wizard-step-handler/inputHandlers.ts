@@ -23,29 +23,32 @@ export async function handleBooleanInput<T>(
   entity: T,
 ): Promise<boolean> {
   const message = getMessage(ctx);
-  const value = message.text.toLowerCase();
-  let booleanValue: boolean;
+  const booleanValue = parseBooleanInput(message.text);
 
-  switch (value) {
+  if (booleanValue === null) {
+    await replyWithCancelButton(ctx, INCORRECT_ENTER_BOOLEAN_MESSAGE);
+    return false;
+  }
+
+  entity[field] = booleanValue;
+  return true;
+}
+
+export const INCORRECT_ENTER_BOOLEAN_MESSAGE = `Введите "да", "нет", "yes", "no", 1 или 0.`;
+
+export function parseBooleanInput(value: string): boolean | null {
+  switch (value.toLowerCase()) {
     case 'да':
     case 'yes':
     case '1':
-      booleanValue = true;
-      break;
+      return true;
     case 'нет':
     case 'no':
     case '0':
-      booleanValue = false;
-      break;
-    default:
-      await replyWithCancelButton(
-        ctx,
-        `Enter "да", "нет", "yes", "no", 1 or 0.`,
-      );
       return false;
+    default:
+      return null;
   }
-  entity[field] = booleanValue;
-  return true;
 }
 
 export async function handleDateInput<T>(

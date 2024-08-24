@@ -20,7 +20,6 @@ type TransferMoney = {
   format: () => string;
 };
 
-// Define entity type for account selection
 const accountSelectType: AdditionalWizardSelections = 'accountSelect';
 
 const steps: WizardStepType[] = [

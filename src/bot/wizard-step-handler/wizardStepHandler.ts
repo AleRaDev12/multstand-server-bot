@@ -5,8 +5,8 @@ import { BaseEntity } from '../../entities/base.entity';
 import { UnifiedWizardHandlerOptions } from './types';
 import { sendMessage } from '../../shared/senMessages';
 
-export function wizardStepHandler<T extends BaseEntity>(
-  options: UnifiedWizardHandlerOptions<T>,
+export function wizardStepHandler<T extends BaseEntity, E = object>(
+  options: UnifiedWizardHandlerOptions<T, E>,
 ) {
   const {
     getEntity,
@@ -24,7 +24,7 @@ export function wizardStepHandler<T extends BaseEntity>(
       _propertyKey: string,
       descriptor: PropertyDescriptor,
     ) {
-      descriptor.value = async function (ctx: CustomWizardContext) {
+      descriptor.value = async function (ctx: CustomWizardContext<any, E>) {
         const entity = getEntity(ctx);
         let currentStep = stepIndex;
 
@@ -49,21 +49,9 @@ export function wizardStepHandler<T extends BaseEntity>(
           ctx.wizard.state.tempData = {};
         }
 
-        const steps = ctx.wizard.state.steps;
-        const stepForRequestNumber = currentStep - 1;
+        let steps = ctx.wizard.state.steps;
         const stepForAnswerNumber = currentStep - 2;
-        const stepRequest = steps[stepForRequestNumber];
         const stepAnswer = steps[stepForAnswerNumber];
-
-        if (stepRequest) {
-          await sendRequest.call(
-            this,
-            ctx,
-            stepRequest,
-            currentStep,
-            handleSpecificRequest,
-          );
-        }
 
         if (stepAnswer && !isBackAction) {
           const isOk = await handleAnswer.call(
@@ -77,6 +65,20 @@ export function wizardStepHandler<T extends BaseEntity>(
             print.bind(this),
           );
           if (!isOk) return;
+        }
+
+        steps = ctx.wizard.state.steps;
+        const stepForRequestNumber = currentStep - 1;
+        const stepRequest = steps[stepForRequestNumber];
+
+        if (stepRequest) {
+          await sendRequest.call(
+            this,
+            ctx,
+            stepRequest,
+            currentStep,
+            handleSpecificRequest,
+          );
         }
       };
 
