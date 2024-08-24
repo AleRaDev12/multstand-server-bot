@@ -55,6 +55,12 @@ const commonSteps: WizardStepTypeN<StandOrder>[] = [
     union: Painting,
   },
   {
+    message: 'Тип светодиодной ленты:',
+    field: 'ledType',
+    type: 'union',
+    union: Led,
+  },
+  {
     message: 'Крепление для смартфона (количество):',
     field: 'smartphoneMount',
     type: 'number',
@@ -64,12 +70,6 @@ const commonSteps: WizardStepTypeN<StandOrder>[] = [
     field: 'tripod',
     type: 'union',
     union: Tripod,
-  },
-  {
-    message: 'Тип светодиодной ленты:',
-    field: 'ledType',
-    type: 'union',
-    union: Led,
   },
 ];
 
