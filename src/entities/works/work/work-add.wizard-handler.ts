@@ -17,7 +17,7 @@ const standProdSelectType: AdditionalWizardSelections = 'standProdSelect';
 const entityName = 'work';
 
 const commonSteps: WizardStepType[] = [
-  { message: 'Задача:', type: taskSelectType },
+  { message: 'Задача №:', type: taskSelectType },
   {
     message: 'Станок-изделие:',
     type: standProdSelectType,
