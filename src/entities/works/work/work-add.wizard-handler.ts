@@ -128,6 +128,7 @@ async function handleSpecificAnswer(
 
       const tasks = await this.taskService.findAll();
       const task = tasks[selectedNumber - 1];
+
       if (!task) {
         await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
         return false;

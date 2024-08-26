@@ -15,18 +15,17 @@ export class TaskService {
   }
 
   async findAll(): Promise<Task[]> {
-    return this.repository.find();
+    const tasks = await this.repository.find();
+    return tasks.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   async getList(): Promise<string[] | null> {
     const list = await this.findAll();
     if (list.length === 0) return null;
 
-    return list
-      .sort((a, b) => (a.name > b.name ? 1 : -1))
-      .map(
-        (task, i) =>
-          `\n${i + 1}. ${task.shownName} ${task.duration}m ${task.cost}rub`,
-      );
+    return list.map(
+      (task, i) =>
+        `\n${i + 1}. ${task.shownName} ${task.duration}m ${task.cost}rub`,
+    );
   }
 }
