@@ -140,57 +140,67 @@ export class StandProdService {
     if (worksForCurrentStandProd.length === 0) {
       output += '-\n\n';
     } else {
-      // Группируем работы по мастерам
-      const worksByMaster = worksForCurrentStandProd.reduce(
+      // Группируем работы по задачам
+      const worksByTask = worksForCurrentStandProd.reduce(
         (acc, work) => {
-          const masterName = work.master.user?.name || 'Неизвестный мастер';
-          if (!acc[masterName]) {
-            acc[masterName] = [];
+          const taskName = work.task.shownName;
+          if (!acc[taskName]) {
+            acc[taskName] = {
+              works: [],
+              taskId: work.task.id, // Сохраняем id задачи
+            };
           }
-          acc[masterName].push(work);
+          acc[taskName].works.push(work);
           return acc;
         },
-        {} as Record<string, Work[]>,
+        {} as Record<string, { works: Work[]; taskId: number }>,
       );
 
-      // Выводим работы, сгруппированные по мастерам
-      for (const [masterName, masterWorks] of Object.entries(worksByMaster)) {
-        output += `* ${masterName}:\n`;
-        let masterTotalCost = 0;
+      // Сортируем задачи по id
+      const sortedTaskEntries = Object.entries(worksByTask).sort(
+        (a, b) => a[1].taskId - b[1].taskId,
+      );
 
-        for (const work of masterWorks) {
-          // Получаем все standProd, связанные с этой работой
+      // Выводим работы, сгруппированные по задачам
+      for (const [taskName, { works: taskWorks }] of sortedTaskEntries) {
+        output += `* ${taskName}:\n`;
+        let taskTotalCost = 0;
+        let taskTotalCount = 0;
+        let linkedStandProdsCount = 0;
+
+        for (const work of taskWorks) {
           const allLinkedStandProds =
             await this.workService.getStandProdsForWork(work.id);
-          const linkedStandProdsCount = allLinkedStandProds.length;
+          linkedStandProdsCount = allLinkedStandProds.length;
 
-          let workDescription = `  - ${work.task.shownName} (${work.count}ед`;
+          taskTotalCount += work.count;
+
+          let workDescription = `  - ${work.count}шт`;
 
           if (linkedStandProdsCount > 1) {
             const otherStandProdIds = allLinkedStandProds
               .filter((sp) => sp.id !== standProd.id)
               .map((sp) => sp.id)
               .join(' #');
-            workDescription += ` - на ${linkedStandProdsCount} изделия #${standProd.id} #${otherStandProdIds}`;
+            workDescription += ` (на ${linkedStandProdsCount} изделия #${standProd.id} #${otherStandProdIds})`;
           }
 
-          workDescription += `)`;
-
-          // Добавляем ID работы
+          workDescription += ` - ${work.master.user?.name || 'Неизвестный мастер'}`;
           workDescription += ` #${work.id}`;
 
           output += workDescription + '\n';
 
           if (userRole === 'manager') {
             const workCost = work.cost * work.count * work.paymentCoefficient;
-            output += `    Стоимость: ${(workCost / linkedStandProdsCount).toFixed(2)} ₽${linkedStandProdsCount ? ` из расчёта  ${linkedStandProdsCount} шт` : ''}\n`;
-            masterTotalCost += workCost;
-            totalWorkCost += workCost;
+            const workCostPerStandProd = workCost / linkedStandProdsCount;
+            output += `    Оплата: ${workCostPerStandProd.toFixed(2)} ₽${linkedStandProdsCount > 1 ? ` (из ${workCost.toFixed(2)} ₽)` : ''}\n`;
+            taskTotalCost += workCostPerStandProd;
+            totalWorkCost += workCostPerStandProd;
           }
         }
 
         if (userRole === 'manager') {
-          output += `  Итого по мастеру: ${masterTotalCost.toFixed(2)} ₽\n`;
+          output += `  Итого по задаче (${linkedStandProdsCount > 1 ? taskTotalCount / linkedStandProdsCount : taskTotalCount}ед): ${taskTotalCost.toFixed(2)} ₽\n`;
         }
         output += '\n';
       }
