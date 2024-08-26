@@ -33,9 +33,11 @@ export class WorkListScene {
 
     for (const user of usersToShow) {
       if (userRole === 'manager') {
+        const earnings = await this.workService.calculateEarnings(user.id);
+
         await sendMessage(
           ctx,
-          `🙍🏻‍♂️ Пользователь: ${user.name}. Актуальный коэффициент: ${user.master[0].paymentCoefficient}`,
+          `🙍🏻‍♂️ Мастер: ${user.name}. Коэффициент: ${user.master[0].paymentCoefficient}\nОбщий баланс:\nНачислено: ${earnings.totalEarned.toFixed(2)}₽\nВыплачено: ${earnings.alreadyPaid.toFixed(2)}₽\nОсталось выплатить: ${earnings.toPay.toFixed(2)}₽`,
         );
       }
 
@@ -89,14 +91,6 @@ export class WorkListScene {
       });
 
       await sendMessages(ctx, workList);
-
-      if (userRole === 'manager') {
-        const earnings = await this.workService.calculateEarnings(user.id);
-        await sendMessage(
-          ctx,
-          `Общий баланс:\nНачислено: ${earnings.totalEarned.toFixed(2)}₽\nВыплачено: ${earnings.alreadyPaid.toFixed(2)}₽\nОсталось выплатить: ${earnings.toPay.toFixed(2)}₽`,
-        );
-      }
     }
 
     await ctx.scene.leave();
