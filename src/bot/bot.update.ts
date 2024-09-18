@@ -38,7 +38,7 @@ export class BotUpdate implements OnApplicationBootstrap {
   async notifyAllUsers() {
     const users = await this.userService.findAll();
     for (const user of users) {
-      if (user.role !== 'unregistered' && user.role !== 'unknown')
+      if (user.role === 'master' || user.role === 'manager')
         try {
           await this.bot.telegram.sendMessage(
             user.telegramUserId,
