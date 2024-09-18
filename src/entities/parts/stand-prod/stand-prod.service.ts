@@ -36,6 +36,15 @@ export class StandProdService {
     });
   }
 
+  async findActive(): Promise<StandProd[]> {
+    return this.repository.find({
+      where: {
+        isActive: true,
+      },
+      relations: ['standOrder', 'work', 'standOrder.order'],
+    });
+  }
+
   async findNotLinked(): Promise<StandProd[]> {
     return this.repository.find({
       where: {
@@ -101,7 +110,7 @@ export class StandProdService {
     const standOrder: StandOrder | undefined = standProd.standOrder;
     const order = standOrder?.order;
 
-    let output = `# Изделия / # заказа (на наклейку):\n📝️ ️️️️️️️️${standProd.id} / ${standOrder ? standOrder.id + '\n' + standOrder.format(userRole, 'line') : '-'}\n\n`;
+    let output = `📝️ ️️️️️️️️${standProd.id} / ${standOrder ? standOrder.id + '\n' + standOrder.format(userRole, 'line') : '-'}  -  # Изделия / # заказа (на наклейку)\n\n`;
     output += order ? `Заказ клиента #${order.id}\n` : '';
 
     output += '\n🛠 Комплектация:\n';
@@ -216,6 +225,7 @@ export class StandProdService {
     return output;
   }
 
+  // TODO: We should optimize this, separate some logic to functions
   async getStandProdsWithWorksByMaster(
     userId: number,
     userRole: UserRole,
@@ -242,7 +252,14 @@ export class StandProdService {
         }
         const entry = standProdMap.get(standProd.id);
         entry.works.push(work);
-        const workCost = work.cost * work.count * work.paymentCoefficient;
+        const allLinkedStandProds = await this.workService.getStandProdsForWork(
+          work.id,
+        );
+        const linkedStandProdsCount = allLinkedStandProds.length;
+        const workCountForCurrentStand = work.count / linkedStandProdsCount;
+
+        const workCost =
+          work.cost * workCountForCurrentStand * work.paymentCoefficient;
         entry.totalCost += workCost;
       }
     }
@@ -260,8 +277,15 @@ export class StandProdService {
       output += 'Список выполненных задач:\n';
 
       for (const work of works) {
-        const workCost = work.cost * work.count * work.paymentCoefficient;
-        output += `- ${work.task.shownName} (${work.count}ед)\n`;
+        const allLinkedStandProds = await this.workService.getStandProdsForWork(
+          work.id,
+        );
+        const linkedStandProdsCount = allLinkedStandProds.length;
+        const workCountForCurrentStand = work.count / linkedStandProdsCount;
+
+        const workCost =
+          work.cost * workCountForCurrentStand * work.paymentCoefficient;
+        output += `- ${work.task.shownName} (${workCountForCurrentStand}ед)\n`;
         output += `  Оплата: ${workCost.toFixed(2)} ₽\n`;
       }
 

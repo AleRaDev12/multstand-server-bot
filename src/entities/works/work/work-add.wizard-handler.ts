@@ -1,7 +1,6 @@
 import {
   AdditionalWizardSelections,
   CustomWizardContext,
-  UserRole,
   WizardStepType,
 } from '../../../shared/interfaces';
 import { WorkAddWizard } from './work-add.wizard';
@@ -19,7 +18,7 @@ const entityName = 'work';
 const commonSteps: WizardStepType[] = [
   { message: 'Задача №:', type: taskSelectType },
   {
-    message: 'Станок-изделие:',
+    message: 'Станок-изделие - указываем номер изделия:',
     type: standProdSelectType,
   },
   { message: 'Количество:', field: 'count', type: 'number' },
@@ -89,7 +88,7 @@ async function handleSpecificRequest(
     }
 
     case standProdSelectType: {
-      const standsProdList = await this.standProdService.findAll();
+      const standsProdList = await this.standProdService.findActive();
       const formattedList = await this.standProdService.formatList(
         standsProdList,
         ctx.session.userRole,
@@ -103,7 +102,7 @@ async function handleSpecificRequest(
       await sendMessage(ctx, stepRequest.message);
       await sendMessages(
         ctx,
-        formattedList.map((message, index) => `№${index + 1}\n${message}`),
+        formattedList.map((message) => `${message}`),
       );
 
       await replyWithCancelButton(ctx, `-`);
@@ -180,9 +179,9 @@ async function handleSpecificAnswer(
         return false;
       }
 
-      const standsProd = await this.standProdService.findAll();
+      const standsProd = await this.standProdService.findActive();
       const selectedStandsProd = selectedNumbers
-        .map((num) => standsProd[num - 1])
+        .map((num) => standsProd.find((standProd) => standProd.id === num))
         .filter((standProd) => standProd !== undefined);
 
       if (selectedStandsProd.length === 0) {

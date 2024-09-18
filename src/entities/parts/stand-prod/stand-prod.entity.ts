@@ -34,9 +34,16 @@ export class StandProd extends BaseEntity {
   })
   description: string;
 
+  @NullableColumn({
+    type: 'boolean',
+    default: true,
+  })
+  isActive: boolean;
+
   public static nullable = {
     standOrder: true,
     description: true,
+    isActive: false,
   };
 
   public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
