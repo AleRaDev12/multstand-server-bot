@@ -19,7 +19,8 @@ import { Tail } from 'rxjs';
 const RATE_LIMIT = 10; // messages per second
 const DELAY = 1000 / RATE_LIMIT; // delay in milliseconds
 const MAX_MESSAGE_LENGTH = 4096;
-const MESSAGES_DIVIDER = '\n\n----\n\n';
+const MESSAGES_DIVIDER =
+  '\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n';
 
 type Shorthand<FName extends Exclude<keyof Telegram, keyof ApiClient>> = Tail<
   Parameters<Telegram[FName]>
