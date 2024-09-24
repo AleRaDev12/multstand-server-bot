@@ -32,7 +32,7 @@ export class StandOrderService {
       where: {
         status: StandOrderStatus[statusKey],
       },
-      relations: ['order', 'standProd'],
+      relations: ['order', 'standProd', 'order.client'],
     });
   }
 

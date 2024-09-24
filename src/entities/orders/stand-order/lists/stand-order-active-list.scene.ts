@@ -12,6 +12,7 @@ import { StandProdService } from '../../../parts/stand-prod/stand-prod.service';
 import { WorkService } from '../../../works/work/work.service';
 import { getEmitOutput } from 'ts-loader/dist/instances';
 import { generateOrderDeadline } from '../../order/order-formatting';
+import { format } from 'date-fns';
 
 @Scene(SCENES.STAND_ORDER_ACTIVE_LIST)
 @SceneRoles('manager', 'master')
@@ -44,9 +45,22 @@ export class StandOrderActiveListScene {
 
         output += `${standOrder.format(ctx.userRole, 'line')}\n\n`;
         output += `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.standProd.length ? standOrder.standProd[0].id : '-'} / ${standOrder.id}\n\n`;
-        output += standOrder.order
-          ? `Order #${standOrder.order.id}\n`
-          : 'Order: -';
+
+        if (standOrder.order) {
+          if (ctx.userRole === 'manager') {
+            output += `📅 Дата договора: ${format(standOrder.order.contractDate, 'yyyy-MM-dd')}\n`;
+            if (standOrder.order.client) {
+              const client = standOrder.order.client;
+              output += `👤 Клиент: ${client.firstName ?? ''} ${client.lastName ?? ''}\n${client.phoneNumber}\n`;
+              if (client.organization) {
+                output += `🏢 Организация: ${client.organization}\n`;
+              }
+              output += `🏙 Город: ${client.city}\n`;
+            }
+          }
+        } else {
+          output += 'Order: -\n';
+        }
 
         output += generateOrderDeadline(standOrder.order).join('\n');
         output += '\n';
