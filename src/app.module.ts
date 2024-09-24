@@ -23,7 +23,7 @@ import { Component } from './entities/parts/component/component.entity';
     }),
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'database.sqlite',
+      database: 'db/database.sqlite',
       entities: ['dist/**/*.entity{.ts,.js}'],
       migrations: ['dist/migrations/**/*.js'],
       migrationsRun: false,
