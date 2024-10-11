@@ -22,9 +22,6 @@ export class ComponentService {
     const list = await this.findAll();
     if (list.length === 0) return null;
 
-    return list.map((item, i) => {
-      const type = `(${item.type})` ?? '';
-      return `${item.name} ${type}`;
-    });
+    return list.map((item) => `${item.name} ${item.type}`);
   }
 }
