@@ -10,9 +10,9 @@ import { sendMessage } from '../shared/senMessages';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { User } from '../entities/user/user.entity';
 
-@Scene(SCENES.REGISTER)
+@Scene(SCENES.REGISTRATION_USER)
 @SceneRoles('manager')
-export class RegisterUserScene {
+export class RegistrationUserScene {
   constructor(
     @InjectBot() private bot: Telegraf<SceneContext>,
     @Inject(UserService) private readonly userService: UserService,

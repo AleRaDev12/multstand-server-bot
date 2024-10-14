@@ -56,7 +56,7 @@ export class BotUpdate implements OnApplicationBootstrap {
 
     if (!user) {
       await sendMessage(ctx, `Вы не зарегистрированы.`);
-      await ctx.scene.enter(SCENES.REGISTRATION);
+      await ctx.scene.enter(SCENES.REGISTRATION_SENDING);
       return;
     }
 

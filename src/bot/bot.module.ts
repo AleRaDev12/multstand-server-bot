@@ -11,8 +11,8 @@ import { MasterModule } from '../entities/master/master.module';
 import { AccountModule } from '../entities/money/account/account.module';
 import { BotUpdate } from './bot.update';
 import { MenuScene } from './menu.scene';
-import { RegisterUserScene } from './register-user.scene';
-import { RegistrationScene } from './registrationScene';
+import { RegistrationUserScene } from './registration-user.scene';
+import { RegistrationSendingScene } from './registration-sending.scene';
 import { OrdersScene } from '../entities/orders/orders.scene';
 import { MoneyScene } from '../entities/money/money.scene';
 import { Module } from '@nestjs/common';
@@ -39,8 +39,8 @@ import { WorksScene } from '../entities/works/works.scene';
   providers: [
     BotUpdate,
     MenuScene,
-    RegisterUserScene,
-    RegistrationScene,
+    RegistrationUserScene,
+    RegistrationSendingScene,
     OrdersScene,
     MoneyScene,
     WorksScene,

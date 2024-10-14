@@ -94,7 +94,7 @@ export class MenuScene {
 
   @Action(Actions.USER_REGISTRATION)
   async onUserRegistration(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
-    await this.enterScene(ctx, SCENES.REGISTER);
+    await this.enterScene(ctx, SCENES.REGISTRATION_USER);
   }
 
   @Action(Actions.WORKS)
