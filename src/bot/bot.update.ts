@@ -91,46 +91,4 @@ export class BotUpdate implements OnApplicationBootstrap {
       await ctx.scene.enter(SCENES.MENU);
     });
   }
-
-  @Action(BotActions.DATE_TODAY)
-  async onDateToday(@Ctx() ctx: CustomWizardContext) {
-    await handleButtonPress(ctx, async () => {
-      const date = new Date();
-      ctx.wizard.state.selectedDate = date;
-
-      await sendMessage(
-        ctx,
-        `Выбрано: ${format(date, 'yyyy-MM-dd')}. Для продолжения введите любой текст, кроме "-"`,
-      );
-      await ctx.answerCbQuery();
-    });
-  }
-
-  @Action(BotActions.DATE_YESTERDAY)
-  async onDateYesterday(@Ctx() ctx: CustomWizardContext) {
-    await handleButtonPress(ctx, async () => {
-      const date = subDays(new Date(), 1);
-      ctx.wizard.state.selectedDate = date;
-
-      await sendMessage(
-        ctx,
-        `Выбрано: ${format(date, 'yyyy-MM-dd')}. Для продолжения введите любой текст, кроме "-"`,
-      );
-      await ctx.answerCbQuery();
-    });
-  }
-
-  @Action(BotActions.DATE_BEFORE_YESTERDAY)
-  async onDateBeforeYesterday(@Ctx() ctx: CustomWizardContext) {
-    await handleButtonPress(ctx, async () => {
-      const date = subDays(new Date(), 2);
-      ctx.wizard.state.selectedDate = date;
-
-      await sendMessage(
-        ctx,
-        `Выбрано: ${format(date, 'yyyy-MM-dd')}. Для продолжения введите любой текст, кроме "-"`,
-      );
-      await ctx.answerCbQuery();
-    });
-  }
 }
