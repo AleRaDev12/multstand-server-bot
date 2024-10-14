@@ -54,7 +54,13 @@ export class BotUpdate implements OnApplicationBootstrap {
   async onStart(@Ctx() ctx: CustomContext): Promise<void> {
     const user = await this.userService.findByTelegramId(ctx.from.id);
 
-    if (!user || ctx.notRegistered) {
+    if (!user) {
+      await sendMessage(ctx, `Вы не зарегистрированы.`);
+      await ctx.scene.enter(SCENES.REGISTRATION);
+      return;
+    }
+
+    if (ctx.notRegistered) {
       await sendMessage(ctx, 'Нет доступа');
       return;
     }

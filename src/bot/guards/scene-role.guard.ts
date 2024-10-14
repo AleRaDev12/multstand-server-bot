@@ -45,10 +45,6 @@ export class SceneRoleGuard implements CanActivate {
 
     const { from } = telegrafContext;
     const user = await this.userService.findByTelegramId(from.id);
-    if (!user) {
-      await this.handleUnregistered(telegrafContext);
-      return true;
-    }
 
     const hasAccess = allowedRoles.some((role: UserRole) =>
       user.role.includes(role),
@@ -76,11 +72,6 @@ export class SceneRoleGuard implements CanActivate {
   private async handleUnauthorized(ctx: SceneContext) {
     await sendMessage(ctx, `У вас нет доступа к данной функции.`);
     await ctx.scene.enter(SCENES.MENU);
-  }
-
-  private async handleUnregistered(ctx: SceneContext) {
-    await sendMessage(ctx, `Вы не зарегистрированы.`);
-    await ctx.scene.enter(SCENES.REGISTRATION);
   }
 
   private isSceneOrWizardEnter(

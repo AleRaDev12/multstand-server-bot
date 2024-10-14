@@ -17,9 +17,11 @@ export class RegistrationScene {
   @SceneEnter()
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext) {
     const userId = ctx.from.id;
-    await sendMessage(ctx, 'Отправляется заявка на регистрацию.');
     await this.userService.createRequest(userId);
-    await sendMessage(ctx, 'Отправлена. Ожидайте подтверждения.');
+    await sendMessage(
+      ctx,
+      `Отправлена заявка на регистрацию. Отправьте администратору ID вашего аккаунта: ${userId} и ожидайте подтверждения.`,
+    );
     await ctx.scene.leave();
   }
 }
