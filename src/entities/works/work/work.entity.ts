@@ -43,7 +43,7 @@ export class Work extends BaseEntity {
   @NullableColumn({ type: 'date' })
   date: Date;
 
-  @NullableColumn({ type: 'datetime' })
+  @NullableColumn({ type: 'timestamp' })
   createdAt: Date;
 
   @NullableColumn({ type: 'int' })

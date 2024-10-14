@@ -19,7 +19,7 @@ export class User extends BaseEntity {
   @NullableColumn()
   name: string;
 
-  @NullableColumn({ unique: true })
+  @NullableColumn({ unique: true, type: 'bigint' })
   telegramUserId: number;
 
   @NullableColumn()
