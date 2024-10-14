@@ -6,9 +6,9 @@ import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 import { sendMessage } from '../shared/senMessages';
 
-@Scene(SCENES.REGISTRATION_SENDING)
+@Scene(SCENES.REGISTRATION_REQUEST_SENDING)
 @SceneRoles('unknown')
-export class RegistrationSendingScene {
+export class RegistrationRequestSendingScene {
   constructor(
     @Inject(UserService)
     private readonly userService: UserService,

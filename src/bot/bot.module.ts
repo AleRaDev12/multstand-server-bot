@@ -12,7 +12,7 @@ import { AccountModule } from '../entities/money/account/account.module';
 import { BotUpdate } from './bot.update';
 import { MenuScene } from './menu.scene';
 import { RegistrationUserScene } from './registration-user.scene';
-import { RegistrationSendingScene } from './registration-sending.scene';
+import { RegistrationRequestSendingScene } from './registration-request-sending.scene';
 import { OrdersScene } from '../entities/orders/orders.scene';
 import { MoneyScene } from '../entities/money/money.scene';
 import { Module } from '@nestjs/common';
@@ -40,7 +40,7 @@ import { WorksScene } from '../entities/works/works.scene';
     BotUpdate,
     MenuScene,
     RegistrationUserScene,
-    RegistrationSendingScene,
+    RegistrationRequestSendingScene,
     OrdersScene,
     MoneyScene,
     WorksScene,
