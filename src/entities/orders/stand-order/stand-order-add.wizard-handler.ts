@@ -136,7 +136,7 @@ async function handleSpecificRequest(
     case orderSelectType: {
       const ordersList = await this.orderService.getFormattedList();
       if (!ordersList) {
-        await sendMessage(ctx, 'Записей нет');
+        await replyWithCancelButton(ctx, 'Записей нет');
         return true;
       }
 
