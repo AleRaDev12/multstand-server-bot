@@ -89,7 +89,7 @@ async function handleSpecificRequest(
   if (stepRequest.type !== selectTypeName) return true;
 
   const ordersList = await this.clientService.getList();
-  await replyWithCancelButton(ctx, `${stepRequest.message}${ordersList}`);
+  await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
   return true;
 }
 
