@@ -102,6 +102,11 @@ export const formatLabels = (
   entity: Record<string, any>,
   labels: Record<string, string>,
 ): string => {
+  if (!entity || !labels) {
+    console.log('There is no entity or labels');
+    return '[No formatted data]';
+  }
+
   return Object.keys(labels)
     .filter(
       (key) =>
@@ -112,14 +117,14 @@ export const formatLabels = (
     )
     .map((key) => {
       const value = entity[key];
-      let formattedValue: string | number | Date;
+      let formattedValue: string;
 
       if (value instanceof Date) {
         formattedValue = format(value, 'yyyy-MM-dd');
       } else if (typeof value === 'number' && !Number.isInteger(value)) {
         formattedValue = value.toFixed(2);
       } else {
-        formattedValue = value;
+        formattedValue = value.toFixed(0);
       }
 
       return `${labels[key]}: ${formattedValue}`;
