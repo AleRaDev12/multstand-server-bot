@@ -40,8 +40,24 @@ function setEntity(ctx: CustomWizardContext): void {
   ctx.wizard.state[entityName] = new Work();
 }
 
-function save(this: WorkAddWizard, entity: Work) {
-  return this.service.create(entity);
+async function save(
+  this: WorkAddWizard,
+  entity: Work,
+  ctx?: CustomWizardContext,
+) {
+  const work = await this.service.create(entity);
+
+  const managers = await this.userService.findManagers();
+  const currentUser = await this.userService.findByTelegramId(ctx.from.id);
+
+  for (const manager of managers) {
+    await this.bot.telegram.sendMessage(
+      manager.telegramUserId,
+      `${currentUser.name} отправил отчёт:\n${entity.format('manager')}`,
+    );
+  }
+
+  return work;
 }
 
 async function print(ctx: CustomWizardContext, entity: Work): Promise<void> {

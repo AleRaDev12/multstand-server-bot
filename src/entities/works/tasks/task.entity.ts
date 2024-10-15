@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '../../base.entity';
+import { BaseEntity, LabelsType } from '../../base.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
+import { UserRole } from '../../../shared/interfaces';
+import { formatTask } from './task-formatting';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -25,13 +27,21 @@ export class Task extends BaseEntity {
   @NullableColumn({ type: 'text' })
   shownName: string;
 
-  @NullableColumn({ type: 'int' })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 10,
+    scale: 4,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   cost: number;
 
   @NullableColumn({ type: 'int' })
   duration: number;
 
-  public format(): string {
-    return `Not implemented yet for ${this.constructor.name}`;
+  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+    return formatTask(this, userRole, labelType);
   }
 }

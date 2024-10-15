@@ -117,17 +117,7 @@ export const formatLabels = (
     )
     .map((key) => {
       const value = entity[key];
-      let formattedValue: string;
-
-      if (value instanceof Date) {
-        formattedValue = format(value, 'yyyy-MM-dd');
-      } else if (typeof value === 'number' && !Number.isInteger(value)) {
-        formattedValue = value.toFixed(2);
-      } else {
-        formattedValue = value.toFixed(0);
-      }
-
-      return `${labels[key]}: ${formattedValue}`;
+      return `${labels[key]}: ${formatLabelValue(value)}`;
     })
     .join('\n');
 };
@@ -146,3 +136,15 @@ export function assertNever(x: never): never {
 export const formatWithListIndexes = (list: string[]): string[] => {
   return list.map((item, index) => `№${index + 1}. ${item}`);
 };
+
+function formatLabelValue(value: any): string {
+  if (value instanceof Date) {
+    return format(value, 'yyyy-MM-dd');
+  }
+
+  if (typeof value === 'number') {
+    return Number.isInteger(value) ? value.toFixed(0) : value.toFixed(2);
+  }
+
+  return String(value);
+}

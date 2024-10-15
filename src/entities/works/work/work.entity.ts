@@ -11,6 +11,7 @@ import { NullableColumn } from '../../nullable-column.decorator';
 import { Master } from '../../master/master.entity';
 import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
 import { UserRole } from '../../../shared/interfaces';
+import { formatWork } from './work-formatting';
 
 @Entity()
 export class Work extends BaseEntity {
@@ -46,19 +47,43 @@ export class Work extends BaseEntity {
   @NullableColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @NullableColumn({ type: 'int' })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 10,
+    scale: 4,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   cost: number;
 
-  @NullableColumn({ type: 'int' })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 10,
+    scale: 4,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   count: number;
 
-  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 4,
+    scale: 2,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   paymentCoefficient: number;
 
   @NullableColumn({ type: 'text' })
   description: string;
 
-  public format(userRole: UserRole, labelType?: LabelsType): string {
-    return `Not implemented yet for ${this.constructor.name}`;
+  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+    return formatWork(this, userRole, labelType);
   }
 }

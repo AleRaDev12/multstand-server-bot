@@ -18,6 +18,10 @@ export class UserService {
     return this.repository.find({ relations: ['master'] });
   }
 
+  async findManagers(): Promise<User[]> {
+    return this.repository.find({ where: { role: 'manager' } });
+  }
+
   async createRequest(userId: number): Promise<User> {
     let user = await this.repository.findOne({
       where: { telegramUserId: userId },

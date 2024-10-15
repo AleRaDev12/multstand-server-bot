@@ -51,10 +51,26 @@ export class PartIn extends BaseEntity {
   @NullableColumn({ type: 'date' })
   dateArrival: Date;
 
-  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 4,
+    scale: 2,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   amount: number;
 
-  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 4,
+    scale: 2,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   count: number;
 
   @NullableColumn()

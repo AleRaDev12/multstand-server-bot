@@ -26,7 +26,15 @@ export class Transaction extends BaseEntity {
   @NullableColumn({ type: 'date' })
   transactionDate: Date;
 
-  @NullableColumn({ type: 'decimal', precision: 10, scale: 2 })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   amount: number;
 
   @NullableColumn()

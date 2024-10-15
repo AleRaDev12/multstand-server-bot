@@ -17,7 +17,15 @@ export class Master extends BaseEntity {
   @ManyToOne(() => User)
   user: User;
 
-  @NullableColumn({ type: 'decimal', precision: 4, scale: 2 })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 4,
+    scale: 2,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   paymentCoefficient: number;
 
   public format(userRole: UserRole, labelType?: LabelsType): string {

@@ -48,7 +48,15 @@ export class StandOrder extends BaseEntity {
   })
   model: StandModelType;
 
-  @NullableColumn({ type: 'decimal' })
+  @NullableColumn({
+    type: 'decimal',
+    precision: 16,
+    scale: 2,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
   cost: number;
 
   @NullableColumn({
