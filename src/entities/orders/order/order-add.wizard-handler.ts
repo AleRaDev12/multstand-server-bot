@@ -7,7 +7,7 @@ import { OrderAddWizard } from './order-add.wizard';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const selectTypeName = 'clientSelect';
 

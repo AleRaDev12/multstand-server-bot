@@ -6,7 +6,7 @@ import { SCENES } from '../../../shared/scenes-wizards';
 import { UserService } from '../../user/user.service';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../shared/interfaces';
-import { sendMessage, sendMessages } from '../../../shared/senMessages';
+import { sendMessage, sendMessages } from '../../../shared/sendMessages';
 import { Work } from './work.entity';
 
 @Scene(SCENES.WORK_LIST)

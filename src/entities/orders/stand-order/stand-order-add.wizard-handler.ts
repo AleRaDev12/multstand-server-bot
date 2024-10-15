@@ -14,7 +14,7 @@ import {
   handleAnswerUnion,
   replyWithCancelButton,
 } from '../../../bot/wizard-step-handler/utils';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const orderSelectType: AdditionalWizardSelections = 'orderSelect';
 const orderModelSelectType: AdditionalWizardSelections = 'orderModelSelect';

@@ -4,7 +4,7 @@ import { SCENES, WIZARDS } from '../../shared/scenes-wizards';
 import { BaseScene } from '../../shared/base.scene';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 import { CtxAuth } from '../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../shared/interfaces';
 

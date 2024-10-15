@@ -5,7 +5,7 @@ import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { Markup } from 'telegraf';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 @Scene(SCENES.ACCOUNT_LIST)
 @SceneRoles('manager')

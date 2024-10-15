@@ -9,7 +9,7 @@ import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from '../component/component.entity';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const standProdTypeName: AdditionalWizardSelections = 'standProdSelect';
 const componentTypeName: AdditionalWizardSelections = 'componentSelect';

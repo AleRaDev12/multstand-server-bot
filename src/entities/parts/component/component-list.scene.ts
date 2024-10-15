@@ -8,7 +8,7 @@ import {
 } from '../../../shared/helpers';
 import { ComponentService } from './component.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 @Scene(SCENES.COMPONENT_LIST)
 @SceneRoles('manager')

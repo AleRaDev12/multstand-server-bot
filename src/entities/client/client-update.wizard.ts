@@ -7,7 +7,7 @@ import { WIZARDS } from '../../shared/scenes-wizards';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { replyWithCancelButton } from '../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 const entityName = 'client';
 

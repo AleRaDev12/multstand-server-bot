@@ -6,7 +6,7 @@ import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 import { getMessage } from '../shared/helpers';
 import { replyWithCancelButton } from './wizard-step-handler/utils';
-import { sendMessage } from '../shared/senMessages';
+import { sendMessage } from '../shared/sendMessages';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { User } from '../entities/user/user.entity';
 

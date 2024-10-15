@@ -4,7 +4,7 @@ import { BaseScene } from '../../shared/base.scene';
 import { Markup, Scenes } from 'telegraf';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 enum Actions {
   COMPONENT_LIST = 'component_list',

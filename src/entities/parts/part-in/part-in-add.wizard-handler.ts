@@ -9,7 +9,7 @@ import { Transaction } from '../../money/transaction/transaction.entity';
 import { formatWithListIndexes, getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const componentTypeName: AdditionalWizardSelections = 'componentSelect';
 const accountSelect: AdditionalWizardSelections = 'accountSelect';

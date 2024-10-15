@@ -8,7 +8,7 @@ import { UserService } from '../../user/user.service';
 
 import { SceneAuthContext } from '../../../shared/interfaces';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 @Scene(SCENES.PART_IN_LIST)
 @SceneRoles('manager')

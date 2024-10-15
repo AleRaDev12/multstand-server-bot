@@ -7,7 +7,7 @@ import { format, subDays } from 'date-fns';
 import { UserService } from '../entities/user/user.service';
 import { Inject, OnApplicationBootstrap } from '@nestjs/common';
 import { SceneContext } from 'telegraf/typings/scenes';
-import { sendMessage } from '../shared/senMessages';
+import { sendMessage } from '../shared/sendMessages';
 
 export enum BotActions {
   CANCEL = 'cancel',

@@ -6,7 +6,7 @@ import { UnifiedWizardHandlerOptions } from './types';
 import { BaseEntity } from '../../entities/base.entity';
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { replyWithCancelButton } from './utils';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 export async function sendRequest<T extends BaseEntity>(
   this: any,

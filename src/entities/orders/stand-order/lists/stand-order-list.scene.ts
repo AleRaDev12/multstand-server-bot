@@ -6,7 +6,7 @@ import { handleButtonPress } from '../../../../shared/helpers';
 import { SceneRoles } from '../../../../bot/decorators/scene-roles.decorator';
 import { CtxAuth } from '../../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../../shared/interfaces';
-import { sendMessage } from '../../../../shared/senMessages';
+import { sendMessage } from '../../../../shared/sendMessages';
 
 @Scene(SCENES.STAND_ORDER_LIST)
 @SceneRoles('manager')

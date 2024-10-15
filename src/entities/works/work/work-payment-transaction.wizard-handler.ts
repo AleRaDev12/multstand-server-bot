@@ -8,7 +8,7 @@ import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { WorkPaymentTransactionWizard } from './work-payment-transaction.wizard';
 import { Transaction } from '../../money/transaction/transaction.entity';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const masterSelect: AdditionalWizardSelections = 'masterSelect';
 const accountSelect: AdditionalWizardSelections = 'accountSelect';

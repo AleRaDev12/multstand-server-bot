@@ -6,7 +6,7 @@ import { handleButtonPress } from '../../shared/helpers';
 import { Inject } from '@nestjs/common';
 import { AccountService } from './account/account.service';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 @Scene(SCENES.MONEY)
 @SceneRoles('manager')

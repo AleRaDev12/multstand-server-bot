@@ -5,7 +5,7 @@ import { SCENES } from '../../../shared/scenes-wizards';
 import { SceneAuthContext } from '../../../shared/interfaces';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 @Scene(SCENES.TRANSACTION_LIST)
 @SceneRoles('manager')

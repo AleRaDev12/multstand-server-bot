@@ -5,7 +5,7 @@ import {
 import { AccountAddWizard } from './account-add.wizard';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Account } from './account.entity';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const entityName = 'account';
 

@@ -11,7 +11,7 @@ import {
 import { TaskAddWizard } from './task-add-wizard';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const steps: WizardStepType[] = [
   { message: 'Категория задачи:', field: 'category', type: 'string' },

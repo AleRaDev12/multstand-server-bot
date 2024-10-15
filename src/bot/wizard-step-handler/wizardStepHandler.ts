@@ -3,7 +3,7 @@ import { handleAnswer } from './handleAnswer';
 import { sendRequest } from './sendRequest';
 import { BaseEntity } from '../../entities/base.entity';
 import { UnifiedWizardHandlerOptions } from './types';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 export function wizardStepHandler<T extends BaseEntity, E = object>(
   options: UnifiedWizardHandlerOptions<T, E>,

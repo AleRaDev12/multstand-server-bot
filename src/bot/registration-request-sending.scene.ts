@@ -4,7 +4,7 @@ import { SCENES } from '../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
-import { sendMessage } from '../shared/senMessages';
+import { sendMessage } from '../shared/sendMessages';
 
 @Scene(SCENES.REGISTRATION_REQUEST_SENDING)
 @SceneRoles('unknown')

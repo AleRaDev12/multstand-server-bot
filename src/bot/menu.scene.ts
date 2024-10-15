@@ -7,7 +7,7 @@ import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
 import { CtxAuth } from './decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../shared/interfaces';
-import { sendMessage, sendMessages } from '../shared/senMessages';
+import { sendMessage, sendMessages } from '../shared/sendMessages';
 import { WorkService } from '../entities/works/work/work.service';
 import { StandProdService } from '../entities/parts/stand-prod/stand-prod.service';
 

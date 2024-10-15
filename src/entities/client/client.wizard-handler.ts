@@ -2,7 +2,7 @@ import { CustomWizardContext, WizardStepTypeN } from '../../shared/interfaces';
 import { Client } from './client.entity';
 import { ClientAddWizard } from './client-add.wizard';
 import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 const entityName = 'client';
 

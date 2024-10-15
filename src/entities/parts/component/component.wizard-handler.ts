@@ -4,7 +4,7 @@ import {
 } from '../../../shared/interfaces';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from './component.entity';
-import { sendMessage } from '../../../shared/senMessages';
+import { sendMessage } from '../../../shared/sendMessages';
 
 const steps: WizardStepType[] = [
   { message: 'Название комплектующего:', field: 'name', type: 'string' },

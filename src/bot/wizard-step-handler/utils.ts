@@ -3,7 +3,7 @@ import { CustomWizardContext } from '../../shared/interfaces';
 import { getMessage, getValueUnionByIndex } from '../../shared/helpers';
 import { BotActions } from '../bot.update';
 import { SceneContext } from 'telegraf/scenes';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 export async function replyWithCancelButton(
   ctx: CustomWizardContext | SceneContext,

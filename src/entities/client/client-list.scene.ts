@@ -5,7 +5,7 @@ import { Inject } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 @Scene(SCENES.CLIENT_LIST)
 @SceneRoles('manager')

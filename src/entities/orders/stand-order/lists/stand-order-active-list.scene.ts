@@ -7,7 +7,7 @@ import { SceneRoles } from '../../../../bot/decorators/scene-roles.decorator';
 import { UserService } from '../../../user/user.service';
 import { CtxAuth } from '../../../../bot/decorators/ctx-auth.decorator';
 import { SceneAuthContext } from '../../../../shared/interfaces';
-import { sendMessage, sendMessages } from '../../../../shared/senMessages';
+import { sendMessage, sendMessages } from '../../../../shared/sendMessages';
 import { StandProdService } from '../../../parts/stand-prod/stand-prod.service';
 import { WorkService } from '../../../works/work/work.service';
 import { getEmitOutput } from 'ts-loader/dist/instances';

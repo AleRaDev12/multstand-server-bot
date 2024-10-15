@@ -8,7 +8,7 @@ import { Work } from './work.entity';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage, sendMessages } from '../../../shared/senMessages';
+import { sendMessage, sendMessages } from '../../../shared/sendMessages';
 
 const masterSelectType: AdditionalWizardSelections = 'masterSelect';
 const taskSelectType: AdditionalWizardSelections = 'taskSelect';

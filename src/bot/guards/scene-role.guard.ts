@@ -4,7 +4,7 @@ import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { SceneContext, SceneSessionData } from 'telegraf/scenes';
 import { UserRole } from '../../shared/interfaces';
 import { SCENES } from '../../shared/scenes-wizards';
-import { sendMessage } from '../../shared/senMessages';
+import { sendMessage } from '../../shared/sendMessages';
 
 export interface ExtendedSceneSessionData extends SceneSessionData {
   userRole?: UserRole;
