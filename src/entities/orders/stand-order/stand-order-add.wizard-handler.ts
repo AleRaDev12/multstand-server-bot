@@ -1,7 +1,7 @@
 import { Led, Painting, StandModel, Tripod } from '../../unions';
 import {
-  CustomWizardContext,
   AdditionalWizardSelections,
+  CustomWizardContext,
   WizardStepType,
   WizardStepTypeN,
 } from '../../../shared/interfaces';

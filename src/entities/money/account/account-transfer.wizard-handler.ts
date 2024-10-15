@@ -1,7 +1,7 @@
 import { Account } from './account.entity';
 import {
-  CustomWizardContext,
   AdditionalWizardSelections,
+  CustomWizardContext,
   WizardStepType,
 } from '../../../shared/interfaces';
 import { AccountTransferWizard } from './account-transfer.wizard';
