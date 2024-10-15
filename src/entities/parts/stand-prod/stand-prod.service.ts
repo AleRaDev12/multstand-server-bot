@@ -175,25 +175,11 @@ export class StandProdService {
         output += `* ${taskName}:\n`;
         let taskTotalCost = 0;
         let taskTotalCount = 0;
-        let linkedStandProdsCount = 0;
 
         for (const work of taskWorks) {
-          const allLinkedStandProds =
-            await this.workService.getStandProdsForWork(work.id);
-          linkedStandProdsCount = allLinkedStandProds.length;
-
           taskTotalCount += work.count;
 
           let workDescription = `  - ${work.count}шт`;
-
-          if (linkedStandProdsCount > 1) {
-            const otherStandProdIds = allLinkedStandProds
-              .filter((sp) => sp.id !== standProd.id)
-              .map((sp) => sp.id)
-              .join(' #');
-            workDescription += ` (на ${linkedStandProdsCount} изделия #${standProd.id} #${otherStandProdIds})`;
-          }
-
           workDescription += ` - ${work.master.user?.name || 'Неизвестный мастер'}`;
           workDescription += ` #${work.id}`;
 
@@ -201,15 +187,14 @@ export class StandProdService {
 
           if (userRole === 'manager') {
             const workCost = work.cost * work.count * work.paymentCoefficient;
-            const workCostPerStandProd = workCost / linkedStandProdsCount;
-            output += `    Оплата: ${workCostPerStandProd.toFixed(2)} ₽${linkedStandProdsCount > 1 ? ` (из ${workCost.toFixed(2)} ₽)` : ''}\n`;
-            taskTotalCost += workCostPerStandProd;
-            totalWorkCost += workCostPerStandProd;
+            output += `    Оплата: ${workCost.toFixed(2)} ₽\n`;
+            taskTotalCost += workCost;
+            totalWorkCost += workCost;
           }
         }
 
         if (userRole === 'manager') {
-          output += `  Итого по задаче (${linkedStandProdsCount > 1 ? taskTotalCount / linkedStandProdsCount : taskTotalCount}ед): ${taskTotalCost.toFixed(2)} ₽\n`;
+          output += `  Итого по задаче (${taskTotalCount}ед): ${taskTotalCost.toFixed(2)} ₽\n`;
         }
         output += '\n';
       }
@@ -242,26 +227,18 @@ export class StandProdService {
     >();
 
     for (const work of works) {
-      for (const standProd of work.standProd) {
-        if (!standProdMap.has(standProd.id)) {
-          standProdMap.set(standProd.id, {
-            standProd,
-            works: [],
-            totalCost: 0,
-          });
-        }
-        const entry = standProdMap.get(standProd.id);
-        entry.works.push(work);
-        const allLinkedStandProds = await this.workService.getStandProdsForWork(
-          work.id,
-        );
-        const linkedStandProdsCount = allLinkedStandProds.length;
-        const workCountForCurrentStand = work.count / linkedStandProdsCount;
-
-        const workCost =
-          work.cost * workCountForCurrentStand * work.paymentCoefficient;
-        entry.totalCost += workCost;
+      const standProdId = work.standProd.id;
+      if (!standProdMap.has(standProdId)) {
+        standProdMap.set(standProdId, {
+          standProd: work.standProd,
+          works: [],
+          totalCost: 0,
+        });
       }
+      const entry = standProdMap.get(standProdId);
+      entry.works.push(work);
+      const workCost = work.cost * work.count * work.paymentCoefficient;
+      entry.totalCost += workCost;
     }
 
     const result: string[] = [];
@@ -277,15 +254,8 @@ export class StandProdService {
       output += 'Список выполненных задач:\n';
 
       for (const work of works) {
-        const allLinkedStandProds = await this.workService.getStandProdsForWork(
-          work.id,
-        );
-        const linkedStandProdsCount = allLinkedStandProds.length;
-        const workCountForCurrentStand = work.count / linkedStandProdsCount;
-
-        const workCost =
-          work.cost * workCountForCurrentStand * work.paymentCoefficient;
-        output += `- ${work.task.shownName} (${workCountForCurrentStand}ед)\n`;
+        const workCost = work.cost * work.count * work.paymentCoefficient;
+        output += `- ${work.task.shownName} (${work.count}ед)\n`;
         output += `  Оплата: ${workCost.toFixed(2)} ₽\n`;
       }
 

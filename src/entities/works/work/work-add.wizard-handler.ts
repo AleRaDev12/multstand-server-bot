@@ -60,7 +60,7 @@ async function save(
   return work;
 }
 
-async function print(ctx: CustomWizardContext, entity: Work): Promise<void> {
+async function print(ctx: CustomWizardContext): Promise<void> {
   await sendMessage(ctx, `Добавлено`);
 }
 
@@ -168,6 +168,10 @@ async function handleSpecificAnswer(
       const message = getMessage(ctx);
 
       const selectedNumber = parseInt(message.text);
+      if (Number.isNaN(selectedNumber)) {
+        await replyWithCancelButton(ctx, 'Некорректный ввод. Повторите.');
+        return false;
+      }
 
       const masters = await this.masterService.findAll();
       const master = masters[selectedNumber - 1];
@@ -183,33 +187,23 @@ async function handleSpecificAnswer(
     case standProdSelectType: {
       const message = getMessage(ctx);
 
-      const selectedNumbers = message.text
-        .split(',')
-        .map((num) => parseInt(num.trim()));
-
-      if (ctx.session.userRole !== 'manager' && selectedNumbers.length !== 1) {
-        await replyWithCancelButton(
-          ctx,
-          'Вы можете выбрать только одно изделие',
-        );
+      const selectedNumber = parseInt(message.text);
+      if (Number.isNaN(selectedNumber)) {
+        await replyWithCancelButton(ctx, 'Некорректный ввод. Повторите.');
         return false;
       }
 
       const standsProd = await this.standProdService.findActive();
-      const selectedStandsProd = selectedNumbers
-        .map((num) => standsProd.find((standProd) => standProd.id === num))
-        .filter((standProd) => standProd !== undefined);
+      const selectedStandProd = standsProd.find(
+        (standProd) => standProd.id === selectedNumber,
+      );
 
-      if (selectedStandsProd.length === 0) {
+      if (!selectedStandProd) {
         await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
         return false;
       }
 
-      if (!ctx.wizard.state[entityName].standProd) {
-        ctx.wizard.state[entityName].standProd = [];
-      }
-
-      ctx.wizard.state[entityName].standProd.push(...selectedStandsProd);
+      ctx.wizard.state[entityName].standProd = selectedStandProd;
       return true;
     }
 

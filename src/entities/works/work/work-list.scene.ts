@@ -72,17 +72,16 @@ export class WorkListScene {
           }
           output += ')\n';
 
-          if (work.standProd && work.standProd.length > 0) {
+          if (work.standProd) {
             output += '   # Изделия / # заказа (на наклейку):\n';
-            work.standProd.forEach((sp) => {
-              const standOrder = sp.standOrder;
-              const order = standOrder?.order;
+            const { standProd } = work;
+            const { standOrder } = standProd;
+            const order = standOrder?.order;
 
-              output += `   📝 ${sp.id} / ${!standOrder ? '-' : standOrder.id + ':\n      ' + standOrder.format(userRole, 'line')}\n`;
-              output += order
-                ? `      Заказ клиента #${order.id}\n`
-                : 'Заказ клиента: -\n';
-            });
+            output += `   📝 ${standProd.id} / ${!standOrder ? '-' : standOrder.id + ':\n      ' + standOrder.format(userRole, 'line')}\n`;
+            output += order
+              ? `      Заказ клиента #${order.id}\n`
+              : 'Заказ клиента: -\n';
           }
         });
 

@@ -43,8 +43,7 @@ export class WorkService {
     return list
       .map(
         (item, i) => `
-${i + 1}. ${item.count} units
-StandProds: ${item.standProd.map((sp) => sp.description).join(', ')}`,
+${i + 1}. ${item.count} standProd: ${item.standProd.description}`,
       )
       .join('\n\n');
   }
@@ -166,12 +165,13 @@ StandProds: ${item.standProd.map((sp) => sp.description).join(', ')}`,
     });
   }
 
-  async getStandProdsForWork(workId: number): Promise<StandProd[]> {
+  // Obsolete
+  async getStandProdsForWork(workId: number): Promise<StandProd> {
     const work = await this.repository.findOne({
       where: { id: workId },
       relations: ['standProd'],
     });
 
-    return work ? work.standProd : [];
+    return work?.standProd;
   }
 }

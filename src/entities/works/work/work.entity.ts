@@ -1,10 +1,4 @@
-import {
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity, LabelsType } from '../../base.entity';
 import { Task } from '../tasks/task.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
@@ -37,9 +31,8 @@ export class Work extends BaseEntity {
   @ManyToOne(() => Task)
   task: Task;
 
-  @ManyToMany(() => StandProd, (standProd) => standProd.work)
-  @JoinTable({ name: 'work_stand_prod' })
-  standProd: StandProd[];
+  @ManyToOne(() => StandProd)
+  standProd: StandProd;
 
   @NullableColumn({ type: 'date' })
   date: Date;
