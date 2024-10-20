@@ -12,6 +12,7 @@ export class Component extends BaseEntity {
     type: true,
     description: true,
     link: true,
+    historicalAverageCost: true,
     comment: true,
   };
 
@@ -20,6 +21,7 @@ export class Component extends BaseEntity {
     type: 'Тип',
     description: 'Описание',
     link: 'Ссылка',
+    historicalAverageCost: 'Ориентир стоимости (не расчёт)',
     comment: 'Комментарий',
     id: 'id компонента',
   };
@@ -43,6 +45,20 @@ export class Component extends BaseEntity {
   @NullableColumn()
   link: string;
 
+  @NullableColumn({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number) => value,
+      from: (value: string) => parseFloat(value),
+    },
+  })
+  historicalAverageCost: number;
+
   @NullableColumn()
   comment: string;
+
+
+
 }
