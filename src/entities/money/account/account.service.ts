@@ -43,7 +43,7 @@ export class AccountService {
         0,
       );
       balances[account.name] = balance;
-      totalBalance += balance;
+      totalBalance += account.isReal ? balance : 0;
     }
 
     balances['Сумма'] = totalBalance;
