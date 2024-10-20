@@ -89,9 +89,9 @@ const tmtlSteps: WizardStepType[] = [
     type: 'number',
   },
   {
-    message: 'Наличие ткани для затенения (да/нет):',
+    message: 'Наличие ткани для затенения (количество):',
     field: 'shadingFabric',
-    type: 'boolean',
+    type: 'number',
   },
 ];
 
