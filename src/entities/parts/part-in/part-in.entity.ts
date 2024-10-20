@@ -53,7 +53,7 @@ export class PartIn extends BaseEntity {
 
   @NullableColumn({
     type: 'decimal',
-    precision: 4,
+    precision: 10,
     scale: 2,
     transformer: {
       to: (value: number) => value,
@@ -64,7 +64,7 @@ export class PartIn extends BaseEntity {
 
   @NullableColumn({
     type: 'decimal',
-    precision: 4,
+    precision: 8,
     scale: 2,
     transformer: {
       to: (value: number) => value,
