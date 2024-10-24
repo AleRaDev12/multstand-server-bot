@@ -8,7 +8,7 @@ import {
   getMessage,
   getValueUnionByIndex,
 } from '../../../shared/helpers';
-import { TaskAddWizard } from './task-add-wizard';
+import { TaskAddWizard } from './task-add.wizard';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { sendMessage } from '../../../shared/sendMessages';
