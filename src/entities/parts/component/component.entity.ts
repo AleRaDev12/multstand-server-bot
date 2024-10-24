@@ -1,8 +1,9 @@
 import { BaseEntity, LabelsType } from '../../base.entity';
-import { Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { formatComponent } from './component-formatting';
 import { UserRole } from '../../../shared/interfaces';
+import { Task } from '../../works/tasks/task.entity';
 
 @Entity()
 export class Component extends BaseEntity {
@@ -59,6 +60,7 @@ export class Component extends BaseEntity {
   @NullableColumn()
   comment: string;
 
-
-
+  @ManyToMany(() => Task, (task) => task.components)
+  @JoinTable()
+  tasks: Task[];
 }
