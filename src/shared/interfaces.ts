@@ -101,6 +101,7 @@ interface CustomWizardSessionData extends WizardSessionData, AllEntities {
   tempData?: object;
   selectedDate?: Date;
   userRole?: UserRole;
+  wizardState?: any;
 }
 
 interface CustomWizardContextWizard<

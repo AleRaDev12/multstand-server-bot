@@ -65,6 +65,7 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
+  console.log('*-* handleSpecificAnswer stepAnswer.type', stepAnswer.type);
   if (stepAnswer.type !== selectTypeName) return true;
   const message = getMessage(ctx);
 
@@ -86,11 +87,15 @@ async function handleSpecificRequest(
   ctx: CustomWizardContext,
   stepRequest: WizardStepType,
 ): Promise<boolean> {
-  if (stepRequest.type !== selectTypeName) return true;
+  if (stepRequest.type === selectTypeName) {
+    const ordersList = await this.clientService.getList();
+    await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
+    return true;
+  }
 
-  const ordersList = await this.clientService.getList();
-  await replyWithCancelButton(ctx, `${stepRequest.message}\n${ordersList}`);
-  return true;
+  // Для остальных типов возвращаем undefined,
+  // чтобы сработал handleStandardStepRequest
+  return undefined;
 }
 
 export const OrderAddWizardHandler = wizardStepHandler<Order>({

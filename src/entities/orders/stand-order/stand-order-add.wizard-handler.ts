@@ -120,10 +120,7 @@ function save(this: StandOrderAddWizard, entity: StandOrder) {
   return this.service.create(entity);
 }
 
-async function print(
-  ctx: CustomWizardContext,
-  entity: StandOrder,
-): Promise<void> {
+async function print(ctx: CustomWizardContext, _: StandOrder): Promise<void> {
   await sendMessage(ctx, `Набор характеристик станка добавлен`);
 }
 

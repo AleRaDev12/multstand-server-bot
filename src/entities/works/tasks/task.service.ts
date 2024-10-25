@@ -28,4 +28,8 @@ export class TaskService {
         `\n${i + 1}. ${task.shownName} ${task.duration}m ${task.cost}rub`,
     );
   }
+
+  async updateTaskComponents(task: Task): Promise<Task> {
+    return this.repository.save(task);
+  }
 }

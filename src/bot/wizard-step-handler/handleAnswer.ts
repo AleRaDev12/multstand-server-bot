@@ -1,8 +1,4 @@
-import {
-  AllEntities,
-  CustomWizardContext,
-  WizardStepType,
-} from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { UnifiedWizardHandlerOptions } from './types';
 import { replyWithCancelButton } from './utils';
 import { handleInputByType } from './handleInputByType';

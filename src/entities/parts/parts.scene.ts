@@ -7,15 +7,16 @@ import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { sendMessage } from '../../shared/sendMessages';
 
 enum Actions {
-  COMPONENT_LIST = 'component_list',
-  COMPONENT_ADD = 'component_add',
-  PARTS_REMAINING_LIST = 'parts_remaining_list',
-  PART_IN_LIST = 'part_in_list',
-  PART_IN_ADD = 'part_in_add',
-  PART_OUT_LIST = 'part_out_list',
-  PART_OUT_ADD = 'part_out_add',
-  STAND_PROD_LIST = 'stand_prod_list',
-  STAND_PROD_ADD = 'stand_prod_add',
+  COMPONENT_LIST = 'COMPONENT_LIST',
+  COMPONENT_ADD = 'COMPONENT_ADD',
+  PARTS_REMAINING_LIST = 'PARTS_REMAINING_LIST',
+  PART_IN_LIST = 'PART_IN_LIST',
+  PART_IN_ADD = 'PART_IN_ADD',
+  PART_OUT_LIST = 'PART_OUT_LIST',
+  PART_OUT_ADD = 'PART_OUT_ADD',
+  STAND_PROD_LIST = 'STAND_PROD_LIST',
+  STAND_PROD_ADD = 'STAND_PROD_ADD',
+  TASK_COMPONENT_LINK = 'TASK_COMPONENT_LINK',
 }
 
 @Scene(SCENES.PARTS)
@@ -46,6 +47,12 @@ export class PartsScene extends BaseScene {
         [
           Markup.button.callback('📑 Станки-прод', Actions.STAND_PROD_LIST),
           Markup.button.callback('➕', Actions.STAND_PROD_ADD),
+        ],
+        [
+          Markup.button.callback(
+            'Связать компоненты с задачами',
+            Actions.TASK_COMPONENT_LINK,
+          ),
         ],
         [this.menuButton],
       ]),
@@ -127,5 +134,12 @@ export class PartsScene extends BaseScene {
   @Action(Actions.STAND_PROD_ADD)
   async standProdAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_STAND_PROD));
+  }
+
+  @Action(Actions.TASK_COMPONENT_LINK)
+  async taskComponentLink(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await handleButtonPress(ctx, () =>
+      ctx.scene.enter(WIZARDS.TASK_COMPONENT_LINK),
+    );
   }
 }

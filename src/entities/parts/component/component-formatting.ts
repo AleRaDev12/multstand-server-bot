@@ -30,6 +30,13 @@ export function formatComponent(
   userRole: UserRole,
   labelType: LabelsType,
 ): string {
-  const formattedLabels = formatLabels(component, labels[userRole][labelType]);
-  return formattedLabels;
+  try {
+    if (labelType === 'line' && userRole === 'manager') {
+      return component.name;
+    }
+
+    return formatLabels(component, labels[userRole][labelType]);
+  } catch (e) {
+    console.error(e);
+  }
 }

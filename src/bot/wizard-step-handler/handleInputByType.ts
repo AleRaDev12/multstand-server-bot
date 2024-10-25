@@ -1,7 +1,6 @@
 import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
 import { getMessage } from '../../shared/helpers';
-import { UnifiedWizardHandlerOptions } from './types';
-import { BaseEntity } from '../../entities/base.entity';
+import { BaseWizardHandlerOptions } from './types';
 import { handleAnswerUnion, replyWithCancelButton } from './utils';
 import {
   handleBooleanInput,
@@ -9,13 +8,11 @@ import {
   handleNumberInput,
 } from './inputHandlers';
 
-export async function handleInputByType<
-  T extends BaseEntity | Record<string, any>,
->(
+export async function handleInputByType<T>(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
   entity: T,
-  handleSpecificAnswer: UnifiedWizardHandlerOptions<T>['handleSpecificAnswer'],
+  handleSpecificAnswer: BaseWizardHandlerOptions<T>['handleSpecificAnswer'],
 ): Promise<boolean> {
   const message = getMessage(ctx);
 
