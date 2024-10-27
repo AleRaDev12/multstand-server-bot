@@ -1,4 +1,4 @@
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/types';
 import { getMessage } from '../../shared/helpers';
 import { BaseWizardHandlerOptions } from './types';
 import { handleAnswerUnion, replyWithCancelButton } from './utils';

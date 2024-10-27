@@ -2,9 +2,9 @@ import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { StandOrder } from '../../orders/stand-order/stand-order.entity';
 import { Work } from '../../works/work/work.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 import { formatStandProd } from './stand-prod-formatting';
-import { BaseEntity, LabelsType } from '../../base.entity';
+import { BaseEntity, LabelType } from '../../base.entity';
 import { PartOut } from '../part-out/part-out.entity';
 
 @Entity()
@@ -40,7 +40,7 @@ export class StandProd extends BaseEntity {
     isActive: false,
   };
 
-  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+  public format(userRole: UserRole, labelType: LabelType = 'short'): string {
     return formatStandProd(this, userRole, labelType);
   }
 }

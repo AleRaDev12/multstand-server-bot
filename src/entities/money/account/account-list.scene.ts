@@ -1,5 +1,5 @@
 import { AccountService } from './account.service';
-import { CustomWizardContext } from '../../../shared/interfaces';
+import { CustomWizardContext } from '../../../shared/types';
 import { Action, Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';

@@ -1,7 +1,7 @@
 import { formatLabels } from '../../../shared/helpers';
 import { StandOrder } from './stand-order.entity';
-import { UserRole } from '../../../shared/interfaces';
-import { EntityLabels, LabelsType } from '../../base.entity';
+import { UserRole } from '../../../shared/types';
+import { EntityLabels, LabelType } from '../../base.entity';
 import { Tripod } from '../../unions';
 
 const labels: EntityLabels<StandOrder, string> = {
@@ -64,7 +64,7 @@ const labels: EntityLabels<StandOrder, string> = {
 export function formatStandOrder(
   standOrder: StandOrder,
   userRole: UserRole,
-  labelType: LabelsType,
+  labelType: LabelType,
 ): string {
   if (labelType === 'line') {
     return formatStandOrderLine(standOrder, userRole);

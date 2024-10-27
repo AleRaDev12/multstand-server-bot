@@ -1,4 +1,4 @@
-import { CustomWizardContext, WizardStepType } from './interfaces';
+import { CustomWizardContext, WizardStepType } from './types';
 import { Scenes } from 'telegraf';
 import { SCENES, WIZARDS } from './scenes-wizards';
 import { format } from 'date-fns';

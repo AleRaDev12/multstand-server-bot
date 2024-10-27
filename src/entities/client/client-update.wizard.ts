@@ -1,6 +1,6 @@
 import { Ctx, Message, On, Wizard, WizardStep } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
-import { CustomWizardContext, WizardStepTypeN } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepTypeN } from '../../shared/types';
 import { Client } from './client.entity';
 import { ClientService } from './client.service';
 import { WIZARDS } from '../../shared/scenes-wizards';

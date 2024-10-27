@@ -2,7 +2,7 @@ import {
   AdditionalWizardSelections,
   CustomWizardContext,
   WizardStepType,
-} from '../../../shared/interfaces';
+} from '../../../shared/types';
 import { TransactionAddWizard } from './transaction-add.wizard';
 import { Transaction } from './transaction.entity';
 import { getMessage } from '../../../shared/helpers';

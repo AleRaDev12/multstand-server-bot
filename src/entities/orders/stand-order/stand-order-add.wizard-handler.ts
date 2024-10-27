@@ -4,7 +4,7 @@ import {
   CustomWizardContext,
   WizardStepType,
   WizardStepTypeN,
-} from '../../../shared/interfaces';
+} from '../../../shared/types';
 import { StandOrder } from './stand-order.entity';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
 import { getMessage, printUnion } from '../../../shared/helpers';

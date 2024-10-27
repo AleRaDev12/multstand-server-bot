@@ -1,5 +1,5 @@
 import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity, EntityFieldsMap, LabelsType } from '../../base.entity';
+import { BaseEntity, EntityFieldsMap, LabelType } from '../../base.entity';
 import { Client } from '../../client/client.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
@@ -7,7 +7,7 @@ import { StandOrder } from '../stand-order/stand-order.entity';
 import { Transaction } from '../../money/transaction/transaction.entity';
 import { OrderStatusType, OrderTypes } from './order-types';
 import { formatOrder } from './order-formatting';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 
 @Entity()
 export class Order extends BaseEntity {
@@ -77,7 +77,7 @@ export class Order extends BaseEntity {
     status: false,
   };
 
-  public format(userRole: UserRole, labelType: LabelsType = 'short') {
+  public format(userRole: UserRole, labelType: LabelType = 'short') {
     return formatOrder(this, userRole, labelType);
   }
 }

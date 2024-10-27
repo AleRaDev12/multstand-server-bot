@@ -3,7 +3,7 @@ import {
   AdditionalWizardSelections,
   CustomWizardContext,
   WizardStepType,
-} from '../../../shared/interfaces';
+} from '../../../shared/types';
 import { AccountTransferWizard } from './account-transfer.wizard';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';

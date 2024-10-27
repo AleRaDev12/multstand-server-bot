@@ -6,6 +6,16 @@ import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { sendMessage } from '../../shared/sendMessages';
 
+enum Actions {
+  TASK_LIST = 'TASK_LIST',
+  TASK_ADD = 'TASK_ADD',
+  WORK_LIST = 'WORK_LIST',
+  WORK_ADD = 'WORK_ADD',
+  WORK_PAYMENT = 'WORK_PAYMENT',
+  TASK_COMPONENT_LINK_LIST = 'TASK_COMPONENT_LINK_LIST',
+  TASK_COMPONENT_LINK_ADD = 'TASK_COMPONENT_LINK_ADD',
+}
+
 @Scene(SCENES.WORKS)
 @SceneRoles('manager')
 export class WorksScene extends BaseScene {
@@ -16,27 +26,37 @@ export class WorksScene extends BaseScene {
       'Заказы:',
       Markup.inlineKeyboard([
         [
-          Markup.button.callback('➕ Задача', 'add_task'),
-          Markup.button.callback('➕ Работа', 'add_work'),
-          Markup.button.callback('📊 Работа', 'work_list'),
-          Markup.button.callback('Выплата', 'work_payment'),
+          Markup.button.callback('📊 Задачи', Actions.TASK_LIST),
+          Markup.button.callback('➕', Actions.TASK_ADD),
+        ],
+        [
+          Markup.button.callback('📊 Работа', Actions.WORK_LIST),
+          Markup.button.callback('➕', Actions.WORK_ADD),
+        ],
+        [Markup.button.callback('➕ Выплата', Actions.WORK_PAYMENT)],
+        [
+          Markup.button.callback(
+            '📑 Компоненты-задачи',
+            Actions.TASK_COMPONENT_LINK_LIST,
+          ),
+          Markup.button.callback('Связать', Actions.TASK_COMPONENT_LINK_ADD),
         ],
         [this.menuButton],
       ]),
     );
   }
 
-  @Action('add_work')
+  @Action(Actions.WORK_ADD)
   async onAddWork(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.WORK_ADD));
   }
 
-  @Action('add_task')
+  @Action(Actions.TASK_ADD)
   async onAddTask(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.ADD_TASK));
   }
 
-  @Action('work_list')
+  @Action(Actions.WORK_LIST)
   async onWorkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORK_LIST));
@@ -45,12 +65,26 @@ export class WorksScene extends BaseScene {
     }
   }
 
-  @Action('work_payment')
+  @Action(Actions.WORK_PAYMENT)
   async onWorkPayment(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(WIZARDS.WORK_PAYMENT));
     } catch (e) {
       await sendMessage(ctx, e.message);
     }
+  }
+
+  @Action(Actions.TASK_COMPONENT_LINK_LIST)
+  async taskComponentLinkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await handleButtonPress(ctx, () =>
+      ctx.scene.enter(SCENES.TASK_COMPONENT_LINK_LIST),
+    );
+  }
+
+  @Action(Actions.TASK_COMPONENT_LINK_ADD)
+  async taskComponentLinkAdd(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    await handleButtonPress(ctx, () =>
+      ctx.scene.enter(WIZARDS.TASK_COMPONENT_LINK_ADD),
+    );
   }
 }

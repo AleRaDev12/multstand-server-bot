@@ -2,7 +2,7 @@ import {
   AdditionalWizardSelections,
   CustomWizardContext,
   WizardStepType,
-} from '../../../shared/interfaces';
+} from '../../../shared/types';
 import { PartIn } from './part-in.entity';
 import { PartInAddWizard } from './part-in-add.wizard';
 import { Transaction } from '../../money/transaction/transaction.entity';

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Account } from './account.entity';
 import { Transaction } from '../transaction/transaction.entity';
 import { TransactionService } from '../transaction/transaction.service';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 
 @Injectable()
 export class AccountService {

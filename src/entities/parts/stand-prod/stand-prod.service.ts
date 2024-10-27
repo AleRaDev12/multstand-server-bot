@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StandProd } from './stand-prod.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 import { PartOut } from '../part-out/part-out.entity';
 import { WorkService } from '../../works/work/work.service';
 import { StandOrder } from '../../orders/stand-order/stand-order.entity';

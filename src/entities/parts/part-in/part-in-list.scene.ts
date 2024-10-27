@@ -1,13 +1,11 @@
-import { Scene, SceneEnter } from 'nestjs-telegraf';
+import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SCENES } from '../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { handleButtonPress } from '../../../shared/helpers';
 import { PartInService } from './part-in.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { UserService } from '../../user/user.service';
-
-import { SceneAuthContext } from '../../../shared/interfaces';
-import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
+import { CustomSceneContext } from '../../../shared/types';
 import { sendMessage } from '../../../shared/sendMessages';
 
 @Scene(SCENES.PART_IN_LIST)
@@ -21,8 +19,8 @@ export class PartInListScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
-    const userRole = ctx.userRole;
+  async onSceneEnter(@Ctx() ctx: CustomSceneContext): Promise<void> {
+    const userRole = ctx.session.userRole;
 
     const partsInList = await this.service.getFormattedList(userRole);
     if (!partsInList) {

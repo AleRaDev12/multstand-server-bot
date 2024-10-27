@@ -1,8 +1,8 @@
 import { differenceInDays, format } from 'date-fns';
 import { formatLabels } from '../../../shared/helpers';
 import { Order } from './order.entity';
-import { EntityLabels, LabelsType } from '../../base.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { EntityLabels, LabelType } from '../../base.entity';
+import { UserRole } from '../../../shared/types';
 import { filter } from 'rxjs';
 
 const labels: EntityLabels<Order, string> = {
@@ -70,7 +70,7 @@ export function generateOrderDeadline(order: Order): string[] {
 export function formatOrder(
   order: Order,
   userRole: UserRole,
-  labelType: LabelsType,
+  labelType: LabelType,
 ): string {
   const error = checkDeadlineConflict(order);
   if (error) return error;

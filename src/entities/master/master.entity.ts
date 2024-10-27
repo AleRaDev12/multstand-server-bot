@@ -1,8 +1,8 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../nullable-column.decorator';
-import { BaseEntity, LabelsType } from '../base.entity';
+import { BaseEntity, LabelType } from '../base.entity';
 import { User } from '../user/user.entity';
-import { UserRole } from '../../shared/interfaces';
+import { UserRole } from '../../shared/types';
 
 @Entity()
 export class Master extends BaseEntity {
@@ -28,7 +28,7 @@ export class Master extends BaseEntity {
   })
   paymentCoefficient: number;
 
-  public format(userRole: UserRole, labelType?: LabelsType): string {
+  public format(userRole: UserRole, labelType?: LabelType): string {
     return `Not implemented yet for ${this.constructor.name}`;
   }
 }

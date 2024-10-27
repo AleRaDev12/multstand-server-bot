@@ -1,9 +1,9 @@
-import { BaseEntity, LabelsType } from '../../base.entity';
+import { BaseEntity, LabelType } from '../../base.entity';
 import { Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { formatComponent } from './component-formatting';
-import { UserRole } from '../../../shared/interfaces';
-import { Task } from '../../works/tasks/task.entity';
+import { UserRole } from '../../../shared/types';
+import { Task } from '../../works/task/task.entity';
 
 @Entity()
 export class Component extends BaseEntity {
@@ -27,7 +27,7 @@ export class Component extends BaseEntity {
     id: 'id компонента',
   };
 
-  public format(userRole: UserRole, labelType: LabelsType = 'short') {
+  public format(userRole: UserRole, labelType: LabelType = 'short') {
     return formatComponent(this, userRole, labelType);
   }
 

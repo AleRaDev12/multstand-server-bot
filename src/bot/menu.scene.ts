@@ -5,11 +5,10 @@ import { handleButtonPress } from '../shared/helpers';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
-import { CtxAuth } from './decorators/ctx-auth.decorator';
-import { SceneAuthContext } from '../shared/interfaces';
 import { sendMessage, sendMessages } from '../shared/sendMessages';
 import { WorkService } from '../entities/works/work/work.service';
 import { StandProdService } from '../entities/parts/stand-prod/stand-prod.service';
+import { CustomSceneContext } from '../shared/types';
 
 enum Actions {
   CLIENT = 'client',
@@ -42,8 +41,8 @@ export class MenuScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
-    const role = ctx.userRole;
+  async onSceneEnter(@Ctx() ctx: CustomSceneContext): Promise<void> {
+    const role = ctx.session.userRole;
 
     if (['manager', 'master'].includes(role)) {
       await sendMessage(ctx, 'Меню:', MENU[role]);
@@ -113,7 +112,7 @@ export class MenuScene {
   }
 
   @Action(Actions.WORK_BALANCE)
-  async onWorkBalance(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+  async onWorkBalance(@Ctx() ctx: CustomSceneContext): Promise<void> {
     const user = await this.userService.findByTelegramId(ctx.from.id);
     const userId = user.id;
     const earnings = await this.workService.calculateEarnings(userId);
@@ -126,12 +125,12 @@ export class MenuScene {
   }
 
   @Action(Actions.WORK_LIST_BY_STANDS)
-  async onWorkListByStands(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+  async onWorkListByStands(@Ctx() ctx: CustomSceneContext): Promise<void> {
     const user = await this.userService.findByTelegramId(ctx.from.id);
     const standsProdStat =
       await this.standProdService.getStandProdsWithWorksByMaster(
         user.id,
-        ctx.userRole,
+        ctx.session.userRole,
       );
 
     await sendMessages(ctx, standsProdStat);

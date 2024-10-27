@@ -1,7 +1,4 @@
-import {
-  CustomWizardContext,
-  WizardStepType,
-} from '../../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../../shared/types';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from './component.entity';
 import { sendMessage } from '../../../shared/sendMessages';

@@ -7,7 +7,7 @@ import { UserModule } from './entities/user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { SceneRoleGuard } from './bot/guards/scene-role.guard';
 import { sessionMiddleware } from './bot/middleware/session.middleware';
-import { Task } from './entities/works/tasks/task.entity';
+import { Task } from './entities/works/task/task.entity';
 import { Component } from './entities/parts/component/component.entity';
 
 @Module({

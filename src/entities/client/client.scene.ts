@@ -5,14 +5,13 @@ import { BaseScene } from '../../shared/base.scene';
 import { handleButtonPress } from '../../shared/helpers';
 import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { sendMessage } from '../../shared/sendMessages';
-import { CtxAuth } from '../../bot/decorators/ctx-auth.decorator';
-import { SceneAuthContext } from '../../shared/interfaces';
+import { CustomSceneContext } from '../../shared/types';
 
 @Scene(SCENES.CLIENT)
 @SceneRoles('manager')
 export class ClientScene extends BaseScene {
   @SceneEnter()
-  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+  async onSceneEnter(@Ctx() ctx: CustomSceneContext): Promise<void> {
     await sendMessage(
       ctx,
       'Клиенты:',

@@ -1,4 +1,4 @@
-import { CustomWizardContext, WizardStepTypeN } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepTypeN } from '../../shared/types';
 import { Client } from './client.entity';
 import { ClientAddWizard } from './client-add.wizard';
 import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';

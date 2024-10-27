@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderService } from '../../orders/order/order.service';
 import { Transaction } from './transaction.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 
 @Injectable()
 export class TransactionService {

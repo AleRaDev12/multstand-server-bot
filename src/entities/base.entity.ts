@@ -1,17 +1,17 @@
-import { UserRole } from '../shared/interfaces';
+import { UserRole } from '../shared/types';
 
 export abstract class BaseEntity {
   public static entityName: string;
   public static nullable: { [key: string]: boolean };
 
-  abstract format(userRole: UserRole, labelType?: LabelsType): string;
+  abstract format(userRole: UserRole, labelType?: LabelType): string;
 }
 
 export type EntityFieldsMap<T, P> = {
   [K in keyof T]?: P;
 };
 
-export type LabelsType = 'full' | 'short' | 'line';
+export type LabelType = 'full' | 'short' | 'line';
 
 type RoleLabels<T, P> = {
   full: EntityFieldsMap<T, P>;

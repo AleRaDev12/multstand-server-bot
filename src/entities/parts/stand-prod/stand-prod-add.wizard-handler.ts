@@ -2,7 +2,7 @@ import {
   AdditionalWizardSelections,
   CustomWizardContext,
   WizardStepType,
-} from '../../../shared/interfaces';
+} from '../../../shared/types';
 import { StandProd } from './stand-prod.entity';
 import { StandProdAddWizard } from './stand-prod-add.wizard';
 import { getMessage } from '../../../shared/helpers';
@@ -71,7 +71,7 @@ async function handleSpecificRequest(
       const standsProdList = await this.standOrderService.findAll();
       const formattedList = await this.standOrderService.formatList(
         standsProdList,
-        ctx.userRole,
+        ctx.session.userRole,
       );
 
       await replyWithCancelButton(

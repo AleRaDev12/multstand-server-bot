@@ -1,8 +1,8 @@
 import { Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity, EntityFieldsMap, LabelsType } from '../../base.entity';
+import { BaseEntity, EntityFieldsMap, LabelType } from '../../base.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { Transaction } from '../transaction/transaction.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 
 @Entity()
 export class Account extends BaseEntity {
@@ -20,7 +20,7 @@ export class Account extends BaseEntity {
     id: 'id счёта',
   };
 
-  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+  public format(userRole: UserRole, labelType: LabelType = 'short'): string {
     const { name, description, isReal } = this;
     return `${name} ${description ? `(${description})` : ''} ${!isReal ? ' (вирт)' : ''}`;
   }

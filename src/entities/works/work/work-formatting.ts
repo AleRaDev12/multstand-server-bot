@@ -1,7 +1,7 @@
 import { formatLabels } from '../../../shared/helpers';
 import { Work } from './work.entity';
-import { EntityLabels, LabelsType } from '../../base.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { EntityLabels, LabelType } from '../../base.entity';
+import { UserRole } from '../../../shared/types';
 
 const labels: EntityLabels<Work, string> = {
   manager: {
@@ -40,7 +40,7 @@ const labels: EntityLabels<Work, string> = {
 export function formatWork(
   work: Work,
   userRole: UserRole,
-  labelType: LabelsType,
+  labelType: LabelType,
 ): string {
   const { cost, count, paymentCoefficient, task } = work;
 

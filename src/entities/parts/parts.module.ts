@@ -10,24 +10,16 @@ import { PartOut } from './part-out/part-out.entity';
 import { PartsService } from './parts.service';
 import { Component } from './component/component.entity';
 import { PartsScene } from './parts.scene';
-import { TaskComponentLinkWizard } from './task-component-link.wizard';
-import { TaskModule } from '../works/tasks/task.module';
 
 @Module({
   imports: [
     ComponentModule,
     PartInModule,
     forwardRef(() => PartOutModule), // TODO: *-* remake this after to use without forwardRefer
-    TaskModule,
     StandProdModule,
     TypeOrmModule.forFeature([Component, PartIn, PartOut]),
   ],
-  providers: [
-    PartsScene,
-    PartsRemainingListScene,
-    PartsService,
-    TaskComponentLinkWizard,
-  ],
+  providers: [PartsScene, PartsRemainingListScene, PartsService],
   exports: [PartsService],
 })
 export class PartsModule {}

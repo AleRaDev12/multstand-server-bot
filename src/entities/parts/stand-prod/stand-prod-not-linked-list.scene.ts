@@ -1,11 +1,10 @@
-import { Scene, SceneEnter } from 'nestjs-telegraf';
+import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { Inject } from '@nestjs/common';
 import { StandProdService } from './stand-prod.service';
 import { handleButtonPress } from '../../../shared/helpers';
 import { SCENES } from '../../../shared/scenes-wizards';
-import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
-import { SceneAuthContext } from '../../../shared/interfaces';
+import { CustomSceneContext } from '../../../shared/types';
 import { sendMessage } from '../../../shared/sendMessages';
 
 @Scene(SCENES.STAND_PROD_NOT_LINKED_LIST)
@@ -17,7 +16,7 @@ export class StandProdNotLinkedListScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+  async onSceneEnter(@Ctx() ctx: CustomSceneContext): Promise<void> {
     const list = await this.service.findNotLinked();
 
     if (!list || list.length === 0) {
@@ -34,7 +33,7 @@ export class StandProdNotLinkedListScene {
     }
 
     await ctx.scene.leave();
-    const userRole = ctx.userRole;
+    const userRole = ctx.session.userRole;
 
     switch (userRole) {
       case 'manager':

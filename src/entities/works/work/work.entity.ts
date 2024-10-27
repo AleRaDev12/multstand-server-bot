@@ -1,10 +1,10 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity, LabelsType } from '../../base.entity';
-import { Task } from '../tasks/task.entity';
+import { BaseEntity, LabelType } from '../../base.entity';
+import { Task } from '../task/task.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { Master } from '../../master/master.entity';
 import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 import { formatWork } from './work-formatting';
 
 @Entity()
@@ -76,7 +76,7 @@ export class Work extends BaseEntity {
   @NullableColumn({ type: 'text' })
   description: string;
 
-  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+  public format(userRole: UserRole, labelType: LabelType = 'short'): string {
     return formatWork(this, userRole, labelType);
   }
 }

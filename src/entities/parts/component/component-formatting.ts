@@ -1,6 +1,6 @@
 import { formatLabels } from '../../../shared/helpers';
-import { EntityLabels, LabelsType } from '../../base.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { EntityLabels, LabelType } from '../../base.entity';
+import { UserRole } from '../../../shared/types';
 import { Component } from './component.entity';
 
 const labels: EntityLabels<Component, string> = {
@@ -28,7 +28,7 @@ const labels: EntityLabels<Component, string> = {
 export function formatComponent(
   component: Component,
   userRole: UserRole,
-  labelType: LabelsType,
+  labelType: LabelType,
 ): string {
   try {
     if (labelType === 'line' && userRole === 'manager') {

@@ -18,4 +18,4 @@ import { ClientListScene } from './client-list.scene';
   ],
   exports: [ClientService],
 })
-export class ClientsModule {}
+export class ClientModule {}

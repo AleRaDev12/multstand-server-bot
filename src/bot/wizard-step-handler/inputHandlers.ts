@@ -1,4 +1,4 @@
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext } from '../../shared/types';
 import { getMessage } from '../../shared/helpers';
 import { replyWithCancelButton } from './utils';
 

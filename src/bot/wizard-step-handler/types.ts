@@ -1,4 +1,4 @@
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/types';
 import { BaseEntity } from '../../entities/base.entity';
 
 // types.ts

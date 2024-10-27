@@ -1,4 +1,4 @@
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/types';
 import { BaseEntity } from '../../entities/base.entity';
 import { sendMessage } from '../../shared/sendMessages';
 import {
@@ -110,7 +110,10 @@ export function wizardStepHandler<T>(
           if ('initState' in options) {
             state = (options as CustomWizardHandlerOptions<T>).initState();
             ctx.wizard.state.wizardState = state;
-            console.log('*-* ctx.wizard.state.wizardState ctx', ctx.userRole);
+            console.log(
+              '*-* ctx.wizard.state.wizardState ctx',
+              ctx.session.userRole,
+            );
           } else {
             const entityOptions = options as
               | UnifiedWizardHandlerOptions<any>

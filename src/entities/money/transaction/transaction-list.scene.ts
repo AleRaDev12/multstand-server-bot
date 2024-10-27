@@ -1,11 +1,10 @@
-import { Scene, SceneEnter } from 'nestjs-telegraf';
+import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { SCENES } from '../../../shared/scenes-wizards';
-import { SceneAuthContext } from '../../../shared/interfaces';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
-import { CtxAuth } from '../../../bot/decorators/ctx-auth.decorator';
 import { sendMessage } from '../../../shared/sendMessages';
+import { CustomSceneContext } from '../../../shared/types';
 
 @Scene(SCENES.TRANSACTION_LIST)
 @SceneRoles('manager')
@@ -16,11 +15,11 @@ export class TransactionListScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+  async onSceneEnter(@Ctx() ctx: CustomSceneContext): Promise<void> {
     const transactions = await this.transactionService.findAll();
     const formattedList = await this.transactionService.formatList(
       transactions,
-      ctx.userRole,
+      ctx.session.userRole,
     );
 
     await sendMessage(ctx, 'Транзакции:');

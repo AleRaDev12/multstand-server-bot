@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { generateMessage } from '../../shared/helpers';
 import { UnifiedWizardHandlerOptions } from './types';
 import { BaseEntity } from '../../entities/base.entity';
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../shared/types';
 import { replyWithCancelButton } from './utils';
 import { sendMessage } from '../../shared/sendMessages';
 

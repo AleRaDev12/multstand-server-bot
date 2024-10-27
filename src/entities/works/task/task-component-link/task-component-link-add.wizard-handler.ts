@@ -1,11 +1,11 @@
-import { TaskComponentLinkWizard } from './task-component-link.wizard';
-import { Task } from '../works/tasks/task.entity';
-import { Component } from './component/component.entity';
-import { CustomWizardContext, WizardStepType } from '../../shared/interfaces';
-import { wizardStepHandler } from '../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../shared/sendMessages';
-import { replyWithCancelButton } from '../../bot/wizard-step-handler/utils';
-import { getMessage } from '../../shared/helpers';
+import { TaskComponentLinkAddWizard } from './task-component-link-add.wizard';
+import { Task } from '../task.entity';
+import { Component } from '../../../parts/component/component.entity';
+import { CustomWizardContext, WizardStepType } from '../../../../shared/types';
+import { wizardStepHandler } from '../../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../../shared/sendMessages';
+import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
+import { getMessage } from '../../../../shared/helpers';
 
 interface TaskComponentState {
   selectedTask: Task | null;
@@ -17,17 +17,17 @@ const steps: WizardStepType[] = [
   { message: 'Выберите компоненты (через запятую):', type: 'componentSelect' },
 ];
 
-export const TaskComponentLinkWizardHandler =
+export const TaskComponentLinkAddWizardHandler =
   wizardStepHandler<TaskComponentState>({
     initState: () => ({
       selectedTask: null,
       selectedComponents: [],
     }),
 
-    save: async function (this: TaskComponentLinkWizard, state) {
+    save: async function (this: TaskComponentLinkAddWizard, state) {
       const task = state.selectedTask;
       task.components = state.selectedComponents;
-      await this.taskService.updateTaskComponents(task);
+      await this.taskService.updateComponents(task);
     },
 
     print: async (ctx, state) => {
@@ -43,7 +43,7 @@ export const TaskComponentLinkWizardHandler =
     initialSteps: steps,
 
     async handleSpecificAnswer(
-      this: TaskComponentLinkWizard,
+      this: TaskComponentLinkAddWizard,
       ctx: CustomWizardContext,
       stepAnswer: WizardStepType,
       state: TaskComponentState,
@@ -59,13 +59,15 @@ export const TaskComponentLinkWizardHandler =
     },
 
     async handleSpecificRequest(
-      this: TaskComponentLinkWizard,
+      this: TaskComponentLinkAddWizard,
       ctx: CustomWizardContext,
       stepRequest: WizardStepType,
     ): Promise<boolean> {
       switch (stepRequest.type) {
         case 'taskSelect':
-          const tasksList = await this.taskService.getList();
+          const tasksList = await this.taskService.getFormattedList(
+            ctx.session.userRole,
+          );
           await replyWithCancelButton(
             ctx,
             `${stepRequest.message}\n${tasksList}`,
@@ -73,7 +75,10 @@ export const TaskComponentLinkWizardHandler =
           return true;
 
         case 'componentSelect':
-          console.log('*-* componentSelect ctx.userRole', ctx.session.userRole);
+          console.log(
+            '*-* componentSelect ctx.session.userRole',
+            ctx.session.userRole,
+          );
           const components = await this.componentService.findAll();
           await replyWithCancelButton(
             ctx,
@@ -88,7 +93,7 @@ export const TaskComponentLinkWizardHandler =
   });
 
 async function handleTaskSelect(
-  this: TaskComponentLinkWizard,
+  this: TaskComponentLinkAddWizard,
   ctx: CustomWizardContext,
   state: TaskComponentState,
 ): Promise<boolean> {
@@ -108,7 +113,7 @@ async function handleTaskSelect(
 }
 
 async function handleComponentSelect(
-  this: TaskComponentLinkWizard,
+  this: TaskComponentLinkAddWizard,
   ctx: CustomWizardContext,
   state: TaskComponentState,
 ): Promise<boolean> {

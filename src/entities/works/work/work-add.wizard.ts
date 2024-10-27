@@ -4,7 +4,7 @@ import { WIZARDS } from '../../../shared/scenes-wizards';
 import { ComponentService } from '../../parts/component/component.service';
 import { WorkService } from './work.service';
 import { WorkAddWizardHandler } from './work-add.wizard-handler';
-import { TaskService } from '../tasks/task.service';
+import { TaskService } from '../task/task.service';
 import { MasterService } from '../../master/master.service';
 import { SceneRoles } from '../../../bot/decorators/scene-roles.decorator';
 import { StandProdService } from '../../parts/stand-prod/stand-prod.service';

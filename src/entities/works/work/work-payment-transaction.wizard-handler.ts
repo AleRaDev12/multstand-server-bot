@@ -2,7 +2,7 @@ import {
   AdditionalWizardSelections,
   CustomWizardContext,
   WizardStepType,
-} from '../../../shared/interfaces';
+} from '../../../shared/types';
 import { getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';

@@ -2,11 +2,11 @@ import { Action, Ctx, InjectBot, Start, Update } from 'nestjs-telegraf';
 import { Scenes, Telegraf } from 'telegraf';
 import { SCENES } from '../shared/scenes-wizards';
 import { goToSceneOrWizard, handleButtonPress } from '../shared/helpers';
-import { CustomContext } from '../shared/interfaces';
 import { UserService } from '../entities/user/user.service';
 import { Inject, OnApplicationBootstrap } from '@nestjs/common';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { sendMessage } from '../shared/sendMessages';
+import { CustomSceneContext } from '../shared/types';
 
 export enum BotActions {
   CANCEL = 'cancel',
@@ -50,7 +50,7 @@ export class BotUpdate implements OnApplicationBootstrap {
   }
 
   @Start()
-  async onStart(@Ctx() ctx: CustomContext): Promise<void> {
+  async onStart(@Ctx() ctx: CustomSceneContext): Promise<void> {
     const user = await this.userService.findByTelegramId(ctx.from.id);
 
     if (!user) {

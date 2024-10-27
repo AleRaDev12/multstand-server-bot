@@ -1,17 +1,14 @@
-import {
-  CustomWizardContext,
-  WizardStepType,
-} from '../../../shared/interfaces';
-import { Task } from './task.entity';
+import { CustomWizardContext, WizardStepType } from '../../../../shared/types';
+import { Task } from '../task.entity';
 import {
   generateMessage,
   getMessage,
   getValueUnionByIndex,
-} from '../../../shared/helpers';
+} from '../../../../shared/helpers';
 import { TaskAddWizard } from './task-add.wizard';
-import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
-import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../../shared/sendMessages';
+import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
+import { wizardStepHandler } from '../../../../bot/wizard-step-handler/wizardStepHandler';
+import { sendMessage } from '../../../../shared/sendMessages';
 
 const steps: WizardStepType[] = [
   { message: 'Категория задачи:', field: 'category', type: 'string' },

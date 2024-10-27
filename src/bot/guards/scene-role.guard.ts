@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { UserService } from '../../entities/user/user.service';
 import { TelegrafExecutionContext } from 'nestjs-telegraf';
 import { SceneContext, SceneSessionData } from 'telegraf/scenes';
-import { UserRole } from '../../shared/interfaces';
+import { UserRole } from '../../shared/types';
 import { SCENES } from '../../shared/scenes-wizards';
 import { sendMessage } from '../../shared/sendMessages';
 

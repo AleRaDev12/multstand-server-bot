@@ -1,4 +1,4 @@
-import { BaseEntity, EntityFieldsMap, LabelsType } from '../../base.entity';
+import { BaseEntity, EntityFieldsMap, LabelType } from '../../base.entity';
 import { Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { fromValue, toKey } from '../../../shared/helpers';
@@ -14,7 +14,7 @@ import {
 import { Order } from '../order/order.entity';
 import { StandOrderStatus, StandOrderStatusType } from './stand-order-types';
 import { formatStandOrder } from './stand-order-formatting';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
 
 @Entity()
@@ -132,7 +132,7 @@ export class StandOrder extends BaseEntity {
     description: true,
   };
 
-  public format(userRole: UserRole, labelType: LabelsType = 'short'): string {
+  public format(userRole: UserRole, labelType: LabelType = 'short'): string {
     return formatStandOrder(this, userRole, labelType);
   }
 }

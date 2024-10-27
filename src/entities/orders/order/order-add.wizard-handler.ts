@@ -1,7 +1,4 @@
-import {
-  CustomWizardContext,
-  WizardStepType,
-} from '../../../shared/interfaces';
+import { CustomWizardContext, WizardStepType } from '../../../shared/types';
 import { Order } from './order.entity';
 import { OrderAddWizard } from './order-add.wizard';
 import { getMessage } from '../../../shared/helpers';

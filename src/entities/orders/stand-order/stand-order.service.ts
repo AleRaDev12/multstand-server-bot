@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { StandOrder } from './stand-order.entity';
 import { StandOrderStatus, StandOrderStatusKeyType } from './stand-order-types';
 import { UserService } from '../../user/user.service';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 
 @Injectable()
 export class StandOrderService {

@@ -2,7 +2,7 @@ import {
   AdditionalWizardSelections,
   CustomWizardContext,
   WizardStepType,
-} from '../../../shared/interfaces';
+} from '../../../shared/types';
 import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
 import { getMessage } from '../../../shared/helpers';
@@ -92,7 +92,9 @@ async function handleSpecificRequest(
         ctx.wizard.state[entityName].master = master;
       }
 
-      const tasksList = await this.taskService.getList();
+      const tasksList = await this.taskService.getFormattedList(
+        ctx.session.userRole,
+      );
       await replyWithCancelButton(ctx, `${stepRequest.message}${tasksList}`);
       return true;
     }

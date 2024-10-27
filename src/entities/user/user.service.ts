@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserRole } from '../../shared/interfaces';
+import { UserRole } from '../../shared/types';
 import { MasterService } from '../master/master.service';
 
 @Injectable()

@@ -1,11 +1,10 @@
-import { Scene, SceneEnter } from 'nestjs-telegraf';
+import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { Inject } from '@nestjs/common';
 import { SCENES } from '../../../../shared/scenes-wizards';
 import { StandOrderService } from '../stand-order.service';
 import { handleButtonPress } from '../../../../shared/helpers';
 import { SceneRoles } from '../../../../bot/decorators/scene-roles.decorator';
-import { CtxAuth } from '../../../../bot/decorators/ctx-auth.decorator';
-import { SceneAuthContext } from '../../../../shared/interfaces';
+import { CustomSceneContext } from '../../../../shared/types';
 import { sendMessage } from '../../../../shared/sendMessages';
 
 @Scene(SCENES.STAND_ORDER_LIST)
@@ -17,13 +16,16 @@ export class StandOrderListScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+  async onSceneEnter(@Ctx() ctx: CustomSceneContext): Promise<void> {
     const list = await this.service.findAll();
     if (!list) {
       await sendMessage(ctx, 'Записей нет');
     }
 
-    const formattedList = await this.service.formatList(list, ctx.userRole);
+    const formattedList = await this.service.formatList(
+      list,
+      ctx.session.userRole,
+    );
 
     for (const standOrder of formattedList) {
       await sendMessage(ctx, standOrder);

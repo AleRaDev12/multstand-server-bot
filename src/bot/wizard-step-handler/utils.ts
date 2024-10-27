@@ -1,5 +1,5 @@
 import { Markup } from 'telegraf';
-import { CustomWizardContext } from '../../shared/interfaces';
+import { CustomWizardContext } from '../../shared/types';
 import { getMessage, getValueUnionByIndex } from '../../shared/helpers';
 import { BotActions } from '../bot.update';
 import { SceneContext } from 'telegraf/scenes';

@@ -1,12 +1,11 @@
 import { StandOrderService } from '../stand-order.service';
-import { Scene, SceneEnter } from 'nestjs-telegraf';
+import { Ctx, Scene, SceneEnter } from 'nestjs-telegraf';
 import { handleButtonPress } from '../../../../shared/helpers';
 import { SCENES } from '../../../../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { SceneRoles } from '../../../../bot/decorators/scene-roles.decorator';
 import { UserService } from '../../../user/user.service';
-import { CtxAuth } from '../../../../bot/decorators/ctx-auth.decorator';
-import { SceneAuthContext } from '../../../../shared/interfaces';
+import { CustomSceneContext } from '../../../../shared/types';
 import { sendMessage, sendMessages } from '../../../../shared/sendMessages';
 import { StandProdService } from '../../../parts/stand-prod/stand-prod.service';
 import { WorkService } from '../../../works/work/work.service';
@@ -28,7 +27,7 @@ export class StandOrderActiveListScene {
   ) {}
 
   @SceneEnter()
-  async onSceneEnter(@CtxAuth() ctx: SceneAuthContext): Promise<void> {
+  async onSceneEnter(@Ctx() ctx: CustomSceneContext): Promise<void> {
     const list = await this.standOrderService.findInProgress();
 
     if (!list || list.length === 0) {
@@ -42,11 +41,11 @@ export class StandOrderActiveListScene {
           continue;
         }
 
-        output += `${standOrder.format(ctx.userRole, 'line')}\n\n`;
+        output += `${standOrder.format(ctx.session.userRole, 'line')}\n\n`;
         output += `# Изделия / # заказа (на наклейку):\n📝 ${standOrder.standProd.length ? standOrder.standProd[0].id : '-'} / ${standOrder.id}\n\n`;
 
         if (standOrder.order) {
-          if (ctx.userRole === 'manager') {
+          if (ctx.session.userRole === 'manager') {
             output += `📅 Дата договора: ${format(standOrder.order.contractDate, 'yyyy-MM-dd')}\n`;
             if (standOrder.order.client) {
               const client = standOrder.order.client;
@@ -66,7 +65,7 @@ export class StandOrderActiveListScene {
 
         output += '\n🛠 Комплектация:\n';
         if (standOrder) {
-          output += standOrder.format(ctx.userRole, 'full');
+          output += standOrder.format(ctx.session.userRole, 'full');
           output += `\nСтоимость с доставкой: ${standOrder.cost + standOrder.deliveryCost}\n`;
           output += '\n';
         } else {
@@ -83,14 +82,14 @@ export class StandOrderActiveListScene {
           output += '\n🛠 Установленные комплектующие:\n';
           components.forEach((comp) => {
             output += `- ${comp.componentName} (${comp.totalCount}шт)`;
-            if (ctx.userRole === 'manager') {
+            if (ctx.session.userRole === 'manager') {
               const componentCost = comp.unitCost * comp.totalCount;
               output += ` - ${componentCost.toFixed(2)} ₽`;
               totalComponentsCost += componentCost;
             }
             output += '\n';
           });
-          if (ctx.userRole === 'manager') {
+          if (ctx.session.userRole === 'manager') {
             output += `Себестоимость комплектующих: ${totalComponentsCost.toFixed(2)} ₽\n`;
           }
           output += '\n';
@@ -111,7 +110,7 @@ export class StandOrderActiveListScene {
                 acc[taskName] = { count: 0, cost: 0 };
               }
               acc[taskName].count += work.count;
-              if (ctx.userRole === 'manager') {
+              if (ctx.session.userRole === 'manager') {
                 const workCost =
                   work.cost * work.count * work.paymentCoefficient;
                 acc[taskName].cost += workCost;
@@ -125,19 +124,19 @@ export class StandOrderActiveListScene {
           // Выводим объединенные работы
           Object.entries(worksByTask).forEach(([taskName, { count, cost }]) => {
             output += `- ${taskName} (${count}шт)`;
-            if (ctx.userRole === 'manager') {
+            if (ctx.session.userRole === 'manager') {
               output += ` - ${cost.toFixed(2)} ₽`;
             }
             output += '\n';
           });
 
-          if (ctx.userRole === 'manager') {
+          if (ctx.session.userRole === 'manager') {
             output += `Себестоимость работ: ${totalWorkCost.toFixed(2)} ₽\n`;
           }
           output += '\n';
         }
 
-        if (ctx.userRole === 'manager') {
+        if (ctx.session.userRole === 'manager') {
           const totalCost = totalComponentsCost + totalWorkCost;
           output += `💰 Себестоимость всего изделия: ${totalCost.toFixed(2)} ₽\n`;
         }
@@ -148,7 +147,7 @@ export class StandOrderActiveListScene {
     }
 
     await ctx.scene.leave();
-    const userRole = ctx.userRole;
+    const userRole = ctx.session.userRole;
     switch (userRole) {
       case 'manager':
         await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.ORDERS));

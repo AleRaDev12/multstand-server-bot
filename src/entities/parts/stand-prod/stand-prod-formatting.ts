@@ -1,6 +1,6 @@
-import { EntityLabels, LabelsType } from '../../base.entity';
+import { EntityLabels, LabelType } from '../../base.entity';
 import { StandProd } from './stand-prod.entity';
-import { UserRole } from '../../../shared/interfaces';
+import { UserRole } from '../../../shared/types';
 import { formatLabels } from '../../../shared/helpers';
 
 const labels: EntityLabels<StandProd, string> = {
@@ -29,7 +29,7 @@ const labels: EntityLabels<StandProd, string> = {
 export function formatStandProd(
   standProd: StandProd,
   userRole: UserRole,
-  labelType: LabelsType,
+  labelType: LabelType,
 ): string {
   return formatLabels(standProd, labels[userRole ?? 'master'][labelType]);
 }
