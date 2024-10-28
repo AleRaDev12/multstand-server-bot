@@ -50,7 +50,7 @@ ${i + 1}. ${item.count} standProd: ${item.standProd.description}`,
 
   async findAllByUserId(userId: number): Promise<Work[]> {
     return this.repository.find({
-      where: { master: { id: userId } },
+      where: { master: { user: { id: userId } } },
       relations: ['task', 'standProd', 'standProd.standOrder'],
     });
   }
