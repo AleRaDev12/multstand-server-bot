@@ -87,7 +87,7 @@ export const TaskComponentLinkAddWizardHandler =
           return true;
 
         default:
-          return true;
+          return undefined;
       }
     },
   });

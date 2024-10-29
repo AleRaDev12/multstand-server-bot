@@ -90,8 +90,6 @@ async function handleSpecificRequest(
     return true;
   }
 
-  // Для остальных типов возвращаем undefined,
-  // чтобы сработал handleStandardStepRequest
   return undefined;
 }
 

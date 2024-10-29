@@ -120,7 +120,7 @@ async function handleSpecificRequest(
       return true;
     }
     default:
-      return false;
+      return undefined;
   }
 }
 

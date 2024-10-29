@@ -73,12 +73,6 @@ async function handleStandardStepRequest(
   }
 }
 
-function isEntityOptions<T>(
-  options: EntityWizardHandlerOptions<any> | CustomWizardHandlerOptions<T>,
-): options is EntityWizardHandlerOptions<BaseEntity> {
-  return 'getEntity' in options && 'setEntity' in options;
-}
-
 export function wizardStepHandler<T extends BaseEntity, E = object>(
   options: UnifiedWizardHandlerOptions<T, E>,
 ): any;

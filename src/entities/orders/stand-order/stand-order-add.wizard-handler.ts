@@ -152,9 +152,10 @@ async function handleSpecificRequest(
       );
       return true;
     }
-  }
 
-  if (stepRequest.type !== orderSelectType) return false;
+    default:
+      return undefined;
+  }
 }
 
 async function handleSpecificAnswer(

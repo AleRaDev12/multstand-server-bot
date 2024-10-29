@@ -89,7 +89,7 @@ async function handleSpecificRequest(
       return true;
     }
     default:
-      return true;
+      return undefined;
   }
 }
 

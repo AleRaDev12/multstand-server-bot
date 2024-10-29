@@ -82,6 +82,9 @@ async function handleSpecificRequest(
         `${stepRequest.message}\n${formattedPartsInList.map((item, index) => `№${index + 1}.\n${item}`).join('\n\n')}`,
       );
       return true;
+
+    default:
+      return undefined;
   }
 }
 
