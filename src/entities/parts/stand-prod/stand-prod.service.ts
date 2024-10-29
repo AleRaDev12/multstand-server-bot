@@ -33,6 +33,9 @@ export class StandProdService {
   async findAll(): Promise<StandProd[]> {
     return this.repository.find({
       relations: ['standOrder', 'work', 'standOrder.order'],
+      order: {
+        id: 'ASC',
+      },
     });
   }
 
@@ -42,6 +45,9 @@ export class StandProdService {
         isActive: true,
       },
       relations: ['standOrder', 'work', 'standOrder.order'],
+      order: {
+        id: 'ASC',
+      },
     });
   }
 
@@ -51,6 +57,9 @@ export class StandProdService {
         standOrder: null,
       },
       relations: ['standOrder', 'work', 'standOrder.order'],
+      order: {
+        id: 'ASC',
+      },
     });
   }
 
