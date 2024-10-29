@@ -35,8 +35,12 @@ export function formatTask(
   userRole: UserRole,
   labelType: LabelType = 'short',
 ): string {
-  if (userRole === 'manager' && labelType === 'line') {
+  if (labelType === 'line') {
     const taskInfo = `${task.shownName} | ${task.cost}₽ | ${task.duration}м`;
+
+    if (userRole !== 'manager') {
+      return taskInfo;
+    }
 
     const componentsInfo =
       task.components?.length > 0

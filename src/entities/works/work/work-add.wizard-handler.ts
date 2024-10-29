@@ -5,7 +5,7 @@ import {
 } from '../../../shared/types';
 import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
-import { getMessage } from '../../../shared/helpers';
+import { formatWithListIndexes, getMessage } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { sendMessage, sendMessages } from '../../../shared/sendMessages';
@@ -94,12 +94,11 @@ async function handleSpecificRequest(
 
       const tasksList = await this.taskService.getFormattedList(
         ctx.session.userRole,
+        'line',
       );
 
-      await replyWithCancelButton(
-        ctx,
-        `${stepRequest.message}${tasksList.map((taskString, index) => `№${index + 1}. ${taskString}\n`)}`,
-      );
+      await sendMessages(ctx, formatWithListIndexes(tasksList));
+      await replyWithCancelButton(ctx, `Выберите задачу из списка`);
       return true;
     }
 
