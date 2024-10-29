@@ -29,7 +29,11 @@ export class TaskComponentListScene {
       return;
     }
 
-    await sendMessages(ctx, formatWithListIndexes(tasksList));
+    console.log(
+      '*-* formatWithListIndexes(tasksList)',
+      JSON.stringify(formatWithListIndexes(tasksList), null, 2),
+    );
+    await sendMessages(ctx, formatWithListIndexes(tasksList), 'line');
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORKS));
   }

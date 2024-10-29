@@ -97,7 +97,7 @@ async function handleSpecificRequest(
         'line',
       );
 
-      await sendMessages(ctx, formatWithListIndexes(tasksList));
+      await sendMessages(ctx, formatWithListIndexes(tasksList), 'line');
       await replyWithCancelButton(ctx, `Выберите задачу из списка`);
       return true;
     }

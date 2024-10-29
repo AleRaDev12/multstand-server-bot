@@ -3,9 +3,9 @@ import { Task } from '../task.entity';
 import { Component } from '../../../parts/component/component.entity';
 import { CustomWizardContext, WizardStepType } from '../../../../shared/types';
 import { wizardStepHandler } from '../../../../bot/wizard-step-handler/wizardStepHandler';
-import { sendMessage } from '../../../../shared/sendMessages';
+import { sendMessage, sendMessages } from '../../../../shared/sendMessages';
 import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
-import { getMessage } from '../../../../shared/helpers';
+import { formatWithListIndexes, getMessage } from '../../../../shared/helpers';
 
 interface TaskComponentState {
   selectedTask: Task | null;
@@ -67,11 +67,12 @@ export const TaskComponentLinkAddWizardHandler =
         case 'taskSelect':
           const tasksList = await this.taskService.getFormattedList(
             ctx.session.userRole,
+            'line',
           );
-          await replyWithCancelButton(
-            ctx,
-            `${stepRequest.message}\n${tasksList}`,
-          );
+
+          await sendMessage(ctx, stepRequest.message);
+          await sendMessages(ctx, formatWithListIndexes(tasksList), 'line');
+          await replyWithCancelButton(ctx, 'Выберите задачу');
           return true;
 
         case 'componentSelect':

@@ -45,11 +45,11 @@ export function formatTask(
     const componentsInfo =
       task.components?.length > 0
         ? task.components
-            .map((component) => `   ${component.format(userRole, labelType)}`)
-            .join('\n')
+            .map((component) => `\n   ${component.format(userRole, labelType)}`)
+            .join('')
         : '';
 
-    return `${taskInfo}\n${componentsInfo}`;
+    return `${taskInfo}${componentsInfo}`;
   }
 
   return formatLabels(task, labels[userRole][labelType]);

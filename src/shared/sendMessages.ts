@@ -19,7 +19,13 @@ import { Tail } from 'rxjs';
 const RATE_LIMIT = 10; // messages per second
 const DELAY = 1000 / RATE_LIMIT; // delay in milliseconds
 const MAX_MESSAGE_LENGTH = 4096;
-const MESSAGES_DIVIDER = '\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n';
+
+type Dividers = 'full' | 'line' | 'nothing';
+const DIVIDERS: Record<Dividers, string> = {
+  line: '\n~~~~~~~~~~~~\n',
+  full: '\n\n~~~~~~~~~~~~\n\n',
+  nothing: '\n',
+};
 
 type Shorthand<FName extends Exclude<keyof Telegram, keyof ApiClient>> = Tail<
   Parameters<Telegram[FName]>
@@ -38,12 +44,15 @@ export async function sendMessage(
 export async function sendMessages(
   ctx: Scenes.SceneContext,
   messages: string[],
+  dividerType: Dividers = 'full',
 ): Promise<void> {
   let currentMessage = '';
 
+  const divider = DIVIDERS[dividerType];
+
   for (const message of messages) {
-    if (canAddMessageToCurrentBatch(currentMessage, message)) {
-      currentMessage = addMessageToBatch(currentMessage, message);
+    if (canAddMessageToCurrentBatch(currentMessage, message, divider)) {
+      currentMessage = addMessageToBatch(currentMessage, message, divider);
     } else {
       await sendCurrentBatchAndResetIfNeeded(ctx, currentMessage);
       currentMessage = await handleLongMessage(ctx, message);
@@ -56,15 +65,20 @@ export async function sendMessages(
 function canAddMessageToCurrentBatch(
   currentMessage: string,
   newMessage: string,
+  divider: string,
 ): boolean {
   return (
-    currentMessage.length + newMessage.length + MESSAGES_DIVIDER.length <=
+    currentMessage.length + newMessage.length + divider.length <=
     MAX_MESSAGE_LENGTH
   );
 }
 
-function addMessageToBatch(currentMessage: string, newMessage: string): string {
-  return currentMessage + (currentMessage ? MESSAGES_DIVIDER : '') + newMessage;
+function addMessageToBatch(
+  currentMessage: string,
+  newMessage: string,
+  divider: string,
+): string {
+  return currentMessage + (currentMessage ? divider : '') + newMessage;
 }
 
 async function sendCurrentBatchAndResetIfNeeded(
