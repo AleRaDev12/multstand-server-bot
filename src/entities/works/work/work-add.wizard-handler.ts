@@ -95,9 +95,10 @@ async function handleSpecificRequest(
       const tasksList = await this.taskService.getFormattedList(
         ctx.session.userRole,
       );
+
       await replyWithCancelButton(
         ctx,
-        `${stepRequest.message}${tasksList.map((taskString, index) => `#${index + 1}. ${taskString}`)}`,
+        `${stepRequest.message}${tasksList.map((taskString, index) => `№${index + 1}. ${taskString}\n`)}`,
       );
       return true;
     }
