@@ -21,7 +21,7 @@ const steps: WizardStepType[] = [
   { message: 'Количество:', field: 'count', type: 'number' },
   { message: 'Дата списания:', field: 'date', type: 'date' },
   {
-    message: 'Партия (-- для автоматического поиска и списания):',
+    message: 'Партия. Введите "-" для автоматического выбора.',
     type: partsInTypeName,
   },
 ];
@@ -116,7 +116,7 @@ async function handleSpecificAnswer(
       const date = ctx.wizard.state.partOut.date;
       const standProd = ctx.wizard.state.partOut.standProd;
 
-      if (message.text === '--') {
+      if (message.text === '-') {
         // Списать нужное количество с разных партий
         try {
           const totalRemaining =

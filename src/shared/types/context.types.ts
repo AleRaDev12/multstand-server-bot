@@ -1,7 +1,6 @@
 import { Scenes } from 'telegraf';
 import { WizardContext, WizardContextWizard } from 'telegraf/typings/scenes';
-import { CustomWizardSessionData, BaseSession } from './session.types';
-import { UserRole } from './common.types';
+import { BaseSession, CustomWizardSessionData } from './session.types';
 
 interface CustomWizardContextWizard<
   D extends CustomWizardSessionData = CustomWizardSessionData,
@@ -10,7 +9,6 @@ interface CustomWizardContextWizard<
   state: D & E;
 }
 
-// Контекст для обычных сцен
 export interface CustomSceneContext
   extends Omit<Scenes.SceneContext, 'session'> {
   session: BaseSession;
@@ -21,7 +19,6 @@ type WizardSessionOverrides = {
   session: BaseSession & CustomWizardSessionData;
 };
 
-// Контекст для визардов
 export interface CustomWizardContext<
   D extends CustomWizardSessionData = CustomWizardSessionData,
   E = object,
@@ -32,5 +29,4 @@ export interface CustomWizardContext<
     Scenes.SceneSessionData
   >;
   wizard: CustomWizardContextWizard<D, E>;
-  userRole: UserRole;
 }

@@ -10,9 +10,6 @@ import { CustomSceneContext } from '../shared/types';
 
 export enum BotActions {
   CANCEL = 'cancel',
-  DATE_TODAY = 'date-today',
-  DATE_YESTERDAY = 'date-yesterday',
-  DATE_BEFORE_YESTERDAY = 'date-before-yesterday',
 }
 
 @Update()
