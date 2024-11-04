@@ -5,7 +5,7 @@ import {
 } from '../../../shared/types';
 import { StandProd } from './stand-prod.entity';
 import { StandProdAddWizard } from './stand-prod-add.wizard';
-import { getMessage } from '../../../shared/helpers';
+import { getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { sendMessage } from '../../../shared/sendMessages';
@@ -41,9 +41,9 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case standOrderSelectType: {
-      const message = getMessage(ctx);
+      const message = getMessageText(ctx);
 
-      const selectedNumber = parseInt(message.text);
+      const selectedNumber = parseInt(message);
 
       const standsOrder = await this.standOrderService.findAll();
       const standOrder = standsOrder[selectedNumber - 1];

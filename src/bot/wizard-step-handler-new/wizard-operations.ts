@@ -2,9 +2,9 @@ import { WizardStep } from './types';
 import { parseValue } from './utils';
 import { WizardData } from './wizard-context-types';
 
-export function createWizardData<T>(
-  initialSteps: WizardStep<T>[],
-): WizardData<T> {
+export function createWizardData<T, W>(
+  initialSteps: WizardStep<T, W>[],
+): WizardData<T, W> {
   return {
     values: {} as T,
     meta: {
@@ -13,11 +13,10 @@ export function createWizardData<T>(
   };
 }
 
-export function validateAndParseStepInput<T>(
-  step: WizardStep<T>,
+export function validateAndParseStepInput<T, W>(
+  step: WizardStep<T, W>,
   text?: string,
 ): { isValid: boolean; value?: any; error?: string } {
-  // *-* не нужно, сюда ижём только из обычного
   if ('handler' in step) {
     return { isValid: true };
   }

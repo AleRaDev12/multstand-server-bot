@@ -1,7 +1,7 @@
 import { CustomWizardContext, WizardStepType } from '../../../shared/types';
 import { Order } from './order.entity';
 import { OrderAddWizard } from './order-add.wizard';
-import { getMessage } from '../../../shared/helpers';
+import { getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { sendMessage } from '../../../shared/sendMessages';
@@ -64,9 +64,9 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   console.log('*-* handleSpecificAnswer stepAnswer.type', stepAnswer.type);
   if (stepAnswer.type !== selectTypeName) return true;
-  const message = getMessage(ctx);
+  const message = getMessageText(ctx);
 
-  const selectedNumber = parseInt(message.text);
+  const selectedNumber = parseInt(message);
 
   const clients = await this.clientService.findAll();
   const client = clients[selectedNumber - 1];

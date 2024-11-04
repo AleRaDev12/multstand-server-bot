@@ -7,7 +7,7 @@ import {
 } from '../../../shared/types';
 import { StandOrder } from './stand-order.entity';
 import { StandOrderAddWizard } from './stand-order-add.wizard';
-import { getMessage, printUnion } from '../../../shared/helpers';
+import { getMessageText, printUnion } from '../../../shared/helpers';
 import { StandOrderStatus } from './stand-order-types';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import {
@@ -166,9 +166,9 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case orderSelectType: {
-      const message = getMessage(ctx);
+      const message = getMessageText(ctx);
 
-      const selectedNumber = parseInt(message.text);
+      const selectedNumber = parseInt(message);
 
       const standsOrder = await this.orderService.findAll();
       const standOrder = standsOrder[selectedNumber - 1];

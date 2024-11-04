@@ -5,7 +5,7 @@ import {
   WizardStepType,
 } from '../../../shared/types';
 import { PartOutAddWizard } from './part-out-add.wizard';
-import { getMessage } from '../../../shared/helpers';
+import { getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from '../component/component.entity';
@@ -93,14 +93,14 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
+  const message = getMessageText(ctx);
 
   switch (stepAnswer.type) {
     case standProdTypeName:
       return handleStandProdAnswer.call(this, ctx);
 
     case componentTypeName:
-      const selectedNumber = parseInt(message.text);
+      const selectedNumber = parseInt(message);
       const remainingList = await this.partsService.getRemainingList();
       const component: Component = remainingList[selectedNumber - 1]?.component;
       if (!component) {
@@ -116,7 +116,7 @@ async function handleSpecificAnswer(
       const date = ctx.wizard.state.partOut.date;
       const standProd = ctx.wizard.state.partOut.standProd;
 
-      if (message.text === '-') {
+      if (message === '-') {
         // Списать нужное количество с разных партий
         try {
           const totalRemaining =
@@ -146,7 +146,7 @@ async function handleSpecificAnswer(
         }
       } else {
         // Списать указанное количество из выбранных партий
-        const selectedNumbers = message.text
+        const selectedNumbers = message
           .split(',')
           .map((num) => parseInt(num.trim()))
           .filter((num) => !isNaN(num));
@@ -204,8 +204,8 @@ async function handleStandProdAnswer(
   this: PartOutAddWizard,
   ctx: CustomWizardContext,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
-  const selectedStandNumber = parseInt(message.text);
+  const message = getMessageText(ctx);
+  const selectedStandNumber = parseInt(message);
   const standProds = await this.standProdService.findAll();
   const standProd = standProds[selectedStandNumber - 1];
   if (!standProd) {

@@ -1,6 +1,6 @@
 import { Markup } from 'telegraf';
 import { CustomWizardContext } from '../../shared/types';
-import { getMessage, getValueUnionByIndex } from '../../shared/helpers';
+import { getMessageText, getValueUnionByIndex } from '../../shared/helpers';
 import { BotActions } from '../bot.update';
 import { SceneContext } from 'telegraf/scenes';
 import { sendMessage } from '../../shared/sendMessages';
@@ -24,8 +24,8 @@ export async function handleAnswerUnion<T>(
   union: object,
   entity: T,
 ) {
-  const message = getMessage(ctx);
-  const optionNumber = +message.text;
+  const message = getMessageText(ctx);
+  const optionNumber = +message;
   const unionKeys = Object.keys(union);
 
   if (optionNumber < 1 || optionNumber > unionKeys.length) {

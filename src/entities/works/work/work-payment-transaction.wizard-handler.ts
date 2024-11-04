@@ -3,7 +3,7 @@ import {
   CustomWizardContext,
   WizardStepType,
 } from '../../../shared/types';
-import { getMessage } from '../../../shared/helpers';
+import { getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { WorkPaymentTransactionWizard } from './work-payment-transaction.wizard';
@@ -84,9 +84,9 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case masterSelect: {
-      const message = getMessage(ctx);
+      const message = getMessageText(ctx);
 
-      const selectedNumber = parseInt(message.text);
+      const selectedNumber = parseInt(message);
 
       const masters = await this.masterService.findAll();
       const master = masters[selectedNumber - 1];
@@ -100,8 +100,8 @@ async function handleSpecificAnswer(
     }
 
     case accountSelect: {
-      const message = getMessage(ctx);
-      const selectedNumber = parseInt(message.text);
+      const message = getMessageText(ctx);
+      const selectedNumber = parseInt(message);
 
       const accounts = await this.accountService.findAll();
       const account = accounts[selectedNumber - 1];

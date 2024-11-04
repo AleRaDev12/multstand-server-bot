@@ -7,7 +7,7 @@ import {
   UnifiedWizardHandlerOptions,
 } from './types';
 import { SCENES } from '../../shared/scenes-wizards';
-import { getMessage } from '../../shared/helpers';
+import { getMessageText } from '../../shared/helpers';
 import { handleInputByType } from './handleInputByType';
 import { replyWithCancelButton } from './utils';
 
@@ -18,13 +18,13 @@ async function handleStandardFieldAnswer(
 ): Promise<boolean> {
   if (!stepAnswer.field) return true;
 
-  const message = getMessage(ctx);
-  if (!message?.text) {
+  const message = getMessageText(ctx);
+  if (!message) {
     await sendMessage(ctx, 'Invalid input. Please enter the value again.');
     return false;
   }
 
-  if (message.text === '-') {
+  if (message === '-') {
     const isNullable = (entity.constructor as typeof BaseEntity).nullable[
       stepAnswer.field
     ];
@@ -133,8 +133,8 @@ export function wizardStepHandler<T>(
         const steps = ctx.wizard.state.steps;
 
         // Handle back action
-        const isBackAction =
-          ctx.message && 'text' in ctx.message && ctx.message.text === '<';
+        const message = getMessageText(ctx);
+        const isBackAction = message === '<';
         if (isBackAction) {
           if (stepIndex === 2) {
             await sendMessage(ctx, 'Вы уже на первом шаге. Повторите ввод.');

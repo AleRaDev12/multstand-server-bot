@@ -4,7 +4,7 @@ import { SCENES } from '../shared/scenes-wizards';
 import { Inject } from '@nestjs/common';
 import { UserService } from '../entities/user/user.service';
 import { SceneRoles } from './decorators/scene-roles.decorator';
-import { getMessage } from '../shared/helpers';
+import { getMessageText } from '../shared/helpers';
 import { replyWithCancelButton } from './wizard-step-handler/utils';
 import { sendMessage } from '../shared/sendMessages';
 import { SceneContext } from 'telegraf/typings/scenes';
@@ -35,8 +35,8 @@ export class RegistrationUserScene {
 
   @On('text')
   async onRegister(@Ctx() ctx: Scenes.SceneContext) {
-    const message = getMessage(ctx);
-    const [numberString, name] = message.text
+    const message = getMessageText(ctx);
+    const [numberString, name] = message
       .split(',')
       .map((substring) => substring.trim());
     const selectedNumber = parseInt(numberString);

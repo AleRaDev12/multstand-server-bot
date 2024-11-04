@@ -1,5 +1,5 @@
 import { CustomWizardContext } from '../../shared/types';
-import { getMessage } from '../../shared/helpers';
+import { getMessageText } from '../../shared/helpers';
 import { replyWithCancelButton } from './utils';
 
 export async function handleNumberInput<T>(
@@ -7,8 +7,8 @@ export async function handleNumberInput<T>(
   field: string,
   entity: T,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
-  const number = parseFloat(message.text.replaceAll(',', '.'));
+  const message = getMessageText(ctx);
+  const number = parseFloat(message.replaceAll(',', '.'));
   if (!isNaN(number)) {
     entity[field] = number;
     return true;
@@ -22,8 +22,8 @@ export async function handleBooleanInput<T>(
   field: string,
   entity: T,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
-  const booleanValue = parseBooleanInput(message.text);
+  const message = getMessageText(ctx);
+  const booleanValue = parseBooleanInput(message);
 
   if (booleanValue === null) {
     await replyWithCancelButton(ctx, INCORRECT_ENTER_BOOLEAN_MESSAGE);
@@ -56,7 +56,7 @@ export async function handleDateInput<T>(
   field: string,
   entity: T,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
+  const message = getMessageText(ctx);
   if (ctx.wizard.state.selectedDate) {
     entity[field] = ctx.wizard.state.selectedDate;
     ctx.wizard.state.selectedDate = undefined;
@@ -66,10 +66,10 @@ export async function handleDateInput<T>(
   const now = new Date();
   let resultDate: Date | null = null;
 
-  if (/^\d{1,2}$/.test(message.text)) {
-    resultDate = handleShortDateInput(message.text, now);
+  if (/^\d{1,2}$/.test(message)) {
+    resultDate = handleShortDateInput(message, now);
   } else {
-    resultDate = handleFullDateInput(message.text);
+    resultDate = handleFullDateInput(message);
   }
 
   if (resultDate && resultDate.getTime() > 0) {

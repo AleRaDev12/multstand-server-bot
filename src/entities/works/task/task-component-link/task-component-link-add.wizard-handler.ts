@@ -5,7 +5,10 @@ import { CustomWizardContext, WizardStepType } from '../../../../shared/types';
 import { wizardStepHandler } from '../../../../bot/wizard-step-handler/wizardStepHandler';
 import { sendMessage, sendMessages } from '../../../../shared/sendMessages';
 import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
-import { formatWithListIndexes, getMessage } from '../../../../shared/helpers';
+import {
+  formatWithListIndexes,
+  getMessageText,
+} from '../../../../shared/helpers';
 
 interface TaskComponentState {
   selectedTask: Task | null;
@@ -98,8 +101,8 @@ async function handleTaskSelect(
   ctx: CustomWizardContext,
   state: TaskComponentState,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
-  const selectedNumber = parseInt(message.text);
+  const message = getMessageText(ctx);
+  const selectedNumber = parseInt(message);
 
   const tasks = await this.taskService.findAll();
   const task = tasks[selectedNumber - 1];
@@ -118,8 +121,8 @@ async function handleComponentSelect(
   ctx: CustomWizardContext,
   state: TaskComponentState,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
-  const selectedNumbers = message.text
+  const message = getMessageText(ctx);
+  const selectedNumbers = message
     .split(',')
     .map((num) => parseInt(num.trim()))
     .filter((num) => !isNaN(num));

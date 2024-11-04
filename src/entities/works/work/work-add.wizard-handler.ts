@@ -5,7 +5,7 @@ import {
 } from '../../../shared/types';
 import { WorkAddWizard } from './work-add.wizard';
 import { Work } from './work.entity';
-import { formatWithListIndexes, getMessage } from '../../../shared/helpers';
+import { formatWithListIndexes, getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { sendMessage, sendMessages } from '../../../shared/sendMessages';
@@ -142,9 +142,9 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case taskSelectType: {
-      const message = getMessage(ctx);
+      const message = getMessageText(ctx);
 
-      const selectedNumber = parseInt(message.text);
+      const selectedNumber = parseInt(message);
 
       const tasks = await this.taskService.findAll();
       const task = tasks[selectedNumber - 1];
@@ -170,9 +170,9 @@ async function handleSpecificAnswer(
     }
 
     case masterSelectType: {
-      const message = getMessage(ctx);
+      const message = getMessageText(ctx);
 
-      const selectedNumber = parseInt(message.text);
+      const selectedNumber = parseInt(message);
       if (Number.isNaN(selectedNumber)) {
         await replyWithCancelButton(ctx, 'Некорректный ввод. Повторите.');
         return false;
@@ -190,9 +190,9 @@ async function handleSpecificAnswer(
     }
 
     case standProdSelectType: {
-      const message = getMessage(ctx);
+      const message = getMessageText(ctx);
 
-      const selectedNumber = parseInt(message.text);
+      const selectedNumber = parseInt(message);
       if (Number.isNaN(selectedNumber)) {
         await replyWithCancelButton(ctx, 'Некорректный ввод. Повторите.');
         return false;

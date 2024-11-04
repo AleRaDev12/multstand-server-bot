@@ -3,24 +3,24 @@ import { WizardContext, WizardContextWizard } from 'telegraf/typings/scenes';
 import { BaseSession } from '../../shared/types';
 import { WizardStep } from './types';
 
-export type WizardData<T> = {
+export type WizardData<T, W> = {
   values: T;
   meta: {
-    steps: WizardStep<T>[];
+    steps: WizardStep<T, W>[];
   };
 };
 
-interface StepWizardState<T> {
-  data: WizardData<T>;
+interface StepWizardState<T, W> {
+  data: WizardData<T, W>;
 }
 
-interface StepWizardContextWizard<T>
+interface StepWizardContextWizard<T, W>
   extends WizardContextWizard<WizardContext> {
-  state: StepWizardState<T>;
+  state: StepWizardState<T, W>;
 }
 
-export interface StepWizardContext<T> extends Scenes.SceneContext {
-  scene: Scenes.SceneContextScene<StepWizardContext<T>>;
-  wizard: StepWizardContextWizard<T>;
+export interface StepWizardContext<T, W> extends Scenes.SceneContext {
+  scene: Scenes.SceneContextScene<StepWizardContext<T, W>>;
+  wizard: StepWizardContextWizard<T, W>;
   session: BaseSession;
 }

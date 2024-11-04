@@ -122,11 +122,11 @@ export const formatLabels = (
     .join('\n');
 };
 
-export const getMessage = (ctx: CustomWizardContext | Scenes.SceneContext) => {
-  // TODO: update types
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  return ctx.update?.message as { text?: string };
+export const getMessageText = (
+  ctx: CustomWizardContext | Scenes.SceneContext,
+): string | undefined => {
+  const message = ctx.message;
+  return message ? ('text' in message ? message.text : undefined) : undefined;
 };
 
 export function assertNever(x: never): never {

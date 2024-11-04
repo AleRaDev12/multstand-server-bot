@@ -5,7 +5,7 @@ import {
   WizardStepType,
 } from '../../../shared/types';
 import { AccountTransferWizard } from './account-transfer.wizard';
-import { getMessage } from '../../../shared/helpers';
+import { getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { sendMessage } from '../../../shared/sendMessages';
@@ -74,8 +74,8 @@ async function handleSpecificAnswer(
 ): Promise<boolean> {
   switch (stepAnswer.type) {
     case accountSelectType: {
-      const message = getMessage(ctx);
-      const selectedNumber = parseInt(message.text);
+      const message = getMessageText(ctx);
+      const selectedNumber = parseInt(message);
 
       const accounts = await this.service.findAll();
       const account = accounts[selectedNumber - 1];

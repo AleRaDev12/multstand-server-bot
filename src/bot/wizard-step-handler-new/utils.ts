@@ -1,9 +1,13 @@
-import { PathsToStringProps, PathValue, WIZARD_STEP_VALUE_TYPE } from './types';
+import {
+  PathsToStringPropsWithDepth,
+  PathValue,
+  WIZARD_STEP_VALUE_TYPE,
+} from './types';
 
 export function setValueByPath<T>(
   obj: T,
-  path: PathsToStringProps<T>,
-  value: PathValue<T, PathsToStringProps<T>>,
+  path: PathsToStringPropsWithDepth<T>,
+  value: PathValue<T, PathsToStringPropsWithDepth<T>>,
 ): void {
   const parts = path.split('.');
   let current: any = obj;

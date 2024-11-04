@@ -4,7 +4,7 @@ import {
   WizardStepType,
 } from '../../../shared/types';
 import { Transaction } from './transaction.entity';
-import { getMessage } from '../../../shared/helpers';
+import { getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { TransactionOrderAddWizard } from './transaction-order-add.wizard';
@@ -130,7 +130,7 @@ async function handleSpecificAnswer(
   stepAnswer: WizardStepType,
   entity: Transaction,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
+  const message = getMessageText(ctx);
 
   switch (stepAnswer.type) {
     case SELECT_TYPES.ORDER:
@@ -150,9 +150,9 @@ async function handleOrderSelect(
   this: TransactionOrderAddWizard,
   ctx: TransactionOrderContext,
   entity: Transaction,
-  message: { text: string },
+  message: string,
 ): Promise<boolean> {
-  const selectedNumber = parseInt(message.text);
+  const selectedNumber = parseInt(message);
   const orders = await this.orderService.findAll();
   const order = orders[selectedNumber - 1];
   if (!order) {
@@ -167,9 +167,9 @@ async function handleAccountSelect(
   this: TransactionOrderAddWizard,
   ctx: TransactionOrderContext,
   entity: Transaction,
-  message: { text: string },
+  message: string,
 ): Promise<boolean> {
-  const selectedNumber = parseInt(message.text);
+  const selectedNumber = parseInt(message);
   const accounts = await this.accountService.findAll();
   const account = accounts[selectedNumber - 1];
   if (!account) {
@@ -183,9 +183,9 @@ async function handleAccountSelect(
 async function handleTaxAccountSelect(
   this: TransactionOrderAddWizard,
   ctx: TransactionOrderContext,
-  message: { text: string },
+  message: string,
 ): Promise<boolean> {
-  const selectedNumber = parseInt(message.text);
+  const selectedNumber = parseInt(message);
   const accounts = await this.accountService.findAll();
   const account = accounts[selectedNumber - 1];
   if (!account) {
@@ -199,9 +199,9 @@ async function handleTaxAccountSelect(
 async function handleTransferTaxSelect(
   this: TransactionOrderAddWizard,
   ctx: TransactionOrderContext,
-  message: { text: string },
+  message: string,
 ): Promise<boolean> {
-  const booleanValue = parseBooleanInput(message.text);
+  const booleanValue = parseBooleanInput(message);
 
   if (booleanValue === null) {
     await replyWithCancelButton(ctx, INCORRECT_ENTER_BOOLEAN_MESSAGE);

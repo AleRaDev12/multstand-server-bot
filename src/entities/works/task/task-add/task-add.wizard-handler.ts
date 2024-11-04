@@ -2,7 +2,7 @@ import { CustomWizardContext, WizardStepType } from '../../../../shared/types';
 import { Task } from '../task.entity';
 import {
   generateMessage,
-  getMessage,
+  getMessageText,
   getValueUnionByIndex,
 } from '../../../../shared/helpers';
 import { TaskAddWizard } from './task-add.wizard';
@@ -47,17 +47,17 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
-  const message = getMessage(ctx);
+  const message = getMessageText(ctx);
 
   switch (stepAnswer.type) {
     case 'union':
       ctx.wizard.state.task[stepAnswer.field] = getValueUnionByIndex(
         stepAnswer.union,
-        +message.text - 1,
+        +message - 1,
       );
       break;
     case 'number':
-      const number = parseFloat(message.text);
+      const number = parseFloat(message);
       if (isNaN(number)) {
         await replyWithCancelButton(
           ctx,
@@ -68,10 +68,10 @@ async function handleSpecificAnswer(
       ctx.wizard.state.task[stepAnswer.field] = number;
       break;
     case 'string':
-      ctx.wizard.state.task[stepAnswer.field] = message.text;
+      ctx.wizard.state.task[stepAnswer.field] = message;
       break;
     case 'date':
-      const date = Date.parse(message.text);
+      const date = Date.parse(message);
       if (isNaN(date)) {
         await replyWithCancelButton(ctx, 'Введите корректную дату.');
         return false;

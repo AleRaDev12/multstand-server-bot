@@ -4,7 +4,7 @@ import { replyWithCancelButton } from './utils';
 import { handleInputByType } from './handleInputByType';
 import { SCENES } from '../../shared/scenes-wizards';
 import { BaseEntity } from '../../entities/base.entity';
-import { getMessage } from '../../shared/helpers';
+import { getMessageText } from '../../shared/helpers';
 
 type EntityOrRecord = BaseEntity | Record<string, any>;
 
@@ -18,9 +18,9 @@ export async function handleAnswer<T extends BaseEntity>(
   save: UnifiedWizardHandlerOptions<T>['save'],
   print: UnifiedWizardHandlerOptions<T>['print'],
 ): Promise<boolean> {
-  const message = getMessage(ctx);
+  const message = getMessageText(ctx);
 
-  if (!message?.text) {
+  if (!message) {
     await replyWithCancelButton(
       ctx,
       'Invalid input. Please enter the value again.',
@@ -28,7 +28,7 @@ export async function handleAnswer<T extends BaseEntity>(
     return false;
   }
 
-  if (message.text === '-' && entity instanceof BaseEntity) {
+  if (message === '-' && entity instanceof BaseEntity) {
     const isNullable = (entity.constructor as typeof BaseEntity).nullable[
       stepAnswer.field
     ];
@@ -42,7 +42,7 @@ export async function handleAnswer<T extends BaseEntity>(
     }
   }
 
-  if (message.text !== '-') {
+  if (message !== '-') {
     let targetEntity: EntityOrRecord;
 
     if (stepAnswer.linkedEntity === 'temp') {
