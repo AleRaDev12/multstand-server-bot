@@ -23,7 +23,7 @@ export class WorksScene extends BaseScene {
   async onSceneEnter(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     await sendMessage(
       ctx,
-      'Заказы:',
+      'Работы:',
       Markup.inlineKeyboard([
         [
           Markup.button.callback('📊 Задачи', Actions.TASK_LIST),
