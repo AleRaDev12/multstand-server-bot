@@ -101,7 +101,7 @@ async function handleFirstStep<T, W>(
     await config.beforeFirstStep(wizard, ctx);
   }
 
-  const firstStep = ctx.wizard.state.data.meta.steps[0];
+  const firstStep = getWizardSteps(ctx)[0];
   await ctx.reply(
     `Команды:\n${COMMAND_SYMBOLS.back} Ввернуться на предыдущий шаг\n${COMMAND_SYMBOLS.skip} Пропустить необязательное поле\n${COMMAND_SYMBOLS.cancel} Прервать`,
   );
@@ -137,7 +137,7 @@ async function handleValueAnswer<T, W>(
   wizard: W,
 ): Promise<boolean> {
   const processingAnswerStep = getProcessingAnswerStep(
-    ctx.wizard.state.data.meta.steps,
+    getWizardSteps(ctx),
     ctx.wizard.cursor,
   );
 
@@ -165,6 +165,23 @@ export function setFieldValue<T, W>(
   value: PathValue<T, PathsToStringPropsWithDepth<T>>,
 ): void {
   setValueByPath(ctx.wizard.state.data.values, field, value);
+}
+
+export function getFieldValue<T, W>(
+  ctx: StepWizardContext<T, W>,
+  field: PathsToStringPropsWithDepth<T>,
+): PathValue<T, PathsToStringPropsWithDepth<T>> | undefined {
+  const paths = field.split('.');
+  let value: any = ctx.wizard.state.data.values;
+
+  for (const path of paths) {
+    if (value === undefined || value === null) {
+      return undefined;
+    }
+    value = value[path];
+  }
+
+  return value as PathValue<T, PathsToStringPropsWithDepth<T>>;
 }
 
 const getTypeDescription = (type: WIZARD_STEP_VALUE_TYPE) => {
@@ -260,7 +277,7 @@ async function isCancellation<T, W>(
 
 export function isWizardCompleted<T, W>(ctx: StepWizardContext<T, W>): boolean {
   const cursor = ctx.wizard.cursor - 1;
-  const stepsLength = ctx.wizard.state.data.meta.steps.length;
+  const stepsLength = getWizardSteps(ctx).length;
 
   return cursor === stepsLength - 1;
 }
@@ -269,6 +286,10 @@ async function sendRequestNextStep<T, W>(
   ctx: StepWizardContext<T, W>,
   wizard: W,
 ) {
-  const step = ctx.wizard.state.data.meta.steps[ctx.wizard.cursor];
+  const step = getWizardSteps(ctx)[ctx.wizard.cursor];
   return await sendStepRequest(ctx, step, wizard);
+}
+
+export function getWizardSteps<T, W>(ctx: StepWizardContext<T, W>) {
+  return ctx.wizard.state.data.meta.steps;
 }

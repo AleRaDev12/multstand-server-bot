@@ -17,7 +17,7 @@ import {
 } from '../../../bot/wizard-step-handler-new/wizard-context-types';
 import { WizardStep } from '../../../bot/wizard-step-handler-new/types';
 
-type PartInData = {
+type Data = {
   partIn: {
     component: Component;
     dateOrder: Date;
@@ -30,24 +30,27 @@ type PartInData = {
   account: Account;
 };
 
-const steps: WizardStep<PartInData, PartInAddWizard>[] = [
-  { message: 'Комплектующее:', handler: componentHandler },
-  { message: 'Дата заказа:', field: 'partIn.dateOrder', type: 'date' },
+type Wizard = PartInAddWizard;
+type WizardContext = StepWizardContext<Data, Wizard>;
+
+const steps: WizardStep<Data, Wizard>[] = [
+  { message: 'Комплектующее', handler: componentHandler },
+  { message: 'Дата заказа', field: 'partIn.dateOrder', type: 'date' },
   {
-    message: 'Дата оплаты:',
+    message: 'Дата оплаты',
     field: 'transactionDate',
     type: 'date',
   },
-  { message: 'Дата получения:', field: 'partIn.dateArrival', type: 'date' },
-  { message: 'Стоимость партии:', field: 'partIn.amount', type: 'number' },
-  { message: 'Количество шт:', field: 'partIn.count', type: 'number' },
-  { message: 'Списано со счёта:', handler: accountHandler },
-  { message: 'Описание:', field: 'partIn.description', type: 'string' },
+  { message: 'Дата получения', field: 'partIn.dateArrival', type: 'date' },
+  { message: 'Стоимость партии', field: 'partIn.amount', type: 'number' },
+  { message: 'Количество шт', field: 'partIn.count', type: 'number' },
+  { message: 'Списано со счёта', handler: accountHandler },
+  { message: 'Описание', field: 'partIn.description', type: 'string' },
 ];
 
 async function componentHandler(
-  wizard: PartInAddWizard,
-  ctx: StepWizardContext<PartInData, PartInAddWizard>,
+  wizard: Wizard,
+  ctx: WizardContext,
   type: WizardStepCustomHandlerType,
 ) {
   if (type === 'request') {
@@ -73,8 +76,8 @@ async function componentHandler(
 }
 
 async function accountHandler(
-  wizard: PartInAddWizard,
-  ctx: StepWizardContext<PartInData, PartInAddWizard>,
+  wizard: Wizard,
+  ctx: WizardContext,
   type: WizardStepCustomHandlerType,
 ) {
   if (type === 'request') {
@@ -100,7 +103,7 @@ async function accountHandler(
 }
 
 function createPartInEntity(
-  data: WizardData<PartInData, PartInAddWizard>['values']['partIn'],
+  data: WizardData<Data, Wizard>['values']['partIn'],
 ): PartIn {
   const partInEntity = new PartIn();
   Object.assign(partInEntity, data);
@@ -126,15 +129,9 @@ function formatTransactionDescription(partIn: PartIn): string {
   return `Покупка комплектующего: ${partIn.component.name} в количестве ${partIn.count} на сумму ${partIn.amount}`;
 }
 
-export const PartInAddWizardHandler = wizardStepHandler<
-  PartInData,
-  PartInAddWizard
->({
+export const PartInAddWizardHandler = wizardStepHandler<Data, Wizard>({
   initialSteps: steps,
-  afterLastStep: async function (
-    wizard: PartInAddWizard,
-    ctx: StepWizardContext<PartInData, PartInAddWizard>,
-  ) {
+  afterLastStep: async function (wizard: Wizard, ctx: WizardContext) {
     const values = ctx.wizard.state.data.values;
 
     const partInEntity = createPartInEntity(values.partIn);

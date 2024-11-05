@@ -3,7 +3,7 @@ import { WorkService } from './work.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { forwardRef, Module } from '@nestjs/common';
 import { TaskModule } from '../task/task.module';
-import { WorkAddWizard } from './work-add.wizard';
+import { WorkAddWizard } from './word-add-wizard/work-add.wizard';
 import { ComponentModule } from '../../parts/component/component.module';
 import { MasterModule } from '../../master/master.module';
 import { StandProdModule } from '../../parts/stand-prod/stand-prod.module';

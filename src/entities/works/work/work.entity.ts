@@ -7,6 +7,17 @@ import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
 import { UserRole } from '../../../shared/types';
 import { formatWork } from './work-formatting';
 
+type Props = {
+  task?: Task;
+  master?: Master;
+  standProd?: StandProd;
+  date?: Date;
+  cost?: number;
+  count?: number;
+  paymentCoefficient?: number;
+  description?: string;
+};
+
 @Entity()
 export class Work extends BaseEntity {
   public static entityName = 'Work';
@@ -21,6 +32,22 @@ export class Work extends BaseEntity {
     paymentCoefficient: false,
     description: true,
   };
+
+  public constructor(props: Props = {}) {
+    super();
+
+    this.createdAt = new Date();
+
+    if (props.task) this.task = props.task;
+    if (props.master) this.master = props.master;
+    if (props.standProd) this.standProd = props.standProd;
+    if (props.date) this.date = props.date;
+    if (props.cost) this.cost = props.cost;
+    if (props.count) this.count = props.count;
+    if (props.paymentCoefficient)
+      this.paymentCoefficient = props.paymentCoefficient;
+    if (props.description) this.description = props.description;
+  }
 
   @PrimaryGeneratedColumn()
   id: number;
