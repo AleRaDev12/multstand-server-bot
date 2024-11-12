@@ -34,9 +34,15 @@ export function formatTask(
   task: Task,
   userRole: UserRole,
   labelType: LabelType = 'short',
+  paymentCoefficient: number,
 ): string {
   if (labelType === 'line') {
-    const taskInfo = `${task.shownName} | ${task.cost}₽ | ${task.duration}м`;
+    const payment = task.cost * paymentCoefficient;
+    const paymentFixed = Number.isInteger(payment)
+      ? payment
+      : payment.toFixed(2);
+
+    const taskInfo = `${task.shownName} | ${paymentFixed}₽ | ${task.duration}м`;
 
     if (userRole !== 'manager') {
       return taskInfo;

@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NullableColumn } from '../nullable-column.decorator';
 import { BaseEntity, LabelType } from '../base.entity';
 import { User } from '../user/user.entity';
@@ -14,7 +14,8 @@ export class Master extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
+  @OneToOne(() => User)
+  @JoinColumn()
   user: User;
 
   @NullableColumn({

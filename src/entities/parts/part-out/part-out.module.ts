@@ -14,7 +14,7 @@ import { UserModule } from '../../user/user.module';
   imports: [
     TypeOrmModule.forFeature([PartOut, PartIn]),
     ComponentModule,
-    StandProdModule,
+    forwardRef(() => StandProdModule),
     forwardRef(() => PartsModule), // TODO: *-* remake this after to use without forwardRef
     UserModule,
   ],

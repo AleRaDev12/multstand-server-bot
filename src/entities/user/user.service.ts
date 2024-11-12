@@ -51,15 +51,10 @@ export class UserService {
   }
 
   async findByTelegramId(telegramUserId: number): Promise<User> {
-    return this.repository.findOne({ where: { telegramUserId } });
-  }
-
-  async getUserIdByTelegramId(telegramUserId: number): Promise<number> {
-    const user = await this.repository.findOne({ where: { telegramUserId } });
-    if (user) {
-      return user.id;
-    }
-    return null;
+    return this.repository.findOne({
+      where: { telegramUserId },
+      relations: ['master'],
+    });
   }
 
   async getRoleByTelegramUserId(telegramUserId: number): Promise<UserRole> {

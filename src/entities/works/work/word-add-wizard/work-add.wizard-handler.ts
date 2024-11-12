@@ -1,17 +1,11 @@
-import { WorkAddWizard } from './work-add.wizard';
-import {
-  formatWithListIndexes,
-  getMessageText,
-} from '../../../../shared/helpers';
+import { getMessageText } from '../../../../shared/helpers';
 import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
-import { sendMessages } from '../../../../shared/sendMessages';
 import {
   setFieldValue,
   WizardStepCustomHandlerType,
   wizardStepHandler,
 } from '../../../../bot/wizard-step-handler-new';
 import { Master } from '../../../master/master.entity';
-import { StepWizardContext } from '../../../../bot/wizard-step-handler-new/wizard-context-types';
 import {
   WizardHandlerConfig,
   WizardStep,
@@ -20,87 +14,51 @@ import {
   getFieldValue,
   getWizardSteps,
 } from '../../../../bot/wizard-step-handler-new/wizard-handler';
-import { z } from 'zod';
 import { Task } from '../../task/task.entity';
-import { parseValue } from '../../../../bot/wizard-step-handler-new/utils';
-import { isValidResult } from '../../../../bot/wizard-step-handler-new/wizard-operations';
 import { StandProd } from '../../../parts/stand-prod/stand-prod.entity';
 import { Work } from '../work.entity';
+import { CurrentData, CurrentWizard, CurrentWizardContext } from './types';
+import { taskHandler } from './taskHandler';
+import { partOutHandler } from './partOutHandler';
+import { standProdHandler } from './standProdHandler';
+import { sendMessage } from '../../../../shared/sendMessages';
+import { partOutCountHandler } from './partOutCountHandler';
+import { Component } from '../../../parts/component/component.entity';
+import { z } from 'zod';
 
-type Data = {
-  master: Master;
-  task: Task;
-  savedCost: number;
-  paymentCoefficient: number;
-  standProd: StandProd;
-  count: number;
-  date: Date;
-  description: string;
-};
-
-type Wizard = WorkAddWizard;
-type WizardContext = StepWizardContext<Data, Wizard>;
-
-const steps: WizardStep<Data, Wizard>[] = [
-  { message: 'Задача №', handler: taskHandler },
+const steps: WizardStep<CurrentData, CurrentWizard>[] = [
   {
-    message: 'Станок-изделие - указываем номер изделия',
+    message: '✨ Станок - номер изделия',
     handler: standProdHandler,
   },
-  { message: 'Количество', field: 'count', type: 'number', required: true },
-  { message: 'Дата выполнения', field: 'date', type: 'date', required: true },
   {
-    message: 'Описание (для почасовой - обязательно)',
+    message: '📅 Дата выполнения',
+    field: 'date',
+    type: 'date',
+    required: true,
+  },
+  { message: '✅ Задача', handler: taskHandler },
+  {
+    message: '🔢 Количество (шт)',
+    field: 'workCount',
+    type: 'number',
+    required: true,
+  },
+  { message: '📋 Расход комплектующих', handler: partOutHandler },
+  {
+    message: '🔢 Количество затраченных комплектующих (шт)',
+    handler: partOutCountHandler,
+  },
+  {
+    message: '✍️ Причечания\nДля почасовой - обязательно указать что сделано',
     field: 'description',
     type: 'string',
   },
 ];
 
-async function taskHandler(
-  wizard: Wizard,
-  ctx: WizardContext,
-  type: WizardStepCustomHandlerType,
-) {
-  if (type === 'request') {
-    const tasksList = await wizard.taskService.getFormattedList(
-      ctx.session.userRole,
-      'line',
-    );
-
-    await sendMessages(ctx, formatWithListIndexes(tasksList), 'line');
-    await replyWithCancelButton(ctx, `Выберите задачу из списка`);
-    return true;
-  }
-
-  const message = getMessageText(ctx);
-  const selectedNumber = parseInt(message);
-
-  const tasks = await wizard.taskService.findAll();
-  const task = tasks[selectedNumber - 1];
-
-  if (!task) {
-    await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
-    return false;
-  }
-
-  const masterEntity = getFieldValue(ctx, 'master');
-  console.log('*-* masterEntity', masterEntity);
-  const result = z.instanceof(Master).safeParse(masterEntity);
-  if (!result.success) {
-    await ctx.reply('Ошибка. Мастер для подсчёта коэффициента не найден.');
-    return false;
-  }
-  const master = result.data;
-
-  setFieldValue(ctx, 'paymentCoefficient', master.paymentCoefficient);
-  setFieldValue(ctx, 'task', task);
-  setFieldValue(ctx, 'savedCost', task.cost);
-  return true;
-}
-
 async function masterHandler(
-  wizard: Wizard,
-  ctx: WizardContext,
+  wizard: CurrentWizard,
+  ctx: CurrentWizardContext,
   type: WizardStepCustomHandlerType,
 ) {
   if (type === 'request') {
@@ -128,59 +86,8 @@ async function masterHandler(
   return true;
 }
 
-async function standProdHandler(
-  wizard: Wizard,
-  ctx: WizardContext,
-  type: WizardStepCustomHandlerType,
-) {
-  if (type === 'request') {
-    const standsProdList = await wizard.standProdService.findActive();
-    const formattedList = await wizard.standProdService.formatList(
-      standsProdList,
-      ctx.session.userRole,
-    );
-
-    if (formattedList.length === 0) {
-      await replyWithCancelButton(ctx, 'Записей нет');
-      return true;
-    }
-
-    await sendMessages(
-      ctx,
-      formattedList.map((message) => message),
-    );
-
-    await replyWithCancelButton(ctx, `-`);
-    return true;
-  }
-
-  const message = getMessageText(ctx);
-  const selectedNumber = parseValue(message, 'number');
-
-  if (!isValidResult(selectedNumber)) {
-    await replyWithCancelButton(
-      ctx,
-      `Некорректный ввод. ${selectedNumber.error}. Повторите.`,
-    );
-    return false;
-  }
-
-  const standsProd = await wizard.standProdService.findActive();
-  const selectedStandProd = standsProd.find(
-    (standProd) => standProd.id === selectedNumber.value,
-  );
-
-  if (!selectedStandProd) {
-    await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
-    return false;
-  }
-
-  setFieldValue(ctx, 'standProd', selectedStandProd);
-  return true;
-}
-
 const beforeFirstStep: NonNullable<
-  WizardHandlerConfig<any, Wizard>['beforeFirstStep']
+  WizardHandlerConfig<CurrentData, CurrentWizard>['beforeFirstStep']
 > = async (wizard, ctx) => {
   if (ctx.session.userRole === 'manager') {
     getWizardSteps(ctx).splice(0, 0, {
@@ -210,7 +117,7 @@ const WorkSchema = z.object({
 });
 
 const afterLastStep: NonNullable<
-  WizardHandlerConfig<any, Wizard>['afterLastStep']
+  WizardHandlerConfig<CurrentData, CurrentWizard>['afterLastStep']
 > = async (wizard, ctx) => {
   const result = WorkSchema.safeParse({
     task: getFieldValue(ctx, 'task'),
@@ -218,7 +125,7 @@ const afterLastStep: NonNullable<
     master: getFieldValue(ctx, 'master'),
     paymentCoefficient: getFieldValue(ctx, 'paymentCoefficient'),
     date: getFieldValue(ctx, 'date'),
-    count: getFieldValue(ctx, 'count'),
+    count: getFieldValue(ctx, 'workCount'),
     cost: getFieldValue(ctx, 'savedCost'),
     description: getFieldValue(ctx, 'description'),
   });
@@ -231,25 +138,61 @@ const afterLastStep: NonNullable<
     await ctx.reply(`Ошибка при создании работы:\n${errors}`);
     return;
   }
-
   const workEntity = new Work(result.data);
 
-  // *-*
   const work = await wizard.service.create(workEntity);
+  console.log('*-* instanceof work', work instanceof Work);
 
-  const managers = await wizard.userService.findManagers();
-  const currentUser = await wizard.userService.findByTelegramId(ctx.from.id);
+  const componentValue = getFieldValue(ctx, 'component');
+  const componentValueParsed = z
+    .instanceof(Component)
+    .safeParse(componentValue);
+  if (!componentValueParsed.success) {
+    await ctx.reply('Ошибка. Мастер для подсчёта коэффициента не найден.');
+    return;
+  }
+  const component = componentValueParsed.data;
 
-  for (const manager of managers) {
-    await wizard.bot.telegram.sendMessage(
-      manager.telegramUserId,
-      // *-* workEntity is temporary - replace with work
-      `${currentUser.name} отправил отчёт:\n${workEntity.format('manager')}`,
+  const partOutCountValue = getFieldValue(ctx, 'partOutCount');
+  const partOutCountValueParsed = z.number().safeParse(partOutCountValue);
+  if (!componentValueParsed.success) {
+    await ctx.reply('Ошибка. Мастер для подсчёта коэффициента не найден.');
+    return;
+  }
+  const partOutCount = partOutCountValueParsed.data;
+
+  try {
+    const partOuts = await wizard.partsService.writeOffComponents(
+      component.id,
+      partOutCount,
+      workEntity.date,
+      workEntity.standProd,
+      work,
     );
+    await sendMessage(
+      ctx,
+      `Успешно списано ${partOutCount} компонентов с ${partOuts.length} партий.`,
+    );
+
+    const managers = await wizard.userService.findManagers();
+    const currentUser = await wizard.userService.findByTelegramId(ctx.from.id);
+
+    for (const manager of managers) {
+      await wizard.bot.telegram.sendMessage(
+        manager.telegramUserId,
+        `${currentUser.name} отправил отчёт:\n${work.format('manager')}\n\nСтанок:\n${work.standProd.format('manager')}\n\nКомплектующие:\n${partOuts.map((partOut) => partOut.format('manager'))}`,
+      );
+    }
+  } catch (error) {
+    await replyWithCancelButton(ctx, `Ошибка: ${error.message}`);
+    return;
   }
 };
 
-export const WorkAddWizardHandler = wizardStepHandler<Data, Wizard>({
+export const WorkAddWizardHandler = wizardStepHandler<
+  CurrentData,
+  CurrentWizard
+>({
   beforeFirstStep,
   initialSteps: steps,
   afterLastStep,

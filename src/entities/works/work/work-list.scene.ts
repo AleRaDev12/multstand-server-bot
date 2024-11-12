@@ -25,9 +25,7 @@ export class WorkListScene {
 
     const usersToShow =
       userRole === 'manager'
-        ? (await this.userService.findAll()).filter(
-            (user) => !!user.master.length,
-          )
+        ? (await this.userService.findAll()).filter((user) => !!user.master)
         : [user];
 
     for (const user of usersToShow) {

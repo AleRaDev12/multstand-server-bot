@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity, LabelType } from '../../base.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { UserRole } from '../../../shared/types';
 import { Component } from '../../parts/component/component.entity';
-import { formatTask } from './task-formatting';
+import { formatTask } from './task-format';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -45,7 +45,11 @@ export class Task extends BaseEntity {
   @ManyToMany(() => Component, (component) => component.tasks)
   components: Component[];
 
-  public format(userRole: UserRole, labelType: LabelType = 'short'): string {
-    return formatTask(this, userRole, labelType);
+  public format(
+    userRole: UserRole,
+    labelType: LabelType = 'short',
+    paymentCoefficient: number = 1,
+  ): string {
+    return formatTask(this, userRole, labelType, paymentCoefficient);
   }
 }

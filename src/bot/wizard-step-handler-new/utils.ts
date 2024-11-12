@@ -137,6 +137,9 @@ export function parseValue(
         value: date,
       };
 
+    case 'string':
+      return { isValid: true, value: value };
+
     default:
       return {
         isValid: false,

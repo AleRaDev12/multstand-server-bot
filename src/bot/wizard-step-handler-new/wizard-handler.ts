@@ -185,15 +185,15 @@ export function getFieldValue<T, W>(
 }
 
 const getTypeDescription = (type: WIZARD_STEP_VALUE_TYPE) => {
-  if (type === 'boolean') return 'Тип: флаг (да/нет 1/0 yes/no)';
-  if (type === 'number') return 'Тип: число';
+  if (type === 'boolean') return '❓ да/нет 1/0 yes/no';
+  if (type === 'number') return '❓ число';
 
   const today = new Date();
   const monthName = format(today, 'MMMM');
   if (type === 'date')
-    return `Тип: дата\nВ формате "ГГГГ-ММ-ДД"\nИли день текущего месяца (текущий месяц сервера — ${monthName})`;
+    return `❓ день текущего месяца (сейчас ${monthName})\n❓ или ГГГГ-ММ-ДД`;
 
-  if (type === 'string') return 'Тип: строка';
+  if (type === 'string') return '❓ любой текст';
 };
 
 async function sendStepRequest<T, W>(
@@ -208,7 +208,7 @@ async function sendStepRequest<T, W>(
 
   await replyWithCancelButton(
     ctx,
-    `${step.message}\n${getTypeDescription(step.type)}${step.required ? '' : '\nНеобязательное - можно пропустить'}`,
+    `${step.message}\n${getTypeDescription(step.type)}${step.required ? '' : '\n◽️ Необязательное - можно пропустить'}`,
   );
 
   return true;

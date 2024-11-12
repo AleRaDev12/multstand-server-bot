@@ -36,7 +36,7 @@ export class WorksScene extends BaseScene {
         [Markup.button.callback('➕ Выплата', Actions.WORK_PAYMENT)],
         [
           Markup.button.callback(
-            '📑 Компоненты-задачи',
+            '📑 Задачи-компоненты',
             Actions.TASK_COMPONENT_LINK_LIST,
           ),
           Markup.button.callback('Связать', Actions.TASK_COMPONENT_LINK_ADD),

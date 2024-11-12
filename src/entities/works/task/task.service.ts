@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { UserRole } from '../../../shared/types';
 import { LabelType } from '../../base.entity';
-import { formatTask } from './task-formatting';
 
 @Injectable()
 export class TaskService {
@@ -90,10 +89,6 @@ export class TaskService {
     userRole: UserRole,
     type?: LabelType,
   ): string[] {
-    return tasks.map((task) => this.format(task, userRole, type));
-  }
-
-  private format(task: Task, userRole: UserRole, type?: LabelType): string {
-    return formatTask(task, userRole, type);
+    return tasks.map((task) => task.format(userRole, type));
   }
 }

@@ -1,10 +1,11 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '../../base.entity';
+import { BaseEntity, LabelType } from '../../base.entity';
 import { NullableColumn } from '../../nullable-column.decorator';
 import { StandProd } from '../stand-prod/stand-prod.entity';
-import { formatLabels } from '../../../shared/helpers';
 import { PartIn } from '../part-in/part-in.entity';
 import { Work } from '../../works/work/work.entity';
+import { UserRole } from '../../../shared/types';
+import { formatPartOut } from './part-out-format';
 
 @Entity()
 export class PartOut extends BaseEntity {
@@ -20,8 +21,8 @@ export class PartOut extends BaseEntity {
     id: 'id списания части',
   };
 
-  public format(): string {
-    return formatLabels(this, this.labels);
+  public format(userRole: UserRole, labelType: LabelType = 'short'): string {
+    return formatPartOut(this, userRole);
   }
 
   @PrimaryGeneratedColumn()

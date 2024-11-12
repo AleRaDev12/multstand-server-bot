@@ -11,6 +11,7 @@ import { StandProdService } from '../../../parts/stand-prod/stand-prod.service';
 import { Telegraf } from 'telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { UserService } from 'src/entities/user/user.service';
+import { PartsService } from '../../../parts/parts.service';
 
 @Wizard(WIZARDS.WORK_ADD)
 @SceneRoles('manager', 'master')
@@ -18,18 +19,27 @@ export class WorkAddWizard {
   constructor(
     @InjectBot()
     readonly bot: Telegraf<SceneContext>,
+
     @Inject(WorkService)
     readonly service: WorkService,
+
     @Inject(UserService)
     readonly userService: UserService,
+
     @Inject(MasterService)
     readonly masterService: MasterService,
+
     @Inject(ComponentService)
     readonly componentService: ComponentService,
+
     @Inject(TaskService)
     readonly taskService: TaskService,
+
     @Inject(StandProdService)
     readonly standProdService: StandProdService,
+
+    @Inject(PartsService)
+    readonly partsService: PartsService,
   ) {}
 
   @WizardStep(1)

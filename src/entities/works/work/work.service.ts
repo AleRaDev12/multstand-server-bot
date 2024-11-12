@@ -26,10 +26,10 @@ export class WorkService {
   ) {}
 
   async create(work: Work): Promise<Work> {
-    const newWork = {
+    const newWork = this.repository.create({
       ...work,
       createdAt: new Date(),
-    };
+    });
     return this.repository.save(newWork);
   }
 

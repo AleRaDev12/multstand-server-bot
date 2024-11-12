@@ -119,7 +119,7 @@ export class StandProdService {
     const standOrder: StandOrder | undefined = standProd.standOrder;
     const order = standOrder?.order;
 
-    let output = `📝️ ️️️️️️️️${standProd.id} / ${standOrder ? standOrder.id + '\n' + standOrder.format(userRole, 'line') : '-'}  -  # Изделия / # заказа (на наклейку)\n\n`;
+    let output = `🏷️ ️️️️️️️️${standProd.id} / ${standOrder ? standOrder.id + '\n' + standOrder.format(userRole, 'line') : '-'}  -  # Изделия / # заказа (на наклейку)\n\n`;
     output += order ? `Заказ клиента #${order.id}\n` : '';
 
     output += '\n🛠 Комплектация:\n';
@@ -253,7 +253,7 @@ export class StandProdService {
     const result: string[] = [];
 
     for (const [, { standProd, works, totalCost }] of standProdMap) {
-      let output = `# Изделия / # заказа (на наклейку):\n📝️ ️️️️️️️️${standProd.id} / ${standProd.standOrder ? standProd.standOrder.id : '-'}\n`;
+      let output = `# Изделия / # заказа (на наклейку):\n🏷️ ️️️️️️️️${standProd.id} / ${standProd.standOrder ? standProd.standOrder.id : '-'}\n`;
       output += standProd.standOrder
         ? standProd.standOrder.format(userRole, 'line')
         : '';

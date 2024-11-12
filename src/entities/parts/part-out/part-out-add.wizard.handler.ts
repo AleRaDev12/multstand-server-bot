@@ -137,7 +137,7 @@ async function handleSpecificAnswer(
           );
           await sendMessage(
             ctx,
-            `Успешно списано ${count} компонентов с ${partOuts.length} партий.`,
+            `Успешно списано ${count} удиниц(ы) комплектующих из ${partOuts.length} партий.`,
           );
           return true;
         } catch (error) {

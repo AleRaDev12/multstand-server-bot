@@ -77,7 +77,7 @@ export class PartOutService {
     return list
       .map(
         (item, i) =>
-          `${i + 1}.\n${item.partIn.component.format(userRole)}\n${item.format()}`,
+          `${i + 1}.\n${item.partIn.component.format(userRole)}\n${item.format(userRole)}`,
       )
       .join('\n\n');
   };

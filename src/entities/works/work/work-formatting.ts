@@ -6,7 +6,7 @@ import { UserRole } from '../../../shared/types';
 const labels: EntityLabels<Work, string> = {
   manager: {
     short: {
-      date: 'Дата',
+      date: '📅',
       cost: 'Оплата',
       count: 'Количество',
       paymentCoefficient: 'Коэффициент',
@@ -53,9 +53,9 @@ export function formatWork(
   const workAdditionalInfo =
     userRole !== 'manager'
       ? ''
-      : `Оплата: ${costSumWCoefficient}\nДлительность план: ${durationPlanSum}`;
+      : `\nИтог:\nОплата: ${costSumWCoefficient}\nДлительность план: ${durationPlanSum}`;
 
-  const taskDescription = task ? `\n\n${task.format(userRole)}` : '';
+  const taskDescription = task ? `\n\n${task.format(userRole, 'line')}` : '';
 
   const formattedWork = formatLabels(work, labels[userRole][labelType]);
 

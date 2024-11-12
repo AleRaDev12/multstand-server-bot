@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PartOut } from './part-out/part-out.entity';
+import { Work } from '../works/work/work.entity';
 
 type RemainingComponent = {
   component: Component;
@@ -122,6 +123,7 @@ export class PartsService {
     count: number,
     date: Date,
     standProd: StandProd,
+    work?: Work,
   ): Promise<PartOut[]> {
     const remainingList = await this.getRemainingListByComponent(componentId);
     let remainingCount = count;
@@ -143,6 +145,10 @@ export class PartsService {
 
     if (remainingCount > 0) {
       throw new Error('Недостаточно компонентов для списания');
+    }
+
+    if (work) {
+      partOuts.forEach((partOut) => (partOut.work = work));
     }
 
     return this.partOutRepository.save(partOuts);
