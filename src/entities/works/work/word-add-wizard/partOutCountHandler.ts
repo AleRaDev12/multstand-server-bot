@@ -35,7 +35,7 @@ export async function partOutCountHandler(
   const componentValue = getFieldValue(ctx, 'component');
   const result = z.instanceof(Component).safeParse(componentValue);
   if (!result.success) {
-    await ctx.reply('Ошибка. Мастер для подсчёта коэффициента не найден.');
+    await ctx.reply('Ошибка. componentValue не найден.');
     return false;
   }
   const component = result.data;

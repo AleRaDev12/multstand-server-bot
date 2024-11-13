@@ -293,3 +293,30 @@ async function sendRequestNextStep<T, W>(
 export function getWizardSteps<T, W>(ctx: StepWizardContext<T, W>) {
   return ctx.wizard.state.data.meta.steps;
 }
+
+export function addWizardSteps<T, W>(
+  ctx: StepWizardContext<T, W>,
+  steps: WizardStep<T, W>[],
+  targetIndex = null,
+) {
+  const stepsLength = ctx.wizard.state.data.meta.steps.length;
+  const normalizedIndex =
+    targetIndex === null
+      ? stepsLength // если targetIndex не указан, добавляем в конец
+      : targetIndex < 0
+        ? Math.max(stepsLength + targetIndex, 0)
+        : Math.min(targetIndex, stepsLength);
+
+  ctx.wizard.state.data.meta.steps.splice(normalizedIndex, 0, ...steps);
+}
+
+export function removeWizardSteps<T, W>(
+  ctx: StepWizardContext<T, W>,
+  stepsToRemove: WizardStep<T, W>[],
+) {
+  const stepsSet = new Set(stepsToRemove);
+
+  ctx.wizard.state.data.meta.steps = ctx.wizard.state.data.meta.steps.filter(
+    (step) => !stepsSet.has(step),
+  );
+}

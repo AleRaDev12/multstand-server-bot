@@ -23,7 +23,7 @@ export async function partOutHandler(
     const linkedComponents = await getTaskLinkedComponents(ctx);
 
     if (!linkedComponents?.length) {
-      await replyWithCancelButton(ctx, 'Связанные компоненты не найдены');
+      await ctx.reply('Связанные компоненты не найдены');
       return true;
     }
 
@@ -43,6 +43,11 @@ export async function partOutHandler(
   const selectedNumber = parseInt(message);
 
   const linkedComponents = await getTaskLinkedComponents(ctx);
+
+  if (!linkedComponents?.length) {
+    await ctx.reply('Связанные компоненты не найдены');
+    return true;
+  }
 
   const component = linkedComponents[selectedNumber - 1];
   if (!component) {

@@ -25,6 +25,7 @@ import { sendMessage } from '../../../../shared/sendMessages';
 import { partOutCountHandler } from './partOutCountHandler';
 import { Component } from '../../../parts/component/component.entity';
 import { z } from 'zod';
+import { PartOut } from '../../../parts/part-out/part-out.entity';
 
 const steps: WizardStep<CurrentData, CurrentWizard>[] = [
   {
@@ -44,15 +45,18 @@ const steps: WizardStep<CurrentData, CurrentWizard>[] = [
     type: 'number',
     required: true,
   },
-  { message: '📋 Расход комплектующих', handler: partOutHandler },
-  {
-    message: '🔢 Количество затраченных комплектующих (шт)',
-    handler: partOutCountHandler,
-  },
   {
     message: '✍️ Причечания\nДля почасовой - обязательно указать что сделано',
     field: 'description',
     type: 'string',
+  },
+];
+
+export const partOutSteps: WizardStep<CurrentData, CurrentWizard>[] = [
+  { message: '📋 Расход комплектующих', handler: partOutHandler },
+  {
+    message: '🔢 Количество затраченных комплектующих (шт)',
+    handler: partOutCountHandler,
   },
 ];
 
@@ -141,51 +145,56 @@ const afterLastStep: NonNullable<
   const workEntity = new Work(result.data);
 
   const work = await wizard.service.create(workEntity);
-  console.log('*-* instanceof work', work instanceof Work);
 
-  const componentValue = getFieldValue(ctx, 'component');
-  const componentValueParsed = z
-    .instanceof(Component)
-    .safeParse(componentValue);
-  if (!componentValueParsed.success) {
-    await ctx.reply('Ошибка. Мастер для подсчёта коэффициента не найден.');
-    return;
-  }
-  const component = componentValueParsed.data;
+  const isWithComponentsValue = getFieldValue(ctx, 'isWithComponents');
 
-  const partOutCountValue = getFieldValue(ctx, 'partOutCount');
-  const partOutCountValueParsed = z.number().safeParse(partOutCountValue);
-  if (!componentValueParsed.success) {
-    await ctx.reply('Ошибка. Мастер для подсчёта коэффициента не найден.');
-    return;
-  }
-  const partOutCount = partOutCountValueParsed.data;
+  let partsOut: PartOut[];
 
-  try {
-    const partOuts = await wizard.partsService.writeOffComponents(
-      component.id,
-      partOutCount,
-      workEntity.date,
-      workEntity.standProd,
-      work,
-    );
-    await sendMessage(
-      ctx,
-      `Успешно списано ${partOutCount} компонентов с ${partOuts.length} партий.`,
-    );
-
-    const managers = await wizard.userService.findManagers();
-    const currentUser = await wizard.userService.findByTelegramId(ctx.from.id);
-
-    for (const manager of managers) {
-      await wizard.bot.telegram.sendMessage(
-        manager.telegramUserId,
-        `${currentUser.name} отправил отчёт:\n${work.format('manager')}\n\nСтанок:\n${work.standProd.format('manager')}\n\nКомплектующие:\n${partOuts.map((partOut) => partOut.format('manager'))}`,
-      );
+  if (!!isWithComponentsValue) {
+    const componentValue = getFieldValue(ctx, 'component');
+    const componentValueParsed = z
+      .instanceof(Component)
+      .safeParse(componentValue);
+    if (!componentValueParsed.success) {
+      await ctx.reply('Ошибка. componentValue не найден.');
+      return;
     }
-  } catch (error) {
-    await replyWithCancelButton(ctx, `Ошибка: ${error.message}`);
-    return;
+    const component = componentValueParsed.data;
+
+    const partOutCountValue = getFieldValue(ctx, 'partOutCount');
+    const partOutCountValueParsed = z.number().safeParse(partOutCountValue);
+    if (!partOutCountValueParsed.success) {
+      await ctx.reply('Ошибка. partOutCountValue не найден.');
+      return;
+    }
+    const partOutCount = partOutCountValueParsed.data;
+
+    try {
+      partsOut = await wizard.partsService.writeOffComponents(
+        component.id,
+        partOutCount,
+        workEntity.date,
+        workEntity.standProd,
+        work,
+      );
+      await sendMessage(
+        ctx,
+        `Успешно списано ${partOutCount} компонентов с ${partsOut.length} партий.`,
+      );
+    } catch (error) {
+      await replyWithCancelButton(ctx, `Ошибка: ${error.message}`);
+      return;
+    }
+  }
+
+  const managers = await wizard.userService.findManagers();
+  const currentUser = await wizard.userService.findByTelegramId(ctx.from.id);
+
+  for (const manager of managers) {
+    await wizard.bot.telegram.sendMessage(
+      manager.telegramUserId,
+      `${currentUser.name} отправил отчёт:\n${work.format('manager')}\n\nСтанок:\n${work.standProd.format('manager')}\n\n${partsOut?.length ? `Комплектующие:\n${partsOut.map((partOut) => partOut.format('manager'))}` : ''}`,
+    );
   }
 };
 

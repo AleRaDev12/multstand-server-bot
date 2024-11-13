@@ -8,12 +8,17 @@ import {
   getMessageText,
 } from '../../../../shared/helpers';
 import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
-import { getFieldValue } from '../../../../bot/wizard-step-handler-new/wizard-handler';
+import {
+  addWizardSteps,
+  getFieldValue,
+  removeWizardSteps,
+} from '../../../../bot/wizard-step-handler-new/wizard-handler';
 import { z } from 'zod';
 import { Master } from '../../../master/master.entity';
 import { CurrentWizard, CurrentWizardContext } from './types';
 import { parseValue } from '../../../../bot/wizard-step-handler-new/utils';
 import { isValidResult } from '../../../../bot/wizard-step-handler-new/wizard-operations';
+import { partOutSteps } from './work-add.wizard-handler';
 
 export async function taskHandler(
   wizard: CurrentWizard,
@@ -65,5 +70,14 @@ export async function taskHandler(
   setFieldValue(ctx, 'paymentCoefficient', master.paymentCoefficient);
   setFieldValue(ctx, 'task', task);
   setFieldValue(ctx, 'savedCost', task.cost);
+
+  if (task.components.length) {
+    addWizardSteps(ctx, partOutSteps, -1);
+    setFieldValue(ctx, 'isWithComponents', true);
+    return true;
+  }
+
+  removeWizardSteps(ctx, partOutSteps);
+  setFieldValue(ctx, 'isWithComponents', false);
   return true;
 }
