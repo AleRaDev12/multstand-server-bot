@@ -25,11 +25,15 @@ export async function taskHandler(
   ctx: CurrentWizardContext,
   type: WizardStepCustomHandlerType,
 ) {
+  const getTasks = () => {
+    return wizard.taskService.findAllWithComponents();
+  };
+
   if (type === 'request') {
     const user = await wizard.userService.findByTelegramId(ctx.from.id);
     const paymentCoefficient = user.master.paymentCoefficient;
 
-    const tasks = await wizard.taskService.findAll();
+    const tasks = await getTasks();
     const tasksFormatted = tasks.map((task) =>
       task.format(ctx.session.userRole, 'line', paymentCoefficient),
     );
@@ -50,7 +54,7 @@ export async function taskHandler(
     return false;
   }
 
-  const tasks = await wizard.taskService.findAllWithComponents();
+  const tasks = await getTasks();
   const task = tasks[selectedNumber.value - 1];
 
   if (!task) {

@@ -46,7 +46,7 @@ const steps: WizardStep<CurrentData, CurrentWizard>[] = [
     required: true,
   },
   {
-    message: '✍️ Причечания\nДля почасовой - обязательно указать что сделано',
+    message: '✍️ Примечания\nДля почасовой - обязательно указать что сделано',
     field: 'description',
     type: 'string',
   },
