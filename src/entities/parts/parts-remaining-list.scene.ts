@@ -5,7 +5,7 @@ import { SceneRoles } from '../../bot/decorators/scene-roles.decorator';
 import { Inject } from '@nestjs/common';
 import { Scenes } from 'telegraf';
 import { PartsService } from './parts.service';
-import { sendMessage } from '../../shared/sendMessages';
+import { sendMessage, sendMessages } from '../../shared/sendMessages';
 
 @Scene(SCENES.PARTS_REMAINING_LIST)
 @SceneRoles('manager')
@@ -23,9 +23,8 @@ export class PartsRemainingListScene {
     if (!formattedList) {
       await sendMessage(ctx, 'Записей нет');
     }
-    for (const item in formattedList) {
-      await sendMessage(ctx, formattedList[item]);
-    }
+
+    await sendMessages(ctx, formattedList, 'full');
 
     await ctx.scene.leave();
     await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.PARTS));
