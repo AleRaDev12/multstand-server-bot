@@ -15,7 +15,11 @@ export class ComponentService {
   }
 
   async findAll(): Promise<Component[]> {
-    return this.repository.find();
+    return this.repository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async getList(): Promise<string[] | null> {
