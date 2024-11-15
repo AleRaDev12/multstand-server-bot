@@ -31,7 +31,9 @@ export class PartsService {
   ) {}
 
   async getRemainingList(): Promise<RemainingComponent[]> {
-    const components = await this.componentRepository.find();
+    const components = await this.componentRepository.find({
+      order: { id: 'ASC' },
+    });
     const remainingList: RemainingComponent[] = await Promise.all(
       components.map(async (component) => {
         const partsIn = await this.partInRepository.find({
