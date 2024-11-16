@@ -26,10 +26,7 @@ export async function standProdHandler(
       return true;
     }
 
-    await sendMessages(
-      ctx,
-      formattedList.map((message) => message),
-    );
+    await sendMessages(ctx, formattedList);
 
     await replyWithCancelButton(ctx, `-`);
     return true;

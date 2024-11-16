@@ -9,7 +9,7 @@ import { getMessageText } from '../../../shared/helpers';
 import { replyWithCancelButton } from '../../../bot/wizard-step-handler/utils';
 import { wizardStepHandler } from '../../../bot/wizard-step-handler/wizardStepHandler';
 import { Component } from '../component/component.entity';
-import { sendMessage } from '../../../shared/sendMessages';
+import { sendMessage, sendMessages } from '../../../shared/sendMessages';
 
 const standProdTypeName: AdditionalWizardSelections = 'standProdSelect';
 const componentTypeName: AdditionalWizardSelections = 'componentSelect';
@@ -49,14 +49,21 @@ async function handleSpecificRequest(
 ): Promise<boolean> {
   switch (stepRequest.type) {
     case standProdTypeName:
-      const standProds = await this.standProdService.findAll();
-      const formattedStandProds = standProds
-        .map((standProd, index) => `№${index + 1}. ${standProd.description}`)
-        .join('\n');
-      await replyWithCancelButton(
-        ctx,
-        `${stepRequest.message}\n${formattedStandProds}`,
+      const standsProdList = await this.standProdService.findAll();
+
+      const standProdFormattedList = await this.standProdService.formatList(
+        standsProdList,
+        ctx.session.userRole,
       );
+
+      if (standProdFormattedList.length === 0) {
+        await replyWithCancelButton(ctx, 'Записей нет');
+        return true;
+      }
+
+      await sendMessages(ctx, standProdFormattedList);
+
+      await replyWithCancelButton(ctx, `-`);
       return true;
 
     case componentTypeName:
@@ -206,12 +213,15 @@ async function handleStandProdAnswer(
 ): Promise<boolean> {
   const message = getMessageText(ctx);
   const selectedStandNumber = parseInt(message);
-  const standProds = await this.standProdService.findAll();
-  const standProd = standProds[selectedStandNumber - 1];
-  if (!standProd) {
+  const standsProd = await this.standProdService.findAll();
+  const selectedStandProd = standsProd.find(
+    (standProd) => standProd.id === selectedStandNumber,
+  );
+
+  if (!selectedStandProd) {
     await replyWithCancelButton(ctx, 'Не найдено. Выберите из списка.');
     return false;
   }
-  ctx.wizard.state.partOut.standProd = standProd;
+  ctx.wizard.state.partOut.standProd = selectedStandProd;
   return true;
 }
