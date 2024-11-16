@@ -40,6 +40,7 @@ const steps: WizardStep<Data, Wizard>[] = [
     message: 'Дата оплаты',
     field: 'transactionDate',
     type: 'date',
+    required: true,
   },
   { message: 'Дата получения', field: 'partIn.dateArrival', type: 'date' },
   { message: 'Стоимость партии', field: 'partIn.amount', type: 'number' },
