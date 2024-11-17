@@ -16,6 +16,7 @@ import { TransactionModule } from '../../money/transaction/transaction.module';
 import { AccountModule } from '../../money/account/account.module';
 import { StandProd } from '../../parts/stand-prod/stand-prod.entity';
 import { PartsModule } from '../../parts/parts.module';
+import { WorkShortListScene } from './work-short-list.scene';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PartsModule } from '../../parts/parts.module';
     WorkService,
     WorkAddWizard,
     WorkListScene,
+    WorkShortListScene,
     WorkPaymentTransactionWizard,
   ],
   exports: [WorkService],

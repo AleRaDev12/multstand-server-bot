@@ -34,7 +34,7 @@ export class WorkListScene {
 
         await sendMessage(
           ctx,
-          `🙍🏻‍♂️ Мастер: ${user.name}. Коэффициент: ${user.master[0].paymentCoefficient}\nОбщий баланс:\nНачислено: ${earnings.totalEarned.toFixed(2)}₽\nВыплачено: ${earnings.alreadyPaid.toFixed(2)}₽\nОсталось выплатить: ${earnings.toPay.toFixed(2)}₽`,
+          `🙍🏻‍♂️ Мастер: ${user.name}. Коэффициент: ${user.master.paymentCoefficient}\nОбщий баланс:\nНачислено: ${earnings.totalEarned.toFixed(2)}₽\nВыплачено: ${earnings.alreadyPaid.toFixed(2)}₽\nОсталось выплатить: ${earnings.toPay.toFixed(2)}₽`,
         );
       }
 

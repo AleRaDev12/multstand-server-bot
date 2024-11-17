@@ -10,6 +10,7 @@ enum Actions {
   TASK_LIST = 'TASK_LIST',
   TASK_ADD = 'TASK_ADD',
   WORK_LIST = 'WORK_LIST',
+  WORK_SHORT_LIST = 'WORK_SHORT_LIST',
   WORK_ADD = 'WORK_ADD',
   WORK_PAYMENT = 'WORK_PAYMENT',
   TASK_COMPONENT_LINK_LIST = 'TASK_COMPONENT_LINK_LIST',
@@ -30,7 +31,8 @@ export class WorksScene extends BaseScene {
           Markup.button.callback('➕', Actions.TASK_ADD),
         ],
         [
-          Markup.button.callback('📊 Работа', Actions.WORK_LIST),
+          Markup.button.callback('📊 Полный', Actions.WORK_LIST),
+          Markup.button.callback('📊 Краткий', Actions.WORK_SHORT_LIST),
           Markup.button.callback('➕', Actions.WORK_ADD),
         ],
         [Markup.button.callback('➕ Выплата', Actions.WORK_PAYMENT)],
@@ -60,6 +62,17 @@ export class WorksScene extends BaseScene {
   async onWorkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
     try {
       await handleButtonPress(ctx, () => ctx.scene.enter(SCENES.WORK_LIST));
+    } catch (e) {
+      await sendMessage(ctx, e.message);
+    }
+  }
+
+  @Action(Actions.WORK_SHORT_LIST)
+  async onShortWorkList(@Ctx() ctx: Scenes.SceneContext): Promise<void> {
+    try {
+      await handleButtonPress(ctx, () =>
+        ctx.scene.enter(SCENES.WORK_SHORT_LIST),
+      );
     } catch (e) {
       await sendMessage(ctx, e.message);
     }
