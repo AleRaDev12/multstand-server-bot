@@ -17,7 +17,7 @@ import { GLOBAL_ACTION } from '../constants';
 import { format } from 'date-fns';
 import { getMessageText } from '../../shared/helpers';
 
-const COMMAND_SYMBOLS = {
+export const COMMAND_SYMBOLS = {
   back: '<',
   skip: '-',
   cancel: '.',
@@ -201,14 +201,18 @@ async function sendStepRequest<T, W>(
   step: WizardStep<T, W>,
   wizard: W,
 ): Promise<boolean> {
+  const requiredMessage = step.required
+    ? ''
+    : '\n◽️ Необязательное - можно пропустить';
+
   if ('handler' in step) {
-    await replyWithCancelButton(ctx, step.message);
+    await replyWithCancelButton(ctx, `${step.message}${requiredMessage}`);
     return step.handler(wizard, ctx, 'request');
   }
 
   await replyWithCancelButton(
     ctx,
-    `${step.message}\n${getTypeDescription(step.type)}${step.required ? '' : '\n◽️ Необязательное - можно пропустить'}`,
+    `${step.message}\n${getTypeDescription(step.type)}${requiredMessage}`,
   );
 
   return true;

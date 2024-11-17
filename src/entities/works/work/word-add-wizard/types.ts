@@ -16,7 +16,6 @@ export type CurrentData = {
   partOutCount: number;
   date: Date;
   description: string;
-  isWithComponents: boolean;
 };
 
 export type CurrentWizard = WorkAddWizard;

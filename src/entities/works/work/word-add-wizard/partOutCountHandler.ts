@@ -3,7 +3,10 @@ import {
   WizardStepCustomHandlerType,
 } from '../../../../bot/wizard-step-handler-new';
 import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
-import { getFieldValue } from '../../../../bot/wizard-step-handler-new/wizard-handler';
+import {
+  COMMAND_SYMBOLS,
+  getFieldValue,
+} from '../../../../bot/wizard-step-handler-new/wizard-handler';
 import { z } from 'zod';
 import { CurrentWizard, CurrentWizardContext } from './types';
 import { getMessageText } from '../../../../shared/helpers';

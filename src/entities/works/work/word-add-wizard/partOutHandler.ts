@@ -4,7 +4,10 @@ import {
 } from '../../../../bot/wizard-step-handler-new';
 import { sendMessages } from '../../../../shared/sendMessages';
 import { replyWithCancelButton } from '../../../../bot/wizard-step-handler/utils';
-import { getFieldValue } from '../../../../bot/wizard-step-handler-new/wizard-handler';
+import {
+  COMMAND_SYMBOLS,
+  getFieldValue,
+} from '../../../../bot/wizard-step-handler-new/wizard-handler';
 import { z } from 'zod';
 import { CurrentWizard, CurrentWizardContext } from './types';
 import { Task } from '../../task/task.entity';
@@ -23,7 +26,7 @@ export async function partOutHandler(
     const linkedComponents = await getTaskLinkedComponents(ctx);
 
     if (!linkedComponents?.length) {
-      await ctx.reply('Связанные компоненты не найдены');
+      await ctx.reply('Ошибка. Связанные компоненты не найдены.');
       return true;
     }
 

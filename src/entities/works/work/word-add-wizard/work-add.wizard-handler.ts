@@ -53,10 +53,15 @@ const steps: WizardStep<CurrentData, CurrentWizard>[] = [
 ];
 
 export const partOutSteps: WizardStep<CurrentData, CurrentWizard>[] = [
-  { message: '📋 Расход комплектующих', handler: partOutHandler },
+  {
+    message: '📋 Расход комплектующих',
+    handler: partOutHandler,
+    required: false,
+  },
   {
     message: '🔢 Количество затраченных комплектующих (шт)',
     handler: partOutCountHandler,
+    required: false,
   },
 ];
 
@@ -146,19 +151,15 @@ const afterLastStep: NonNullable<
 
   const work = await wizard.service.create(workEntity);
 
-  const isWithComponentsValue = getFieldValue(ctx, 'isWithComponents');
-
   let partsOut: PartOut[];
 
-  if (!!isWithComponentsValue) {
-    const componentValue = getFieldValue(ctx, 'component');
-    const componentValueParsed = z
-      .instanceof(Component)
-      .safeParse(componentValue);
-    if (!componentValueParsed.success) {
-      await ctx.reply('Ошибка. componentValue не найден.');
-      return;
-    }
+  const componentValue = getFieldValue(ctx, 'component');
+  const componentValueParsed = z
+    .instanceof(Component)
+    .safeParse(componentValue);
+  const isWithComponentsValue = !!componentValueParsed.success;
+
+  if (isWithComponentsValue) {
     const component = componentValueParsed.data;
 
     const partOutCountValue = getFieldValue(ctx, 'partOutCount');

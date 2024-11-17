@@ -77,11 +77,9 @@ export async function taskHandler(
 
   if (task.components.length) {
     addWizardSteps(ctx, partOutSteps, -1);
-    setFieldValue(ctx, 'isWithComponents', true);
     return true;
   }
 
   removeWizardSteps(ctx, partOutSteps);
-  setFieldValue(ctx, 'isWithComponents', false);
   return true;
 }

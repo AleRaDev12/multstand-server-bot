@@ -41,14 +41,14 @@ export type PathValue<
     ? T[P]
     : never;
 
-type FieldStep<T> = BaseStep & {
-  field: PathsToStringPropsWithDepth<T>;
-  type: WIZARD_STEP_VALUE_TYPE;
+type BaseStep = {
+  message: string;
   required?: boolean;
 };
 
-type BaseStep = {
-  message: string;
+type FieldStep<T> = BaseStep & {
+  field: PathsToStringPropsWithDepth<T>;
+  type: WIZARD_STEP_VALUE_TYPE;
 };
 
 export type HandlerStep<T, W> = BaseStep & {
