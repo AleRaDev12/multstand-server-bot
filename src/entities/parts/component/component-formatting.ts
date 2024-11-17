@@ -31,7 +31,7 @@ export function formatComponent(
   labelType: LabelType,
 ): string {
   try {
-    if (labelType === 'line' && userRole === 'manager') {
+    if (labelType === 'line') {
       return component.name;
     }
 
