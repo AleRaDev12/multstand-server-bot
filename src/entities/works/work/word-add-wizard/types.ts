@@ -12,8 +12,10 @@ export type CurrentData = {
   paymentCoefficient: number;
   standProd: StandProd;
   workCount: number;
-  component: Component;
-  partOutCount: number;
+  componentSelections: Array<{
+    component: Component;
+    count: number;
+  }>;
   date: Date;
   description: string;
 };

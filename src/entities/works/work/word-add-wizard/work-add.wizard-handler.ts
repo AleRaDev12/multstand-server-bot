@@ -19,18 +19,18 @@ import { StandProd } from '../../../parts/stand-prod/stand-prod.entity';
 import { Work } from '../work.entity';
 import { CurrentData, CurrentWizard, CurrentWizardContext } from './types';
 import { taskHandler } from './taskHandler';
-import { partOutHandler } from './partOutHandler';
 import { standProdHandler } from './standProdHandler';
 import { sendMessage } from '../../../../shared/sendMessages';
-import { partOutCountHandler } from './partOutCountHandler';
 import { Component } from '../../../parts/component/component.entity';
 import { z } from 'zod';
 import { PartOut } from '../../../parts/part-out/part-out.entity';
+import { unifiedPartOutHandler } from './unifiedPartOutHandler';
 
 const steps: WizardStep<CurrentData, CurrentWizard>[] = [
   {
     message: '✨ Станок - номер изделия',
     handler: standProdHandler,
+    required: true,
   },
   {
     message: '📅 Дата выполнения',
@@ -40,7 +40,7 @@ const steps: WizardStep<CurrentData, CurrentWizard>[] = [
   },
   { message: '✅ Задача', handler: taskHandler },
   {
-    message: '🔢 Количество (шт)',
+    message: '🔢 Количество повторений задачи (шт)',
     field: 'workCount',
     type: 'number',
     required: true,
@@ -54,13 +54,11 @@ const steps: WizardStep<CurrentData, CurrentWizard>[] = [
 
 export const partOutSteps: WizardStep<CurrentData, CurrentWizard>[] = [
   {
-    message: '📋 Расход комплектующих',
-    handler: partOutHandler,
-    required: false,
-  },
-  {
-    message: '🔢 Количество затраченных комплектующих (шт)',
-    handler: partOutCountHandler,
+    message:
+      '📋 Выберите компоненты и укажите их количествов формате:\n' +
+      'номер-количество, номер-количество\n' +
+      'Например: 1-2, 3-5, 4-2',
+    handler: unifiedPartOutHandler,
     required: false,
   },
 ];
@@ -111,9 +109,11 @@ const beforeFirstStep: NonNullable<
 };
 
 const WorkSchema = z.object({
-  task: z.instanceof(Task, { message: 'Некорректный тип задачи' }),
-  master: z.instanceof(Master, { message: 'Некорректный тип мастера' }),
-  standProd: z.instanceof(StandProd, { message: 'Некорректный тип стенда' }),
+  task: z.instanceof(Task, { message: 'Некорректный тип task' }),
+  master: z.instanceof(Master, { message: 'Некорректный тип master' }),
+  standProd: z.instanceof(StandProd, {
+    message: 'Некорректный тип standProd',
+  }),
   date: z.instanceof(Date, { message: 'Некорректная дата' }),
   cost: z.number({ invalid_type_error: 'Стоимость должна быть числом' }),
   count: z.number({ invalid_type_error: 'Количество должно быть числом' }),
@@ -128,6 +128,7 @@ const WorkSchema = z.object({
 const afterLastStep: NonNullable<
   WizardHandlerConfig<CurrentData, CurrentWizard>['afterLastStep']
 > = async (wizard, ctx) => {
+  // Validate the core work data using Zod schema
   const result = WorkSchema.safeParse({
     task: getFieldValue(ctx, 'task'),
     standProd: getFieldValue(ctx, 'standProd'),
@@ -143,58 +144,100 @@ const afterLastStep: NonNullable<
     const errors = result.error.issues
       .map((issue) => `Поле '${issue.path.join('.')}': ${issue.message}`)
       .join('\n');
-
     await ctx.reply(`Ошибка при создании работы:\n${errors}`);
     return;
   }
-  const workEntity = new Work(result.data);
 
+  // Create and save the work entity
+  const workEntity = new Work(result.data);
   const work = await wizard.service.create(workEntity);
 
-  let partsOut: PartOut[];
+  // Handle component selections and parts out
+  const componentSelectionsValue = getFieldValue(ctx, 'componentSelections');
 
-  const componentValue = getFieldValue(ctx, 'component');
-  const componentValueParsed = z
-    .instanceof(Component)
-    .safeParse(componentValue);
-  const isWithComponentsValue = !!componentValueParsed.success;
+  let allPartsOut: PartOut[] = [];
 
-  if (isWithComponentsValue) {
-    const component = componentValueParsed.data;
+  if (componentSelectionsValue !== undefined) {
+    const ComponentSelectionsSchema = z.array(
+      z.object({
+        component: z.instanceof(Component),
+        count: z.number().positive(),
+      }),
+    );
 
-    const partOutCountValue = getFieldValue(ctx, 'partOutCount');
-    const partOutCountValueParsed = z.number().safeParse(partOutCountValue);
-    if (!partOutCountValueParsed.success) {
-      await ctx.reply('Ошибка. partOutCountValue не найден.');
+    const componentSelectionsResult = ComponentSelectionsSchema.safeParse(
+      componentSelectionsValue,
+    );
+
+    if (!componentSelectionsResult.success) {
+      await ctx.reply('Ошибка типов при обработке выбранных компонентов');
       return;
     }
-    const partOutCount = partOutCountValueParsed.data;
 
-    try {
-      partsOut = await wizard.partsService.writeOffComponents(
-        component.id,
-        partOutCount,
-        workEntity.date,
-        workEntity.standProd,
-        work,
-      );
-      await sendMessage(
-        ctx,
-        `Успешно списано ${partOutCount} компонентов с ${partsOut.length} партий.`,
-      );
-    } catch (error) {
-      await replyWithCancelButton(ctx, `Ошибка: ${error.message}`);
-      return;
+    const componentSelections = componentSelectionsResult.data;
+
+    if (componentSelections.length) {
+      try {
+        // Process each component selection
+        for (const selection of componentSelections) {
+          const partsOut = await wizard.partsService.writeOffComponents(
+            selection.component.id,
+            selection.count,
+            workEntity.date,
+            workEntity.standProd,
+            work,
+          );
+          allPartsOut = allPartsOut.concat(partsOut);
+        }
+
+        // Summarize the component write-offs
+        const summary = componentSelections
+          .map(
+            (selection) =>
+              `${selection.component.name}: ${selection.count}шт с ${
+                allPartsOut.filter(
+                  (p) => p.partIn.component.id === selection.component.id,
+                ).length
+              } партий`,
+          )
+          .join('\n');
+
+        await sendMessage(ctx, `Успешно списаны компоненты:\n${summary}`);
+      } catch (error) {
+        await replyWithCancelButton(
+          ctx,
+          `Ошибка при списании компонентов: ${error.message}`,
+        );
+        return;
+      }
     }
   }
 
+  // Notify managers about the new work report
   const managers = await wizard.userService.findManagers();
   const currentUser = await wizard.userService.findByTelegramId(ctx.from.id);
 
+  // Format the notification message
+  const notificationMessage = [
+    `${currentUser.name} отправил отчёт:`,
+    work.format('manager'),
+    '\nСтанок:',
+    work.standProd.format('manager'),
+  ];
+
+  // Add components information if any were used
+  if (allPartsOut.length) {
+    notificationMessage.push(
+      '\nКомплектующие:',
+      allPartsOut.map((partOut) => partOut.format('manager')).join('\n'),
+    );
+  }
+
+  // Send notifications to all managers
   for (const manager of managers) {
     await wizard.bot.telegram.sendMessage(
       manager.telegramUserId,
-      `${currentUser.name} отправил отчёт:\n${work.format('manager')}\n\nСтанок:\n${work.standProd.format('manager')}\n\n${partsOut?.length ? `Комплектующие:\n${partsOut.map((partOut) => partOut.format('manager'))}` : ''}`,
+      notificationMessage.join('\n'),
     );
   }
 };

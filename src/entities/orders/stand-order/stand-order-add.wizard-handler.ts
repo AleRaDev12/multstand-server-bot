@@ -22,12 +22,12 @@ const entityName = 'standOrder';
 
 const commonSteps: WizardStepTypeN<StandOrder>[] = [
   { message: 'Выберите заказ:', type: orderSelectType },
-  {
-    message: 'Статус:',
-    field: 'status',
-    type: 'union',
-    union: StandOrderStatus,
-  },
+  // {
+  //   message: 'Статус:',
+  //   field: 'status',
+  //   type: 'union',
+  //   union: StandOrderStatus,
+  // },
   {
     message: 'Модель:',
     type: orderModelSelectType,
@@ -117,6 +117,7 @@ function setEntity(ctx: CustomWizardContext): void {
 }
 
 function save(this: StandOrderAddWizard, entity: StandOrder) {
+  entity.status = StandOrderStatus.Preliminary;
   return this.service.create(entity);
 }
 

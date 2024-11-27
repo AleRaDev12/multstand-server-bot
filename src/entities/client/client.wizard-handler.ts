@@ -17,7 +17,6 @@ const steps: WizardStepTypeN<Client>[] = [
 ];
 
 function getEntity(ctx: CustomWizardContext): Client {
-  console.log('*-* client getEntity ctx', ctx.session.userRole);
   return ctx.wizard.state[entityName];
 }
 
@@ -26,7 +25,6 @@ function setEntity(ctx: CustomWizardContext): void {
 }
 
 function save(this: ClientAddWizard, entity: Client) {
-  console.log('*-* entity', entity);
   return this.service.create(entity);
 }
 

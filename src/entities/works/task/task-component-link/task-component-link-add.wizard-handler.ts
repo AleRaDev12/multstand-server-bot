@@ -30,7 +30,7 @@ export const TaskComponentLinkAddWizardHandler =
     save: async function (this: TaskComponentLinkAddWizard, state) {
       const task = state.selectedTask;
       task.components = state.selectedComponents;
-      await this.taskService.updateComponents(task);
+      await this.taskService.addComponents(task);
     },
 
     print: async (ctx, state) => {
@@ -79,10 +79,6 @@ export const TaskComponentLinkAddWizardHandler =
           return true;
 
         case 'componentSelect':
-          console.log(
-            '*-* componentSelect ctx.session.userRole',
-            ctx.session.userRole,
-          );
           const components = await this.componentService.findAll();
           await replyWithCancelButton(
             ctx,

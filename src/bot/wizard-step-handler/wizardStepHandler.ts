@@ -54,12 +54,6 @@ async function handleStandardStepRequest(
   ctx: CustomWizardContext,
   stepRequest: WizardStepType,
 ): Promise<boolean> {
-  console.log('*-* Standard request handler:', {
-    hasMessage: !!stepRequest.message,
-    message: stepRequest.message,
-    type: stepRequest.type,
-  });
-
   if (!stepRequest.message) {
     return false;
   }
@@ -104,10 +98,6 @@ export function wizardStepHandler<T>(
           if ('initState' in options) {
             state = (options as CustomWizardHandlerOptions<T>).initState();
             ctx.wizard.state.wizardState = state;
-            console.log(
-              '*-* ctx.wizard.state.wizardState ctx',
-              ctx.session.userRole,
-            );
           } else {
             const entityOptions = options as
               | UnifiedWizardHandlerOptions<any>
@@ -126,8 +116,6 @@ export function wizardStepHandler<T>(
             state = entityOptions.getEntity.call(this, ctx) as T;
           }
         }
-
-        console.log('*-* state', state);
 
         let currentStep = stepIndex;
         const steps = ctx.wizard.state.steps;
@@ -179,7 +167,6 @@ export function wizardStepHandler<T>(
         // Check if wizard is complete
         const isLastStep = currentStep === steps.length + 1;
         if (isLastStep) {
-          console.log('*-* lastStep state', state);
           await options.save.call(this, state, ctx);
           await options.print.call(this, ctx, state);
 
@@ -197,13 +184,6 @@ export function wizardStepHandler<T>(
         const stepRequest = steps[stepForRequestNumber];
 
         if (stepRequest) {
-          console.log('*-* Processing step request:', {
-            currentStep,
-            stepForRequestNumber,
-            stepRequest,
-            hasSpecificHandler: !!options.handleSpecificRequest,
-          });
-
           let result: boolean;
 
           if (options.handleSpecificRequest) {
@@ -222,8 +202,6 @@ export function wizardStepHandler<T>(
           } else {
             result = await handleStandardStepRequest(ctx, stepRequest);
           }
-
-          console.log('*-* Final handler result:', result);
 
           if (result) {
             ctx.wizard.next();

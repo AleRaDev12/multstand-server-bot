@@ -61,10 +61,10 @@ export class TaskService {
     return this.repository.save(task);
   }
 
-  async updateComponents(task: Task): Promise<Task> {
-    const found = await this.findByIdWithComponents(task.id);
-    found.components = task.components;
-    return this.repository.save(found);
+  async addComponents(task: Task): Promise<Task> {
+    const foundTask = await this.findByIdWithComponents(task.id);
+    foundTask.components = [...foundTask.components, ...task.components];
+    return this.repository.save(foundTask);
   }
 
   async getFormattedList(

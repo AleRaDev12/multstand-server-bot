@@ -62,7 +62,6 @@ async function handleSpecificAnswer(
   ctx: CustomWizardContext,
   stepAnswer: WizardStepType,
 ): Promise<boolean> {
-  console.log('*-* handleSpecificAnswer stepAnswer.type', stepAnswer.type);
   if (stepAnswer.type !== selectTypeName) return true;
   const message = getMessageText(ctx);
 

@@ -63,7 +63,6 @@ export async function taskHandler(
   }
 
   const masterEntity = getFieldValue(ctx, 'master');
-  console.log('*-* masterEntity', masterEntity);
   const result = z.instanceof(Master).safeParse(masterEntity);
   if (!result.success) {
     await ctx.reply('Ошибка. Мастер для подсчёта коэффициента не найден.');
